@@ -15,7 +15,7 @@ int main() {
 
 
 	sf::Texture texture;
-	texture.loadFromFile("../Data/Image/chess.png");
+	texture.loadFromFile("../Data/Image/chesses.png");
 	sf::Sprite sprite(texture);
 	sprite.setTextureRect({ 0,0,80,80 });
 
@@ -41,20 +41,20 @@ int main() {
 			}
 
 		}
-/*		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (i == 0) {
-					if (j == 0 or j == 7)	sprite.setTextureRect({ 55 * 4,0,55,55 });
-					if (j == 1 or j == 6)	sprite.setTextureRect({ 55 * 3,0,55,55 });
-					if (j == 2 or j == 5)	sprite.setTextureRect({ 55 * 2,0,55,55 });
-					if (j == 3)				sprite.setTextureRect({ 55,0,55,55 });
-					if (j == 4)				sprite.setTextureRect({ 0,0,55,55 });
+					if (j == 0 or j == 7)	sprite.setTextureRect({ 80 * 4,0,80,80 });
+					if (j == 1 or j == 6)	sprite.setTextureRect({ 80 * 3,0,80,80 });
+					if (j == 2 or j == 5)	sprite.setTextureRect({ 80 * 2,0,80,80 });
+					if (j == 3)				sprite.setTextureRect({ 80,0,80,80 });
+					if (j == 4)				sprite.setTextureRect({ 0,0,80,80 });
 				}
 				else {
-					sprite.setTextureRect({ 55 * 5,0,55,55 });
+					sprite.setTextureRect({ 80 * 5,0,80,80 });
 				}
 
-				sprite.setPosition(j * 55, i * 55);
+				sprite.setPosition(j * 80, i * 80);
 				window.draw(sprite);
 			}
 		}
@@ -62,17 +62,17 @@ int main() {
 		for (int i = 6; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (i == 7) {
-					if (j == 0 or j == 7)	sprite.setTextureRect({ 55 * 4,55,55,55 });
-					if (j == 1 or j == 6)	sprite.setTextureRect({ 55 * 3,55,55,55 });
-					if (j == 2 or j == 5)	sprite.setTextureRect({ 55 * 2,55,55,55 });
-					if (j == 3)				sprite.setTextureRect({ 55,55,55,55 });
-					if (j == 4)				sprite.setTextureRect({ 0,55,55,55 });
+					if (j == 0 or j == 7)	sprite.setTextureRect({ 80 * 4,80,80,80 });
+					if (j == 1 or j == 6)	sprite.setTextureRect({ 80 * 3,80,80,80 });
+					if (j == 2 or j == 5)	sprite.setTextureRect({ 80 * 2,80,80,80 });
+					if (j == 3)				sprite.setTextureRect({ 80,80,80,80 });
+					if (j == 4)				sprite.setTextureRect({ 0,80,80,80 });
 				}
 				else {
-					sprite.setTextureRect({ 55 * 5,55,55,55 });
+					sprite.setTextureRect({ 80 * 5,80,80,80 });
 				}
 
-				sprite.setPosition(j * 55, i * 55);
+				sprite.setPosition(j * 80, i * 80);
 				window.draw(sprite);
 			}
 		}
@@ -81,7 +81,7 @@ int main() {
 			cout << pos.x << " " << pos.y << endl;
 
 		}
-*/
+
 		window.display();
 	}
 
