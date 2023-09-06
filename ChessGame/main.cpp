@@ -128,8 +128,6 @@ void loadPosition() {
 		}
 }
 
-
-
 int main() {
 	sf::Texture texture;
 	texture.loadFromFile("../Data/Image/chesses.png");
@@ -140,7 +138,7 @@ int main() {
 	loadPosition();
 	sf::Event event;
 	while (window.isOpen()) {
-		sf::Vector2i pos = sf::Mouse::getPosition(window) - sf::Vector2i(offset);
+
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
@@ -148,7 +146,29 @@ int main() {
 			window.clear(sf::Color::White);
 
             chessBoard();
+            if (event.type == sf::Event::MouseButtonPressed) {
+                if (event.key.code == sf::Mouse::Left) {
+                    sf::Vector2i pos = sf::Mouse::getPosition(window);
+                            int dy = (pos.x - 50) / 80;
+                            int dx = (pos.y - 50) / 80;
+                            cout << board[dx][dy] << endl;
+                            sf::Event e_new;
+                            if (window.pollEvent(e_new)) {
+                                if (e_new.key.code == sf::Mouse::Left) {
+                                    sf::Vector2i newPos = sf::Mouse::getPosition(window);
+                                    int dy_new = (newPos.x - 50) / 80;
+                                    int dx_new = (newPos.y - 50) / 80;
+                                    cout << "newBoard: " << board[dx_new][dy_new] << endl;
+                                    board[dx_new][dy_new] = board[dx][dy];
+                                }
+
+                            }
+                            loadPosition();
+
+                }
+            }
 		}
+
 
 		for (auto i : f) window.draw(i);
 
