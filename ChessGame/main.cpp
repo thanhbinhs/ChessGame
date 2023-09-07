@@ -41,7 +41,9 @@ int board[8][8] =
 	  6, 6, 6, 6, 6, 6, 6, 6,
 	  5, 4, 3, 1, 2, 3, 4, 5 };
 
-int checkPos[8][8];
+int checkPos[9][9];
+
+int check_king[9][9];
 
 
 sf::RectangleShape createButton() {
@@ -50,7 +52,7 @@ sf::RectangleShape createButton() {
 	return button;
 }
 
-void reloadPos() {
+void reloadPos(int checkPos[9][9]) {
     for (int i = 0; i < 8; i++)
         for (int j = 0; j < 8; j++)
             checkPos[i][j] = 0;
@@ -165,7 +167,7 @@ void loadPosition() {
 		}
 }
 
-void PositiveCastle(int x, int y) {
+void PositiveCastle(int x, int y,int checkPos[9][9]) {
     for (int i = x + 1; i < 8; i++) {
         if (board[i][y] != 0) {
             if (board[i][y] * board[x][y] < 0) {
@@ -213,7 +215,7 @@ void PositiveCastle(int x, int y) {
 
 }
 
-void PositiveBishop(int x, int y) {
+void PositiveBishop(int x, int y, int checkPos[9][9]) {
     for (int i = x + 1, j = y + 1;
         (i < 8 && j < 8); i++, j++) {
         if (board[i][j] != 0) {
@@ -264,7 +266,7 @@ void PositiveBishop(int x, int y) {
     }
 }
 
-void PositiveKnight(int x, int y)//xet 8 vi tri co the di
+void PositiveKnight(int x, int y, int checkPos[9][9])//xet 8 vi tri co the di
 {
 
     if (board[x + 2][y + 1] == 0 && x + 2 < 8 && y + 1 < 8)                                 checkPos[x + 2][y + 1] = 1;
@@ -275,17 +277,18 @@ void PositiveKnight(int x, int y)//xet 8 vi tri co the di
     else if (board[x][y] * board[x - 2][y + 1] < 0 && x - 2 >= 0 && y + 1 < 8)              checkPos[x - 2][y + 1] = 2;
     if (board[x - 2][y - 1] == 0 && x - 2 >= 0 && y - 1 >= 0)                               checkPos[x - 2][y - 1] = 1;
     else if (board[x][y] * board[x - 2][y - 1] < 0 && x - 2 >= 0 && y - 1 >= 0)             checkPos[x - 2][y - 1] = 2;
-    if (board[x +1][y +2] == 0 && x +1 <8 && y +2 <8)                                       checkPos[x + 1][y + 2] = 1;
-    else if (board[x][y] * board[x +1][y +2] < 0 && x +1 < 8 && y + 2 < 8)                  checkPos[x + 1][y + 2] = 2;
+    if (board[x + 1][y + 2] == 0 && x + 1 < 8 && y + 2 < 8)                                 checkPos[x + 1][y + 2] = 1;
+    else if (board[x][y] * board[x + 1][y + 2] < 0 && x + 1 < 8 && y + 2 < 8)               checkPos[x + 1][y + 2] = 2;
     if (board[x - 1][y + 2] == 0 && x - 1 >= 0 && y + 2 < 8)                                checkPos[x - 1][y + 2] = 1;
-    else if (board[x][y] * board[x - 1][y + 2] < 0 && x + 1 < 8 && y + 2 < 8)               checkPos[x - 1][y + 2] = 2;
+    else if (board[x][y] * board[x - 1][y + 2] < 0 && x - 1 >= 0 && y + 2 < 8)              checkPos[x - 1][y + 2] = 2;
     if (board[x + 1][y - 2] == 0 && y - 2 >= 0 && x + 1 < 8)                                checkPos[x + 1][y - 2] = 1;
     else if (board[x][y] * board[x + 1][y - 2] < 0 && y - 2 >= 0 && x + 1 < 8)              checkPos[x + 1][y - 2] = 2;
     if (board[x - 1][y - 2] == 0 && x - 1 >= 0 && y - 2 >= 0)                               checkPos[x - 1][y - 2] = 1;
     else if (board[x][y] * board[x - 1][y - 2] < 0 && x - 1 >= 0 && y - 2 >= 0)             checkPos[x - 1][y - 2] = 2;
+    cout << "Pos: " << x + 2 << " " << y - 1 << endl;
 }
 
-void PositiveKing(int x, int y)//xet 8 vi tri co the di
+void PositiveKing(int x, int y, int checkPos[9][9])//xet 8 vi tri co the di
 {   
     if (board[x + 1][y] == 0 && x + 1 < 8) checkPos[x + 1][y] = 1;
     else if (board[x + 1][y] * board[x][y] < 0 && x + 1 < 8) checkPos[x + 1][y] = 2;
@@ -305,7 +308,7 @@ void PositiveKing(int x, int y)//xet 8 vi tri co the di
     else if (board[x][y - 1] * board[x][y] < 0 && y - 1 >= 0) checkPos[x][y - 1] = 2;
 }
 
-void PositivePawn(int x, int y)
+void PositivePawn(int x, int y, int checkPos[9][9])
 {
     int k = board[x][y] / abs(board[x][y]); // 1 hoac -1 
     if (x == 1 || x == 6) {
@@ -318,9 +321,9 @@ void PositivePawn(int x, int y)
     if (board[x - k][y - 1] * board[x][y] < 0 && x - k >= 0 && y - 1 < 8 && x - k >= 0) checkPos[x - k][y - 1] = 2;
 }
 
-void PositiveQueen(int x, int y) {
-    PositiveCastle(x, y);
-    PositiveBishop(x, y);
+void PositiveQueen(int x, int y, int checkPos[9][9]) {
+    PositiveCastle(x, y,checkPos);
+    PositiveBishop(x, y,checkPos);
 }
 
 void toCapture(int x, int y) {
@@ -338,6 +341,37 @@ bool falseChoose(int i,int j) {
     return true;
 }
 
+void checkKing() {
+    reloadPos(check_king);
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (board[i][j] > 0) {
+                if (board[i][j] == 6)    PositivePawn(i, j, check_king);
+                if (board[i][j] == 5)    PositiveCastle(i, j, check_king);
+                if (board[i][j] == 4)     PositiveKnight(i, j, check_king);
+                if (board[i][j] == 3)    PositiveBishop(i, j, check_king);
+                if (board[i][j] == 2)       PositiveQueen(i, j, check_king);
+                if (board[i][j] == 1)    PositiveKing(i, j, check_king);
+            }
+        }
+    }
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (board[i][j] == -1 && check_king[i][j] > 0) {
+                cout << "Chieu tuong" << endl;
+            }
+        }
+    }
+}
+
+bool checkWin() {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (board[i][j] = -1) return true;
+        }
+    }
+    return false;
+}
 
 int main() {
     window.setFramerateLimit(60);
@@ -370,22 +404,22 @@ int main() {
                         checkPos[dx][dy] = 3;
 
                         if (board[dx][dy] == -5 || board[dx][dy] == 5) {
-                            PositiveCastle(dx, dy);
+                            PositiveCastle(dx, dy,checkPos);
                         }
                         if (board[dx][dy] == -3 || board[dx][dy] == 3) {
-                            PositiveBishop(dx, dy);
+                            PositiveBishop(dx, dy, checkPos);
                         }
                         if (board[dx][dy] == -4 || board[dx][dy] == 4) {
-                            PositiveKnight(dx, dy);
+                            PositiveKnight(dx, dy, checkPos);
                         }
                         if (board[dx][dy] == -2 || board[dx][dy] == 2) {
-                            PositiveQueen(dx, dy);
+                            PositiveQueen(dx, dy, checkPos);
                         }
                         if (board[dx][dy] == -1 || board[dx][dy] == 1) {
-                            PositiveKing(dx, dy);
+                            PositiveKing(dx, dy, checkPos);
                         }
                         if (board[dx][dy] == -6 || board[dx][dy] == 6) {
-                            PositivePawn(dx, dy);
+                            PositivePawn(dx, dy, checkPos);
                         }
 
                     }
@@ -398,7 +432,7 @@ int main() {
                 sf::Vector2i pos_n = sf::Mouse::getPosition(window);
                 int dy_n = (pos_n.x - SCREEN_MARGIN) / 80;
                 int dx_n = (pos_n.y - SCREEN_MARGIN) / 80;
-
+                if(!(dx_n == dx && dy_n == dy))
                 if (falseChoose(dx_n,dy_n)) {
                     board[dx_n][dy_n] = board[dx][dy];
                     board[dx][dy] = 0;
@@ -407,6 +441,10 @@ int main() {
                     //To Capture 
                     if ((board[dx_n][dy_n] == 6 && dx_n == 0) || (board[dx_n][dy_n] == -6 && dx_n == 7)) {
                         toCapture(dx_n,dy_n);
+                    }
+
+                    if (!checkWin) {
+                        cout << "Trang win" << endl;
                     }
                 }
 
@@ -419,7 +457,8 @@ int main() {
                 }
 
                 loadPosition();
-                reloadPos();
+                reloadPos(checkPos);
+                checkKing();
                 //reset
                 isMouse = true;
                 click = 0;
