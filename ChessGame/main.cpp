@@ -12,6 +12,7 @@ int click = 0;
 bool isMouse = true;
 int checkTurn = -1;
 bool checkCastling[5];
+float cellSize = 80.0f;
 
 enum WhiteChesses {
     VUA = 1,
@@ -363,10 +364,10 @@ void checkKing() {
     }
 }
 
-bool checkWin() {
+bool check_win() {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (board[i][j] = -1) return true;
+            if (board[i][j] == -1) return true;
         }
     }
     return false;
@@ -441,7 +442,7 @@ int main() {
                         toCapture(dx_n,dy_n);
                     }
 
-                    if (!checkWin) {
+                    if (check_win == 0) {
                         cout << "Trang win" << endl;
                     }
                 }
@@ -473,7 +474,7 @@ int main() {
                 else if (checkPos[i][j] == 3)     drawBoxPos(i, j);
             }
         }
-		for (auto i : f) window.draw(i);
+        for (auto i:f) window.draw(i);
 
 		window.display();
 	}
