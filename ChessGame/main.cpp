@@ -462,6 +462,10 @@ int main() {
             
 		}
 
+        if(check_win() == false){
+            isMouse = false;
+        }
+
         window.clear(sf::Color(179, 179, 179));
         chessBoard();
         for (int i = 0; i < 8; i++) {
