@@ -8,10 +8,11 @@
 
 const int SCREEN_WIDTH = 1040;
 const int SCREEN_HEIGHT = 690;
-static sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML", sf::Style::Close);
+const float SCREEN_MARGIN = 50.0f;
 
 const sf::Vector2f sizeBtn(80, 80);
-
+const float cellSize = 80.0f;
+static sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML", sf::Style::Close);
 
 #endif // !HEADER_H
 

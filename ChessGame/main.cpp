@@ -43,12 +43,10 @@ sf::RectangleShape createButton() {
 
 void chessBoard() {
     
-    const float cellSize = 80.0f; // Kích thước mỗi ô 80
-    const float boardSize = cellSize * 8.0f;
-    const float margin = 50.0f;
+    const float boardSize = cellSize * 8;
 
     // Vị trí của bàn cờ để nó nằm bên trái và cách lề 50 pixel
-    sf::Vector2f boardPosition(margin, margin);
+    sf::Vector2f boardPosition(SCREEN_MARGIN, SCREEN_MARGIN);
     // Load font chữ 
     sf::Font customFont;
     if (!customFont.loadFromFile("../Data/Font/font_1.ttf")) {
@@ -84,7 +82,7 @@ void chessBoard() {
                 texti.setString(std::string(1, 'A' + i)); // Đặt nội dung chữ
                 texti.setCharacterSize(24); // Kích thước chữ
                 texti.setFillColor(sf::Color::White); // Màu chữ
-                texti.setPosition(boardPosition.x + i * cellSize + 25.f, 15.f); // Vị trí chữ trên cửa sổ
+                texti.setPosition(boardPosition.x + i * cellSize + SCREEN_MARGIN / 2, 15.f); // Vị trí chữ trên cửa sổ
                 window.draw(texti);
             }
             // Vẽ số để đánh dấu toạ độ quân cờ
@@ -94,13 +92,13 @@ void chessBoard() {
                 textij.setString(std::string(1, '1' + ij)); // Đặt nội dung chữ
                 textij.setCharacterSize(24); // Kích thước chữ
                 textij.setFillColor(sf::Color::White); // Màu chữ
-                textij.setPosition(25.f, boardPosition.y + ij * cellSize + 25.f); // Vị trí chữ trên cửa sổ
+                textij.setPosition(SCREEN_MARGIN / 2, boardPosition.y + ij * cellSize + SCREEN_MARGIN / 2); // Vị trí chữ trên cửa sổ
                 window.draw(textij);
             }
             // Dòng kẻ tách phần setting và bàn cờ
             sf::RectangleShape line(sf::Vector2f(1060.f, 5.f));
             line.rotate(90.f);
-            line.setPosition(640.0f + margin * 2 + 5.f, 0.f);
+            line.setPosition(640.0f + SCREEN_MARGIN * 2 + 5.f, 0.f);
             window.draw(line);
             // Chữ edit 
             sf::Text textMenu;
@@ -108,7 +106,7 @@ void chessBoard() {
             textMenu.setString("Setting"); // Đặt nội dung chữ
             textMenu.setCharacterSize(60); // Kích thước chữ
             textMenu.setFillColor(sf::Color::White); // Màu chữ
-            textMenu.setPosition(SCREEN_WIDTH - 250.f, 20.f); // Vị trí chữ trên cửa sổ
+            textMenu.setPosition(SCREEN_WIDTH - (textMenu.getGlobalBounds().width) * 1.2, 20.f); // Vị trí chữ trên cửa sổ
             window.draw(textMenu);
 
 }
@@ -123,12 +121,20 @@ void loadPosition() {
 			int x = abs(n) - 1;
 			int y = n > 0 ? 0 : 1;
 			f[k].setTextureRect({ 80 * x, 80 * y, 80, 80 });
-			f[k].setPosition(sizeBtn.x * j + 50, sizeBtn.y * i + 50 );
+			f[k].setPosition(sizeBtn.x * j + SCREEN_MARGIN, sizeBtn.y * i + SCREEN_MARGIN);
 			k++;
 		}
 }
 
+void getPositionCell() {
+
+}
+
 int main() {
+    sf::Vector2i pos;
+    int dx = 0;
+    int dy = 0;
+
 	sf::Texture texture;
 	texture.loadFromFile("../Data/Image/chesses.png");
 	f->setTexture(texture);
@@ -146,28 +152,30 @@ int main() {
 			window.clear(sf::Color::White);
 
             chessBoard();
+
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.key.code == sf::Mouse::Left) {
-                    sf::Vector2i pos = sf::Mouse::getPosition(window);
-                            int dy = (pos.x - 50) / 80;
-                            int dx = (pos.y - 50) / 80;
-                            cout << board[dx][dy] << endl;
-                            sf::Event e_new;
-                            if (window.pollEvent(e_new)) {
-                                if (e_new.key.code == sf::Mouse::Left) {
-                                    sf::Vector2i newPos = sf::Mouse::getPosition(window);
-                                    int dy_new = (newPos.x - 50) / 80;
-                                    int dx_new = (newPos.y - 50) / 80;
-                                    cout << "newBoard: " << board[dx_new][dy_new] << endl;
-                                    board[dx_new][dy_new] = board[dx][dy];
-                                }
+                    pos = sf::Mouse::getPosition(window);
+                    dy = (pos.x - SCREEN_MARGIN) / 80;
+                    dx = (pos.y - SCREEN_MARGIN) / 80;
+                    cout << "Old Board: " << board[dx][dy] << endl;
+                }
+            }
+            if (event.type == sf::Event::MouseButtonReleased) {
+                if (event.key.code == sf::Mouse::Left) {
+                    sf::Vector2i pos_n = sf::Mouse::getPosition(window);
+                    int dy_n = (pos_n.x - SCREEN_MARGIN) / 80;
+                    int dx_n = (pos_n.y - SCREEN_MARGIN) / 80;
+                    cout << "New Board: " << board[dx_n][dy_n] << endl;
 
-                            }
-                            loadPosition();
-
+                    board[dx_n][dy_n] = board[dx][dy];
+                    board[dx][dy] = 0;
+                    loadPosition();
                 }
             }
 		}
+
+
 
 
 		for (auto i : f) window.draw(i);
