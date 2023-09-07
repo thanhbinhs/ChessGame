@@ -5,6 +5,11 @@ using namespace sf;
 
 sf::Vector2f offset(40, 40);
 Sprite f[33]; //mang lưu các quân cờ
+sf::Vector2i pos;
+int dx = 0;
+int dy = 0;
+int click = 0;
+bool isMouse = true;
 
 enum WhiteChesses {
     VUA = 1,
@@ -129,10 +134,7 @@ void loadPosition() {
 
 
 int main() {
-    sf::Vector2i pos;
-    int dx = 0;
-    int dy = 0;
-    int click = 0;
+    window.setFramerateLimit(60);
 
 	sf::Texture texture;
 	texture.loadFromFile("../Data/Image/chesses.png");
@@ -148,7 +150,6 @@ int main() {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
-			window.clear(sf::Color::White);
 
             chessBoard();
 
@@ -158,10 +159,11 @@ int main() {
                     click++;
                 }
             }
-            if (click == 1) {
+            if (click == 1 and isMouse == true) {
                     dy = (pos.x - SCREEN_MARGIN) / 80;
                     dx = (pos.y - SCREEN_MARGIN) / 80;
                     cout << "Old Board: " << board[dx][dy] << endl;
+                    isMouse = false;
 
             }
             if (click == 2) {
@@ -172,8 +174,12 @@ int main() {
 
                 board[dx_n][dy_n] = board[dx][dy];
                 board[dx][dy] = 0;
-                click = 0;
+
                 loadPosition();
+
+                //reset
+                isMouse = true;
+                click = 0;
             }
             
 		}
