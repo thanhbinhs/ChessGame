@@ -5,6 +5,7 @@
 #include<SFML/Graphics.hpp>
 #include<iostream>
 #include<stack>
+#include<math.h>
 
 const int SCREEN_WIDTH = 1040;
 const int SCREEN_HEIGHT = 690;
