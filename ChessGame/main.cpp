@@ -306,7 +306,7 @@ void PositiveTot(int x, int y)
     }
     if (board[x - k][y] == 0 && x - k >= 0 && x - k < 8) checkPos[x - k][y] = 1;
     if (board[x - k][y + 1] * board[x][y] < 0 && x - k >= 0 && x - k < 8 && y + 1 < 8) checkPos[x - k][y + 1] = 2;
-    if (board[x - k][y - 1] * board[x][y] < 0 && x - k >= 0 && y - 1 < 8 && x - k >= 0) checkPos[x - 1][y - k] = 2;
+    if (board[x - k][y - 1] * board[x][y] < 0 && x - k >= 0 && y - 1 < 8 && x - k >= 0) checkPos[x - k][y - 1] = 2;
 }
 
 void PositiveHau(int x, int y) {
