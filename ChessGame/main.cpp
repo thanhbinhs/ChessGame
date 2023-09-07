@@ -126,14 +126,13 @@ void loadPosition() {
 		}
 }
 
-void getPositionCell() {
 
-}
 
 int main() {
     sf::Vector2i pos;
     int dx = 0;
     int dy = 0;
+    int click = 0;
 
 	sf::Texture texture;
 	texture.loadFromFile("../Data/Image/chesses.png");
@@ -156,23 +155,27 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.key.code == sf::Mouse::Left) {
                     pos = sf::Mouse::getPosition(window);
+                    click++;
+                }
+            }
+            if (click == 1) {
                     dy = (pos.x - SCREEN_MARGIN) / 80;
                     dx = (pos.y - SCREEN_MARGIN) / 80;
                     cout << "Old Board: " << board[dx][dy] << endl;
-                }
-            }
-            if (event.type == sf::Event::MouseButtonReleased) {
-                if (event.key.code == sf::Mouse::Left) {
-                    sf::Vector2i pos_n = sf::Mouse::getPosition(window);
-                    int dy_n = (pos_n.x - SCREEN_MARGIN) / 80;
-                    int dx_n = (pos_n.y - SCREEN_MARGIN) / 80;
-                    cout << "New Board: " << board[dx_n][dy_n] << endl;
 
-                    board[dx_n][dy_n] = board[dx][dy];
-                    board[dx][dy] = 0;
-                    loadPosition();
-                }
             }
+            if (click == 2) {
+                sf::Vector2i pos_n = sf::Mouse::getPosition(window);
+                int dy_n = (pos_n.x - SCREEN_MARGIN) / 80;
+                int dx_n = (pos_n.y - SCREEN_MARGIN) / 80;
+                cout << "New Board: " << board[dx_n][dy_n] << endl;
+
+                board[dx_n][dy_n] = board[dx][dy];
+                board[dx][dy] = 0;
+                click = 0;
+                loadPosition();
+            }
+            
 		}
 
 
