@@ -270,42 +270,41 @@ void PositiveKnight(int x, int y, int checkPos[9][9])//xet 8 vi tri co the di
 {
 
     if (board[x + 2][y + 1] == 0 && x + 2 < 8 && y + 1 < 8)                                 checkPos[x + 2][y + 1] = 1;
-    else if (board[x][y] * board[x + 2][y + 1] < 0 && x + 2 < 8 && y + 1 < 8)               checkPos[x + 2][y + 1] = 2;
-    if (board[x + 2][y - 1] && y - 1 >= 0 && x + 2 < 8)                                     checkPos[x + 2][y - 1] = 1;
-    else if (board[x][y] * board[x + 2][y - 1] < 0 && y - 1 >= 0 && x + 2 < 8)              checkPos[x + 2][y - 1] = 2;
+    else if (board[x][y] * board[x + 2][y + 1] < 0 && x + 2 < 8 && y + 1 < 8)                       checkPos[x + 2][y + 1] = 2;
+    if (board[x + 2][y - 1] == 0 && y - 1 >= 0 && x + 2 < 8)                                     checkPos[x + 2][y - 1] = 1;
+    else if (board[x][y] * board[x + 2][y - 1] < 0 && y - 1 >= 0 && x + 2 < 8)                      checkPos[x + 2][y - 1] = 2;
     if (board[x - 2][y + 1] == 0 && x - 2 >= 0 && y + 1 < 8)                                checkPos[x - 2][y + 1] = 1;
-    else if (board[x][y] * board[x - 2][y + 1] < 0 && x - 2 >= 0 && y + 1 < 8)              checkPos[x - 2][y + 1] = 2;
+    else if (board[x][y] * board[x - 2][y + 1] < 0 && x - 2 >= 0 && y + 1 < 8)                      checkPos[x - 2][y + 1] = 2;
     if (board[x - 2][y - 1] == 0 && x - 2 >= 0 && y - 1 >= 0)                               checkPos[x - 2][y - 1] = 1;
-    else if (board[x][y] * board[x - 2][y - 1] < 0 && x - 2 >= 0 && y - 1 >= 0)             checkPos[x - 2][y - 1] = 2;
+    else if (board[x][y] * board[x - 2][y - 1] < 0 && x - 2 >= 0 && y - 1 >= 0)                     checkPos[x - 2][y - 1] = 2;
     if (board[x + 1][y + 2] == 0 && x + 1 < 8 && y + 2 < 8)                                 checkPos[x + 1][y + 2] = 1;
-    else if (board[x][y] * board[x + 1][y + 2] < 0 && x + 1 < 8 && y + 2 < 8)               checkPos[x + 1][y + 2] = 2;
+    else if (board[x][y] * board[x + 1][y + 2] < 0 && x + 1 < 8 && y + 2 < 8)                       checkPos[x + 1][y + 2] = 2;
     if (board[x - 1][y + 2] == 0 && x - 1 >= 0 && y + 2 < 8)                                checkPos[x - 1][y + 2] = 1;
-    else if (board[x][y] * board[x - 1][y + 2] < 0 && x - 1 >= 0 && y + 2 < 8)              checkPos[x - 1][y + 2] = 2;
+    else if (board[x][y] * board[x - 1][y + 2] < 0 && x - 1 >= 0 && y + 2 < 8)                      checkPos[x - 1][y + 2] = 2;
     if (board[x + 1][y - 2] == 0 && y - 2 >= 0 && x + 1 < 8)                                checkPos[x + 1][y - 2] = 1;
-    else if (board[x][y] * board[x + 1][y - 2] < 0 && y - 2 >= 0 && x + 1 < 8)              checkPos[x + 1][y - 2] = 2;
+    else if (board[x][y] * board[x + 1][y - 2] < 0 && y - 2 >= 0 && x + 1 < 8)                      checkPos[x + 1][y - 2] = 2;
     if (board[x - 1][y - 2] == 0 && x - 1 >= 0 && y - 2 >= 0)                               checkPos[x - 1][y - 2] = 1;
-    else if (board[x][y] * board[x - 1][y - 2] < 0 && x - 1 >= 0 && y - 2 >= 0)             checkPos[x - 1][y - 2] = 2;
-    cout << "Pos: " << x + 2 << " " << y - 1 << endl;
+    else if (board[x][y] * board[x - 1][y - 2] < 0 && x - 1 >= 0 && y - 2 >= 0)                     checkPos[x - 1][y - 2] = 2;
 }
 
 void PositiveKing(int x, int y, int checkPos[9][9])//xet 8 vi tri co the di
 {   
-    if (board[x + 1][y] == 0 && x + 1 < 8) checkPos[x + 1][y] = 1;
-    else if (board[x + 1][y] * board[x][y] < 0 && x + 1 < 8) checkPos[x + 1][y] = 2;
-    if (board[x - 1][y] == 0 && x - 1 >= 0) checkPos[x - 1][y] = 1;
-    else if (board[x - 1][y] * board[x][y] < 0 && x - 1 >= 0) checkPos[x - 1][y] = 2;
-    if (board[x + 1][y + 1] == 0 && x + 1 < 8 && y + 1 < 8) checkPos[x + 1][y + 1] = 1;
-    else if (board[x + 1][y + 1] * board[x][y] < 0 && x + 1 < 8 && y + 1 < 8) checkPos[x + 1][y + 1] = 2;
-    if (board[x - 1][y + 1] == 0 && x - 1 >= 0 && y + 1 < 8) checkPos[x - 1][y + 1] = 1;
-    else if (board[x - 1][y + 1] * board[x][y] < 0 && x - 1 >= 0 && y + 1 < 8) checkPos[x - 1][y + 1] = 2;
-    if (board[x][y + 1] == 0 && y + 1 < 8) checkPos[x][y + 1] = 1;
-    else if (board[x][y + 1] * board[x][y] < 0 && y + 1 < 8) checkPos[x][y + 1] = 2;
-    if (board[x - 1][y - 1] == 0 && x - 1 >= 0 && y - 1 >= 0) checkPos[x - 1][y - 1] = 1;
-    else if (board[x - 1][y - 1] * board[x][y] < 0 && x - 1 >= 0 && y - 1 >= 0) checkPos[x - 1][y - 1] = 2;
-    if (board[x + 1][y - 1] == 0 && x + 1 < 8 && y - 1 >= 0) checkPos[x + 1][y - 1] = 1;
-    else if (board[x + 1][y - 1] * board[x][y] < 0 && x + 1 < 8 && y - 1 >= 0) checkPos[x + 1][y - 1] = 2;
-    if (board[x][y - 1] == 0 && y - 1 >= 0) checkPos[x][y - 1] = 1;
-    else if (board[x][y - 1] * board[x][y] < 0 && y - 1 >= 0) checkPos[x][y - 1] = 2;
+    if (board[x + 1][y] == 0 && x + 1 < 8)                                          checkPos[x + 1][y] = 1;
+    else if (board[x + 1][y] * board[x][y] < 0 && x + 1 < 8)                            checkPos[x + 1][y] = 2;
+    if (board[x - 1][y] == 0 && x - 1 >= 0)                                         checkPos[x - 1][y] = 1;
+    else if (board[x - 1][y] * board[x][y] < 0 && x - 1 >= 0)                           checkPos[x - 1][y] = 2;
+    if (board[x + 1][y + 1] == 0 && x + 1 < 8 && y + 1 < 8)                         checkPos[x + 1][y + 1] = 1;
+    else if (board[x + 1][y + 1] * board[x][y] < 0 && x + 1 < 8 && y + 1 < 8)           checkPos[x + 1][y + 1] = 2;
+    if (board[x - 1][y + 1] == 0 && x - 1 >= 0 && y + 1 < 8)                        checkPos[x - 1][y + 1] = 1;
+    else if (board[x - 1][y + 1] * board[x][y] < 0 && x - 1 >= 0 && y + 1 < 8)          checkPos[x - 1][y + 1] = 2;
+    if (board[x][y + 1] == 0 && y + 1 < 8)                                          checkPos[x][y + 1] = 1;
+    else if (board[x][y + 1] * board[x][y] < 0 && y + 1 < 8)                            checkPos[x][y + 1] = 2;
+    if (board[x - 1][y - 1] == 0 && x - 1 >= 0 && y - 1 >= 0)                       checkPos[x - 1][y - 1] = 1;
+    else if (board[x - 1][y - 1] * board[x][y] < 0 && x - 1 >= 0 && y - 1 >= 0)         checkPos[x - 1][y - 1] = 2;
+    if (board[x + 1][y - 1] == 0 && x + 1 < 8 && y - 1 >= 0)                        checkPos[x + 1][y - 1] = 1;
+    else if (board[x + 1][y - 1] * board[x][y] < 0 && x + 1 < 8 && y - 1 >= 0)          checkPos[x + 1][y - 1] = 2;
+    if (board[x][y - 1] == 0 && y - 1 >= 0)                                         checkPos[x][y - 1] = 1;
+    else if (board[x][y - 1] * board[x][y] < 0 && y - 1 >= 0)                           checkPos[x][y - 1] = 2;
 }
 
 void PositivePawn(int x, int y, int checkPos[9][9])
@@ -402,7 +401,6 @@ int main() {
                     if (board[dx][dy] * checkTurn < 0) {
                         isMouse = false;
                         checkPos[dx][dy] = 3;
-
                         if (board[dx][dy] == -5 || board[dx][dy] == 5) {
                             PositiveCastle(dx, dy,checkPos);
                         }
