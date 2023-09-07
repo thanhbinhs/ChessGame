@@ -95,7 +95,7 @@ void chessBoard() {
         cout << "false to load font";
     }
 
-            window.clear(); // Xóa nội dung cửa sổ
+            window.clear(sf::Color(179, 179, 179)); // Xóa nội dung cửa sổ
             // Vẽ bàn cờ
             sf::RectangleShape board(sf::Vector2f(boardSize, boardSize));
             board.setPosition(boardPosition);
@@ -442,9 +442,6 @@ int main() {
                         toCapture(dx_n,dy_n);
                     }
 
-                    if (check_win == 0) {
-                        cout << "Trang win" << endl;
-                    }
                 }
 
                 cout << "New Board: " << endl;
@@ -465,7 +462,7 @@ int main() {
             
 		}
 
-        window.clear();
+        window.clear(sf::Color(179, 179, 179));
         chessBoard();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
