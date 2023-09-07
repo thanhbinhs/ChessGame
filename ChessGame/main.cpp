@@ -131,6 +131,11 @@ void loadPosition() {
 		}
 }
 
+void PositiveXe(int x, int y) {
+    for (int i = x + 1; i < 8; i++) {
+
+    }
+}
 
 
 int main() {
@@ -142,16 +147,17 @@ int main() {
 	for (int i = 0; i < 32; i++) {
 		f[i].setTexture(texture);
 	}
-	loadPosition();
 	sf::Event event;
+	loadPosition();
 	while (window.isOpen()) {
 
+        chessBoard();
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
 
-            chessBoard();
+
 
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.key.code == sf::Mouse::Left) {
