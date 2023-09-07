@@ -11,6 +11,7 @@ int dy = 0;
 int click = 0;
 bool isMouse = true;
 int checkTurn = -1;
+bool checkCastling[5];
 
 enum WhiteChesses {
     VUA = 1,
@@ -69,6 +70,14 @@ void drawBoxWhite(int x, int y) {
     box.setSize(sizeBtn);
     box.setPosition(y * cellSize + SCREEN_MARGIN, x * cellSize + SCREEN_MARGIN);
     window.draw(box);
+}
+
+void drawBoxPos(int x, int y) {
+    sf::RectangleShape boxPos;
+    boxPos.setFillColor(sf::Color(245, 236, 66,100));
+    boxPos.setSize(sizeBtn);
+    boxPos.setPosition(dy * cellSize + SCREEN_MARGIN, dx * cellSize + SCREEN_MARGIN);
+    window.draw(boxPos);
 }
 
 void chessBoard() {
@@ -156,7 +165,7 @@ void loadPosition() {
 		}
 }
 
-void PositiveXe(int x, int y) {
+void PositiveCastle(int x, int y) {
     for (int i = x + 1; i < 8; i++) {
         if (board[i][y] != 0) {
             if (board[i][y] * board[x][y] < 0) {
@@ -204,7 +213,7 @@ void PositiveXe(int x, int y) {
 
 }
 
-void PositiveTuong(int x, int y) {
+void PositiveBishop(int x, int y) {
     for (int i = x + 1, j = y + 1;
         (i < 8 && j < 8); i++, j++) {
         if (board[i][j] != 0) {
@@ -255,7 +264,7 @@ void PositiveTuong(int x, int y) {
     }
 }
 
-void PositiveMa(int x, int y)//xet 8 vi tri co the di
+void PositiveKnight(int x, int y)//xet 8 vi tri co the di
 {
 
     if (board[x + 2][y + 1] == 0 && x + 2 < 8 && y + 1 < 8)                                 checkPos[x + 2][y + 1] = 1;
@@ -276,7 +285,7 @@ void PositiveMa(int x, int y)//xet 8 vi tri co the di
     else if (board[x][y] * board[x - 1][y - 2] < 0 && x - 1 >= 0 && y - 2 >= 0)             checkPos[x - 1][y - 2] = 2;
 }
 
-void PositiveVua(int x, int y)//xet 8 vi tri co the di
+void PositiveKing(int x, int y)//xet 8 vi tri co the di
 {   
     if (board[x + 1][y] == 0 && x + 1 < 8) checkPos[x + 1][y] = 1;
     else if (board[x + 1][y] * board[x][y] < 0 && x + 1 < 8) checkPos[x + 1][y] = 2;
@@ -296,7 +305,7 @@ void PositiveVua(int x, int y)//xet 8 vi tri co the di
     else if (board[x][y - 1] * board[x][y] < 0 && y - 1 >= 0) checkPos[x][y - 1] = 2;
 }
 
-void PositiveTot(int x, int y)
+void PositivePawn(int x, int y)
 {
     int k = board[x][y] / abs(board[x][y]); // 1 hoac -1 
     if (x == 1 || x == 6) {
@@ -309,9 +318,17 @@ void PositiveTot(int x, int y)
     if (board[x - k][y - 1] * board[x][y] < 0 && x - k >= 0 && y - 1 < 8 && x - k >= 0) checkPos[x - k][y - 1] = 2;
 }
 
-void PositiveHau(int x, int y) {
-    PositiveXe(x, y);
-    PositiveTuong(x, y);
+void PositiveQueen(int x, int y) {
+    PositiveCastle(x, y);
+    PositiveBishop(x, y);
+}
+
+void toCapture(int x, int y) {
+    board[x][y] = (board[x][y] / 6 ) * 2;
+}
+
+void toCastling(int x, int y) {
+
 }
 
 bool falseChoose(int i,int j) {
@@ -334,7 +351,7 @@ int main() {
 	sf::Event event;
 	loadPosition();
 	while (window.isOpen()) {
-        if (isMouse == true)    chessBoard();
+
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
@@ -350,35 +367,27 @@ int main() {
                     dx = (pos.y - SCREEN_MARGIN) / 80;
                     if (board[dx][dy] * checkTurn < 0) {
                         isMouse = false;
-                        sf::RectangleShape box;
-                        box.setFillColor(sf::Color::Yellow);
-                        box.setSize(sizeBtn);
-                        box.setPosition(dy * cellSize + SCREEN_MARGIN, dx * cellSize + SCREEN_MARGIN);
-                        window.draw(box);
+                        checkPos[dx][dy] = 3;
+
                         if (board[dx][dy] == -5 || board[dx][dy] == 5) {
-                            PositiveXe(dx, dy);
+                            PositiveCastle(dx, dy);
                         }
                         if (board[dx][dy] == -3 || board[dx][dy] == 3) {
-                            PositiveTuong(dx, dy);
+                            PositiveBishop(dx, dy);
                         }
                         if (board[dx][dy] == -4 || board[dx][dy] == 4) {
-                            PositiveMa(dx, dy);
+                            PositiveKnight(dx, dy);
                         }
                         if (board[dx][dy] == -2 || board[dx][dy] == 2) {
-                            PositiveHau(dx, dy);
+                            PositiveQueen(dx, dy);
                         }
                         if (board[dx][dy] == -1 || board[dx][dy] == 1) {
-                            PositiveVua(dx, dy);
+                            PositiveKing(dx, dy);
                         }
                         if (board[dx][dy] == -6 || board[dx][dy] == 6) {
-                            PositiveTot(dx, dy);
+                            PositivePawn(dx, dy);
                         }
-                        for (int i = 0; i < 8; i++) {
-                            for (int j = 0; j < 8; j++) {
-                                if (checkPos[i][j] == 2) drawBox(i, j);
-                                else if (checkPos[i][j] == 1)    drawBoxWhite(i, j);
-                            }
-                        }
+
                     }
                     else {
                         click = 0;
@@ -394,6 +403,11 @@ int main() {
                     board[dx_n][dy_n] = board[dx][dy];
                     board[dx][dy] = 0;
                     checkTurn = -checkTurn;
+
+                    //To Capture 
+                    if ((board[dx_n][dy_n] == 6 && dx_n == 0) || (board[dx_n][dy_n] == -6 && dx_n == 7)) {
+                        toCapture(dx_n,dy_n);
+                    }
                 }
 
                 cout << "New Board: " << endl;
@@ -413,7 +427,15 @@ int main() {
             
 		}
 
-
+        window.clear();
+        chessBoard();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (checkPos[i][j] == 2) drawBox(i, j);
+                else if (checkPos[i][j] == 1)    drawBoxWhite(i, j);
+                else if (checkPos[i][j] == 3)     drawBoxPos(i, j);
+            }
+        }
 		for (auto i : f) window.draw(i);
 
 		window.display();
