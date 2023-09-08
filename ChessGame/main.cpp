@@ -60,19 +60,30 @@ void reloadPos(int checkPos[9][9]) {
 }
 
 void drawBox(int x, int y) {
-    sf::RectangleShape box;
-    box.setFillColor(sf::Color(255, 92, 51,200));
-    box.setSize(sizeBtn);
-    box.setPosition(y * cellSize + SCREEN_MARGIN, x * cellSize + SCREEN_MARGIN);
-    window.draw(box);
+    sf::Texture draw_box;
+    draw_box.loadFromFile("../Data/Image/death.png");
+    sf::Sprite sp;
+    sp.setTexture(draw_box);
+    sp.setPosition(y * cellSize + SCREEN_MARGIN, x * cellSize + SCREEN_MARGIN);
+    window.draw(sp);
 }
 
 void drawBoxWhite(int x, int y) {
-    sf::RectangleShape box;
-    box.setFillColor(sf::Color(179, 179, 179,100));
-    box.setSize(sizeBtn);
-    box.setPosition(y * cellSize + SCREEN_MARGIN, x * cellSize + SCREEN_MARGIN);
-    window.draw(box);
+    sf::Texture draw_box;
+    draw_box.loadFromFile("../Data/Image/legalMove.png");
+    sf::Sprite sp;
+    sp.setTexture(draw_box);
+    sp.setPosition(y * cellSize + SCREEN_MARGIN, x * cellSize + SCREEN_MARGIN);
+    window.draw(sp);
+}
+
+void drawBoxKing(int x, int y) {
+    sf::Texture draw_box;
+    draw_box.loadFromFile("../Data/Image/kingDeath.png");
+    sf::Sprite sp;
+    sp.setTexture(draw_box);
+    sp.setPosition(y * cellSize + SCREEN_MARGIN, x * cellSize + SCREEN_MARGIN);
+    window.draw(sp);
 }
 
 void drawBoxPos(int x, int y) {
@@ -341,33 +352,44 @@ bool falseChoose(int i,int j) {
     return true;
 }
 
-void checkKing() {
-    reloadPos(check_king);
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            if (board[i][j] > 0) {
-                if (board[i][j] == 6)    PositivePawn(i, j, check_king);
-                if (board[i][j] == 5)    PositiveCastle(i, j, check_king);
-                if (board[i][j] == 4)     PositiveKnight(i, j, check_king);
-                if (board[i][j] == 3)    PositiveBishop(i, j, check_king);
-                if (board[i][j] == 2)       PositiveQueen(i, j, check_king);
-                if (board[i][j] == 1)    PositiveKing(i, j, check_king);
+void checkKing(int check) {  
+        reloadPos(check_king);
+    if (check == -1) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board[i][j] > 0) {
+                    if (board[i][j] == 6)    PositivePawn(i, j, check_king);
+                    if (board[i][j] == 5)    PositiveCastle(i, j, check_king);
+                    if (board[i][j] == 4)     PositiveKnight(i, j, check_king);
+                    if (board[i][j] == 3)    PositiveBishop(i, j, check_king);
+                    if (board[i][j] == 2)       PositiveQueen(i, j, check_king);
+                    if (board[i][j] == 1)    PositiveKing(i, j, check_king);
+                }
+            }
+        }
+
+    }
+    else if(check == 1){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board[i][j] < 0) {
+                    if (board[i][j] == -6)    PositivePawn(i, j, check_king);
+                    if (board[i][j] == -5)    PositiveCastle(i, j, check_king);
+                    if (board[i][j] == -4)     PositiveKnight(i, j, check_king);
+                    if (board[i][j] == -3)    PositiveBishop(i, j, check_king);
+                    if (board[i][j] == -2)       PositiveQueen(i, j, check_king);
+                    if (board[i][j] == -1)    PositiveKing(i, j, check_king);
+                }
             }
         }
     }
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            if (board[i][j] == -1 && check_king[i][j] > 0) {
-                cout << "Chieu tuong" << endl;
-            }
-        }
-    }
+
 }
 
 bool check_win() {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (board[i][j] == -1) return true;
+            if (board[i][j] == -1 || board[i][j] == 1) return true;
         }
     }
     return false;
@@ -435,6 +457,9 @@ int main() {
                 if (falseChoose(dx_n,dy_n)) {
                     board[dx_n][dy_n] = board[dx][dy];
                     board[dx][dy] = 0;
+
+                    checkKing(checkTurn);
+
                     checkTurn = -checkTurn;
 
                     //To Capture 
@@ -454,7 +479,7 @@ int main() {
 
                 loadPosition();
                 reloadPos(checkPos);
-                checkKing();
+
                 //reset
                 isMouse = true;
                 click = 0;
@@ -473,8 +498,12 @@ int main() {
                 if (checkPos[i][j] == 2) drawBox(i, j);
                 else if (checkPos[i][j] == 1)    drawBoxWhite(i, j);
                 else if (checkPos[i][j] == 3)     drawBoxPos(i, j);
+                if ((board[i][j] == -1 || board[i][j] == 1) && check_king[i][j] == 2) {
+                    drawBoxKing(i, j);
+                }
             }
         }
+
         for (auto i:f) window.draw(i);
 
 		window.display();
