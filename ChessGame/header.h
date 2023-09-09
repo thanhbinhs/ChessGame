@@ -1,4 +1,4 @@
-﻿#pragma once
+﻿
 #ifndef HEADER_H
 #define HEADER_H
 
@@ -27,6 +27,3 @@ static bool checkCastling[5];
 static float cellSize = 80.0f;
 
 #endif // !HEADER_H
-
-
-
