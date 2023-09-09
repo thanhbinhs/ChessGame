@@ -1,18 +1,10 @@
 #include "header.h"
 
+
 using namespace std;
 using namespace sf;
 
-sf::Vector2f offset(40, 40);
-Sprite f[33]; //mang lưu các quân cờ
-sf::Vector2i pos;
-int dx = 0;
-int dy = 0;
-int click = 0;
-bool isMouse = true;
-int checkTurn = -1;
-bool checkCastling[5];
-float cellSize = 80.0f;
+sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML", sf::Style::Close);
 
 enum WhiteChesses {
     VUA = 1,
@@ -32,15 +24,15 @@ enum BlackChesses {
     VUADEN
 };
 
-int board[8][8] = 
-	{ -5,-4,-3,-1,-2,-3,-4,-5,
-	 -6,-6,-6,-6,-6,-6,-6,-6,
-	  0, 0, 0, 0, 0, 0, 0, 0,
-	  0, 0, 0, 0, 0, 0, 0, 0,
-	  0, 0, 0, 0, 0, 0, 0, 0,
-	  0, 0, 0, 0, 0, 0, 0, 0,
-	  6, 6, 6, 6, 6, 6, 6, 6,
-	  5, 4, 3, 1, 2, 3, 4, 5 };
+int board[8][8] =
+{ -5,-4,-3,-1,-2,-3,-4,-5,
+ -6,-6,-6,-6,-6,-6,-6,-6,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  6, 6, 6, 6, 6, 6, 6, 6,
+  5, 4, 3, 1, 2, 3, 4, 5 };
 
 int checkPos[9][9];
 
@@ -387,15 +379,20 @@ void checkKing(int check) {
 }
 
 bool check_win() {
+    int check = 0;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (board[i][j] == -1 || board[i][j] == 1) return true;
+            if (board[i][j] == -1 || board[i][j] == 1) check++;
+            if (check == 2) return true;
         }
     }
     return false;
 }
 
+
+
 int main() {
+
     window.setFramerateLimit(60);
 
 	sf::Texture texture;
@@ -404,8 +401,18 @@ int main() {
 	for (int i = 0; i < 32; i++) {
 		f[i].setTexture(texture);
 	}
+
+    //Sound
+    sf::SoundBuffer buffer;
+    if (!buffer.loadFromFile("../Data/Audio/moveSound.ogg"))     cout << "No Found Sound moveSound" << endl;
+    sf::Sound sound;
+    sound.setBuffer(buffer);
 	sf::Event event;
+
+
+
 	loadPosition();
+
 	while (window.isOpen()) {
 
 		while (window.pollEvent(event)) {
@@ -421,6 +428,7 @@ int main() {
             if (click == 1 && isMouse == true) {
                     dy = (pos.x - SCREEN_MARGIN) / 80;
                     dx = (pos.y - SCREEN_MARGIN) / 80;
+
                     if (board[dx][dy] * checkTurn < 0) {
                         isMouse = false;
                         checkPos[dx][dy] = 3;
@@ -457,6 +465,7 @@ int main() {
                 if (falseChoose(dx_n,dy_n)) {
                     board[dx_n][dy_n] = board[dx][dy];
                     board[dx][dy] = 0;
+                    sound.play();
 
                     checkKing(checkTurn);
 
@@ -466,6 +475,8 @@ int main() {
                     if ((board[dx_n][dy_n] == 6 && dx_n == 0) || (board[dx_n][dy_n] == -6 && dx_n == 7)) {
                         toCapture(dx_n,dy_n);
                     }
+
+
 
                 }
 
