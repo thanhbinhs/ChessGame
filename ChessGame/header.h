@@ -4,6 +4,9 @@
 
 #include<SFML/Graphics.hpp>
 #include<SFML/Audio.hpp>
+#include<SFML/Window.hpp>
+#include<Windows.h>
+#include<string>
 #include<iostream>
 #include<stack>
 #include<math.h>
@@ -25,5 +28,6 @@ static bool isMouse = true;
 static int checkTurn = -1;
 static bool checkCastling[5];
 static float cellSize = 80.0f;
+
 
 #endif // !HEADER_H

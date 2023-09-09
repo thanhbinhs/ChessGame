@@ -6,6 +6,7 @@ using namespace sf;
 
 sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML", sf::Style::Close);
 
+
 enum WhiteChesses {
     VUA = 1,
     HAU,
@@ -33,6 +34,18 @@ int board[8][8] =
   0, 0, 0, 0, 0, 0, 0, 0,
   6, 6, 6, 6, 6, 6, 6, 6,
   5, 4, 3, 1, 2, 3, 4, 5 };
+
+
+int board_s[8][8] = {
+-5,-4,-3,-1,-2,-3,-4,-5,
+ -6,-6,-6,-6,-6,-6,-6,-6,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  6, 6, 6, 6, 6, 6, 6, 6,
+  5, 4, 3, 1, 2, 3, 4, 5
+};
 
 int checkPos[9][9];
 
@@ -387,20 +400,54 @@ void checkKing(int check) {
 
 }
 
-bool check_win() {
-    int check = 0;
+int check_win() {
+    bool checkWhite = false;
+    bool checkBlack = false;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (board[i][j] == -1 || board[i][j] == 1) check++;
-            if (check == 2) return true;
+            if (board[i][j] == -1 ) checkBlack = true;
+            if (board[i][j] == 1)   checkWhite = true;
         }
     }
-    return false;
+    if (!checkWhite) return 1;
+    if (!checkBlack)  return -1;
+    else return 0;
+}
+
+void returnGame() {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            board[i][j] = board_s[i][j];
+        }
+    }
 }
 
 
+void messWin(int check ) {
+    if (check == -1)  MessageBoxA(NULL, "White is Winner", "Winner", MB_OKCANCEL | MB_ICONEXCLAMATION);
+    if (check == 1)  MessageBoxA(NULL, "Black is Winner", "Winner", MB_OKCANCEL | MB_ICONEXCLAMATION);
+
+}
+
+void showTurn(int check) {
+    sf::Texture text_png;
+    sf::Sprite chess_png;
+
+    if (check == -1) {
+        text_png.loadFromFile("../Data/Image/white_chess_rmbg.png");
+        chess_png.setTexture(text_png);
+        chess_png.setPosition(SCREEN_WIDTH - (chess_png.getGlobalBounds().width) * 1.2f, 200.f);
+    }
+    if (check == 1) {
+        text_png.loadFromFile("../Data/Image/black_chess_rmbg.png");
+        chess_png.setTexture(text_png);
+        chess_png.setPosition(SCREEN_WIDTH - (chess_png.getGlobalBounds().width) * 1.5f, 200.f);
+    }
+    window.draw(chess_png);
+}
 
 int main() {
+
 
     window.setFramerateLimit(60);
 
@@ -418,7 +465,8 @@ int main() {
     sound.setBuffer(buffer);
     sf::Event event;
 
-
+    sf::Text text_turn;
+    int check_ = 0;
 
     loadPosition();
 
@@ -434,6 +482,9 @@ int main() {
                     click++;
                 }
             }
+
+
+
             if (click == 1 && isMouse == true) {
                 dy = (pos.x - SCREEN_MARGIN) / 80;
                 dx = (pos.y - SCREEN_MARGIN) / 80;
@@ -507,8 +558,12 @@ int main() {
 
         }
 
-        if (check_win() == false) {
-            isMouse = false;
+        check_ = check_win();
+        if (check_ == 1 || check_ == -1) {
+            returnGame();
+            loadPosition();
+            checkTurn = -check_;
+            messWin(check_);
         }
 
         window.clear(sf::Color(179, 179, 179));
@@ -523,6 +578,8 @@ int main() {
                 }
             }
         }
+
+        showTurn(checkTurn);
 
         for (auto i : f) window.draw(i);
 
