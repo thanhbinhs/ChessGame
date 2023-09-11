@@ -100,7 +100,7 @@ void drawBoxPos(int x, int y) {
 }
 
 void chessBoard() {
-
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
     const float boardSize = cellSize * 8;
 
     // Vị trí của bàn cờ để nó nằm bên trái và cách lề 50 pixel
@@ -158,14 +158,117 @@ void chessBoard() {
     line.rotate(90.f);
     line.setPosition(640.0f + SCREEN_MARGIN * 2 + 5.f, 0.f);
     window.draw(line);
-    // Chữ edit 
+
+    sf::Text textMenu1;
+    textMenu1.setFont(customFont); // Thiết lập font tùy chỉnh
+    textMenu1.setString("Setting"); // Đặt nội dung chữ
+    textMenu1.setCharacterSize(60); // Kích thước chữ
+    textMenu1.setFillColor(sf::Color::White); // Màu chữ
+    textMenu1.setPosition(745 + 44, SCREEN_MARGIN); // Vị trí chữ trên cửa sổ
+    window.draw(textMenu1);
+    sf::RectangleShape BoxInSetting2(sf::Vector2f(295, cellSize));
+    BoxInSetting2.setFillColor(sf::Color(248, 220, 180));
+    BoxInSetting2.setPosition(745, SCREEN_MARGIN);
+    if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN && mousePosition.y <= SCREEN_MARGIN + cellSize)) {
+        window.draw(BoxInSetting2);
+        window.draw(textMenu1);
+    }
+
+}
+
+void PrintSetting() {
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+    sf::Font customFont1;
+    if (!customFont1.loadFromFile("../Data/Font/font_1.ttf")) {
+        cout << "false to load font";
+    }
     sf::Text textMenu;
-    textMenu.setFont(customFont); // Thiết lập font tùy chỉnh
+    textMenu.setFont(customFont1); // Thiết lập font tùy chỉnh
     textMenu.setString("Setting"); // Đặt nội dung chữ
     textMenu.setCharacterSize(60); // Kích thước chữ
     textMenu.setFillColor(sf::Color::White); // Màu chữ
-    textMenu.setPosition(SCREEN_WIDTH - (textMenu.getGlobalBounds().width) * 1.2f, 20.f); // Vị trí chữ trên cửa sổ
-    window.draw(textMenu);
+    textMenu.setPosition(745 + 44, SCREEN_MARGIN); // Vị trí chữ trên cửa sổ
+
+    sf::RectangleShape BoxInSetting(sf::Vector2f(295, cellSize * 4));
+    BoxInSetting.setFillColor(sf::Color::Black);
+    BoxInSetting.setPosition(745, SCREEN_MARGIN);
+    //window.draw(BoxInSetting);
+
+    sf::RectangleShape BoxInSetting2(sf::Vector2f(295, cellSize));
+    BoxInSetting2.setFillColor(sf::Color(248, 220, 180));
+    BoxInSetting2.setPosition(745, SCREEN_MARGIN);
+    //window.draw(BoxInSetting2);
+    sf::RectangleShape BoxIntextPvP(sf::Vector2f(295, cellSize));
+    BoxIntextPvP.setFillColor(sf::Color(248, 220, 180));
+    BoxIntextPvP.setPosition(745, SCREEN_MARGIN + cellSize);
+
+    sf::RectangleShape BoxIntextPvAI(sf::Vector2f(295, cellSize));
+    BoxIntextPvAI.setFillColor(sf::Color(248, 220, 180));
+    BoxIntextPvAI.setPosition(745, SCREEN_MARGIN + cellSize * 2);
+
+    sf::RectangleShape BoxIntextQuit(sf::Vector2f(295, cellSize));
+    BoxIntextQuit.setFillColor(sf::Color(248, 220, 180));
+    BoxIntextQuit.setPosition(745, SCREEN_MARGIN + cellSize * 3);
+
+
+
+    //window.draw(textMenu);
+    sf::Text textPvP;
+    textPvP.setFont(customFont1); // Thiết lập font tùy chỉnh
+    textPvP.setString("PvP"); // Đặt nội dung chữ
+    textPvP.setCharacterSize(60); // Kích thước chữ
+    textPvP.setFillColor(sf::Color::White); // Màu chữ
+    textPvP.setPosition(SCREEN_WIDTH - SCREEN_MARGIN * 2 - 150 + 44.5, SCREEN_MARGIN + cellSize);
+    //window.draw(textPvP);
+    sf::Text textPvAI;
+    textPvAI.setFont(customFont1);
+    textPvAI.setString("PvAI");
+    textPvAI.setCharacterSize(60);
+    textPvAI.setFillColor(sf::Color::White);
+    textPvAI.setPosition(SCREEN_WIDTH - SCREEN_MARGIN * 2 - 150 + 36.5, SCREEN_MARGIN + cellSize * 2);
+    //window.draw(textPvAI);
+    sf::Text textQuit;
+    textQuit.setFont(customFont1);
+    textQuit.setString("Quit");
+    textQuit.setCharacterSize(60);
+    textQuit.setFillColor(sf::Color::White);
+    textQuit.setPosition(SCREEN_WIDTH - SCREEN_MARGIN * 2 - 150 + 42.5, SCREEN_MARGIN + cellSize * 3);
+    //window.draw(textQuit);
+
+    if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN && mousePosition.y <= SCREEN_MARGIN + cellSize)) {
+        window.draw(BoxInSetting);
+        window.draw(BoxInSetting2);
+        window.draw(textMenu);
+        window.draw(textPvP);
+        window.draw(textPvAI);
+        window.draw(textQuit);
+    }
+    if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize && mousePosition.y <= SCREEN_MARGIN + cellSize * 2)) {
+        window.draw(BoxInSetting);
+        window.draw(BoxIntextPvP);
+        window.draw(textMenu);
+        window.draw(textPvP);
+        window.draw(textPvAI);
+        window.draw(textQuit);
+    }
+    if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 2 && mousePosition.y <= SCREEN_MARGIN + cellSize * 3)) {
+        window.draw(BoxInSetting);
+        window.draw(BoxIntextPvAI);
+        window.draw(textMenu);
+        window.draw(textPvP);
+        window.draw(textPvAI);
+        window.draw(textQuit);
+    }
+    if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 3 && mousePosition.y <= SCREEN_MARGIN + cellSize * 4)) {
+        window.draw(BoxInSetting);
+        window.draw(BoxIntextQuit);
+        window.draw(textMenu);
+        window.draw(textPvP);
+        window.draw(textPvAI);
+        window.draw(textQuit);
+    }
+
+
 
 }
 
@@ -189,7 +292,7 @@ void loadPosition() {
             k++;
         }
     for (int i = k_index; i <= k; i++) {
-        f[i].setPosition(-100,-100);
+        f[i].setPosition(-100, -100);
     }
 }
 
@@ -405,7 +508,7 @@ int check_win() {
     bool checkBlack = false;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (board[i][j] == -1 ) checkBlack = true;
+            if (board[i][j] == -1) checkBlack = true;
             if (board[i][j] == 1)   checkWhite = true;
         }
     }
@@ -423,7 +526,7 @@ void returnGame() {
 }
 
 
-void messWin(int check ) {
+void messWin(int check) {
     if (check == -1)  MessageBoxA(NULL, "White is Winner", "Winner", MB_OKCANCEL | MB_ICONEXCLAMATION);
     if (check == 1)  MessageBoxA(NULL, "Black is Winner", "Winner", MB_OKCANCEL | MB_ICONEXCLAMATION);
 
@@ -447,6 +550,10 @@ void showTurn(int check) {
 }
 
 int main() {
+    bool checkareaSetting = false;
+    bool checkareaPvP = false;
+    bool checkareaPvAI = false;
+    bool checkareaQuit = false;
 
 
     window.setFramerateLimit(60);
@@ -555,6 +662,39 @@ int main() {
                 isMouse = true;
                 click = 0;
             }
+            // check setting
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
+                sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+                // Kiểm tra xem chuột có nằm trong vùng setting không
+                if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN && mousePosition.y <= SCREEN_MARGIN + cellSize)) {
+                    checkareaSetting = true;
+                    checkareaPvP = true;
+                    bool checkareaPvAI = false;
+                    bool checkareaQuit = false;
+                    cout << "1";
+                }
+                else if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize && mousePosition.y <= SCREEN_MARGIN + cellSize * 2) && checkareaPvP) {
+                    checkareaSetting = true;
+                    cout << "2";
+                }
+                else if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 2 && mousePosition.y <= SCREEN_MARGIN + cellSize * 3) && checkareaPvP) {
+                    checkareaSetting = true;
+                    cout << "3";
+                }
+                else if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 3 && mousePosition.y <= SCREEN_MARGIN + cellSize * 4) && checkareaPvP) {
+                    checkareaSetting = true;
+                    cout << "4";
+                }
+                else
+                {
+                    checkareaSetting = false;
+                    checkareaPvP = false;
+                    bool checkareaPvAI = false;
+                    bool checkareaQuit = false;
+                }
+            }
 
         }
 
@@ -582,6 +722,10 @@ int main() {
         showTurn(checkTurn);
 
         for (auto i : f) window.draw(i);
+        // Vẽ setting
+        if (checkareaSetting) {
+            PrintSetting();
+        }
 
         window.display();
     }
