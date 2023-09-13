@@ -40,6 +40,37 @@ void Board::drawBoxLegalMove(int x, int y) {
     drawBox(sp, draw_box, x, y);
 }
 
+void Board::drawCapture(const std::string& filename,int x,int y)
+{
+    sf::Sprite ct[4];
+    texture.loadFromFile(filename);
+    ct->setTexture(texture);
+    for (int i = 0; i < 4; i++) {
+        ct[i].setTexture(texture);
+    }
+    sf::RectangleShape shape;
+
+
+    if (board[x][y] > 0) {
+        for (int i = 0; i < 4; i++) {
+            ct[i].setTextureRect({ 80 * (i + 1),0,80,80 });
+            ct[i].setPosition(cellSize * x + SCREEN_MARGIN, SCREEN_MARGIN + cellSize * i);
+        }
+        shape.setSize(sf::Vector2f(cellSize, cellSize * 4));
+        shape.setPosition(cellSize * x + SCREEN_MARGIN, SCREEN_MARGIN + cellSize);
+    }
+    else {
+        for (int i = 0; i < 4; i++) {
+            ct[i].setTextureRect({ 80 * (i + 1),80,80,80 });
+            ct[i].setPosition(cellSize * x + SCREEN_MARGIN,SCREEN_HEIGHT - SCREEN_MARGIN + cellSize * i);
+        }
+        shape.setSize(sf::Vector2f(cellSize, cellSize * 4));
+        shape.setPosition(cellSize * x + SCREEN_MARGIN, SCREEN_HEIGHT - SCREEN_MARGIN + cellSize);
+    }
+    window.draw(shape);
+    for (auto i : ct)  window.draw(i);
+}
+
 void Board::drawBoxDeathKing(int x, int y) {
     sf::Texture draw_box;
     draw_box.loadFromFile("../Data/Image/kingDeath.png");

@@ -17,11 +17,13 @@ public:
     void PositivePawn(int x, int y, int checkPos[9][9]);
     void checkKing(int check);
     void reloadPos(int checkPos[9][9]);
-    void toCapture(int x, int y);
+    void toCapture(int x, int y, Board &board_, sf::Event event);
     void toCastling(int x, int y, int dx, int dy);
     bool falseChoose(int i, int j);
     void returnGame();
+    void disableTurn();
     int check_win();
+    bool bool_king(int check);
     void messWin(int check);
     void Play();
 private:

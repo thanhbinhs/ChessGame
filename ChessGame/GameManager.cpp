@@ -173,8 +173,27 @@ void Game::PositiveQueen(int x, int y, int checkPos[9][9]) {
     PositiveBishop(x, y, checkPos);
 }
 
-void Game::toCapture(int x, int y) {
-    board[x][y] = (board[x][y] / 6) * 2;
+void Game::toCapture(int x, int y, Board& board_, sf::Event event) {
+    board_.drawCapture("../Data/Image/chesses.png", x, y);
+    if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.key.code == sf::Mouse::Left) {
+            sf::Vector2i posCap = sf::Mouse::getPosition(window);
+            int dy = (int)(posCap.y - SCREEN_MARGIN) / 80;
+            //       int dx = (int)(posCap.y - SCREEN_MARGIN) / 80;
+            if (board[x][y] > 0) {
+                if (dy == 0) board[x][y] = (board[x][y] / 6) * 2;
+                if (dy == 1) board[x][y] = (board[x][y] / 6) * 3;
+                if (dy == 2) board[x][y] = (board[x][y] / 6) * 4;
+                if (dy == 3) board[x][y] = (board[x][y] / 6) * 5;
+            }
+            else {
+                if (dy == 7) board[x][y] = (board[x][y] / 6) * 2;
+                if (dy == 6) board[x][y] = (board[x][y] / 6) * 3;
+                if (dy == 5) board[x][y] = (board[x][y] / 6) * 4;
+                if (dy == 4) board[x][y] = (board[x][y] / 6) * 5;
+            }
+        }
+    }
 }
 
 void Game::toCastling(int x, int y, int dx, int dy) {
@@ -226,6 +245,17 @@ void Game::checkKing(int check) {
 
 }
 
+bool Game::bool_king(int check) {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (board[i][j] == check && check_king[i][j] == 2) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 int Game::check_win() {
     bool checkWhite = false;
     bool checkBlack = false;
@@ -246,6 +276,11 @@ void Game::returnGame() {
             board[i][j] = board_s[i][j];
         }
     }
+}
+
+void Game::disableTurn()
+{
+
 }
 
 
@@ -369,6 +404,8 @@ void Game::Play() {
                 sf::Vector2i pos_n = sf::Mouse::getPosition(window);
                 int dy_n = (int)(pos_n.x - SCREEN_MARGIN) / 80;
                 int dx_n = (int)(pos_n.y - SCREEN_MARGIN) / 80;
+                int index = board[dx][dy];
+                int index_2 = board[dx_n][dy_n];
                 if (!(dx_n == dx && dy_n == dy))
                     if (falseChoose(dx_n, dy_n)) {
                         if (dx == 7 && dy == 7)    checkCastlingWhite = false;
@@ -381,25 +418,25 @@ void Game::Play() {
 
                         }
                         else {
-
                             board[dx_n][dy_n] = board[dx][dy];
                             board[dx][dy] = 0;
                         }
                         sound.play();
-
-                        checkKing(checkTurn);
-
-                        checkTurn = -checkTurn;
-
+                        cout << "Check: " << checkTurn << endl;
+                        checkKing(-checkTurn);
+                        if (!bool_king(-checkTurn)) {
+                            board[dx_n][dy_n] = index_2;
+                            board[dx][dy] = index;
+                        }
+                        else {
+                            checkKing(checkTurn);
+                            checkTurn = -checkTurn;
+                        }
                         //To Capture 
                         if ((board[dx_n][dy_n] == 6 && dx_n == 0) || (board[dx_n][dy_n] == -6 && dx_n == 7)) {
-                            toCapture(dx_n, dy_n);
+                            toCapture(dx_n, dy_n,board_,event);
                         }
-
-
-
                     }
-
                 cout << "New Board: " << endl;
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {

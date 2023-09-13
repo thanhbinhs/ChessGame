@@ -15,6 +15,7 @@ public:
     void drawBoxDeath(int x, int y);
     void drawBoxDeathKing(int x, int y);
     void drawBoxLegalMove(int x, int y);
+    void drawCapture(const std::string& filename, int x, int y);
     void drawBoard(int checkPos[9][9], int board[8][8], int check_king[9][9],  int dx, int dy);
     void showTurn(int check);
     void Quit();
