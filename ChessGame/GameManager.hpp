@@ -23,6 +23,7 @@ public:
     void returnGame();
     void disableTurn();
     int check_win();
+    void checkSetting();
     bool bool_king(int check);
     void messWin(int check);
     void Play();
@@ -35,6 +36,9 @@ private:
     bool checkCastlingWhite = true;
     bool checkCastlingBlack = true;
     sf::Sprite f[33];
+
+
+    bool checkareaSetting = false;
 };
 
 

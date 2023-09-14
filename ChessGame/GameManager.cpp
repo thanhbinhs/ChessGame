@@ -290,6 +290,43 @@ void Game::disableTurn()
 
 }
 
+void Game::checkSetting() {
+    bool checkareaPvP = false;
+    bool checkareaPvAI = false;
+    bool checkareaQuit = false;
+    checkareaSetting = true;
+    checkareaPvP = true;
+    cout << "1";
+    click = 0;
+
+    // Kiểm tra xem chuột có nằm trong vùng setting không
+    sf::Event anotherEvent;
+    if (window.pollEvent(anotherEvent)) {
+        if (anotherEvent.type == sf::Event::MouseButtonPressed)
+            if (anotherEvent.key.code == sf::Mouse::Left) {
+                if ((pos.x >= 745 && pos.x <= SCREEN_WIDTH) && (pos.y >= SCREEN_MARGIN + cellSize && pos.y <= SCREEN_MARGIN + cellSize * 2) && checkareaPvP) {
+                    checkareaSetting = true;
+                    cout << "2";
+                    click = 0;
+
+                }
+                else if ((pos.x >= 745 && pos.x <= SCREEN_WIDTH) && (pos.y >= SCREEN_MARGIN + cellSize * 2 && pos.y <= SCREEN_MARGIN + cellSize * 3) && checkareaPvP) {
+                    checkareaSetting = true;
+                    cout << "3";
+                    click = 0;
+
+                }
+
+                else
+                {
+                    checkareaSetting = false;
+                    checkareaPvP = false;
+                    bool checkareaPvAI = false;
+                }
+            }
+    }
+}
+
 
 void Game::messWin(int check) {
     if (check == -1)  MessageBoxA(NULL, "White is Winner", "Winner", MB_OKCANCEL | MB_ICONEXCLAMATION);
@@ -300,10 +337,7 @@ void Game::messWin(int check) {
 
 
 void Game::Play() {
-    bool checkareaSetting = false;
-    bool checkareaPvP = false;
-    bool checkareaPvAI = false;
-    bool checkareaQuit = false;
+
 
     Board board_(window);
 
@@ -338,36 +372,6 @@ void Game::Play() {
             }
 
             bool checkSelection = false;
-
-            // Kiểm tra xem chuột có nằm trong vùng setting không
-            if ((pos.x >= 745 && pos.x <= SCREEN_WIDTH) && (pos.y >= SCREEN_MARGIN && pos.y <= SCREEN_MARGIN + cellSize)) {
-                checkareaSetting = true;
-                checkareaPvP = true;
-                bool checkareaPvAI = false;
-                cout << "1";
-                click = 0;
-            }
-            else if ((pos.x >= 745 && pos.x <= SCREEN_WIDTH) && (pos.y >= SCREEN_MARGIN + cellSize && pos.y <= SCREEN_MARGIN + cellSize * 2) && checkareaPvP) {
-                checkareaSetting = true;
-                cout << "2";
-                click = 0;
-
-            }
-            else if ((pos.x >= 745 && pos.x <= SCREEN_WIDTH) && (pos.y >= SCREEN_MARGIN + cellSize * 2 && pos.y <= SCREEN_MARGIN + cellSize * 3) && checkareaPvP) {
-                checkareaSetting = true;
-                cout << "3";
-                click = 0;
-
-            }
-
-            else
-            {
-                checkareaSetting = false;
-                checkareaPvP = false;
-                bool checkareaPvAI = false;
-            }
-
-
 
             if (click == 1 && isMouse == true) {
                 dy = (int)(pos.x - SCREEN_MARGIN) / 80;
@@ -457,6 +461,10 @@ void Game::Play() {
                 click = 0;
             }
 
+           if ((pos.x >= 745 && pos.x <= SCREEN_WIDTH) && (pos.y >= SCREEN_MARGIN && pos.y <= SCREEN_MARGIN + cellSize))
+
+                checkSetting();
+
         }
 
         while ((board[dx_n][dy_n] == 6 && dx_n == 0) || (board[dx_n][dy_n] == -6 && dx_n == 7)) {
@@ -475,8 +483,9 @@ void Game::Play() {
         }
 
 
-
         board_.drawBoard(checkPos, board, check_king,dx,dy);
+
+
 
         if (checkareaSetting) {
             board_.PrintSetting();
