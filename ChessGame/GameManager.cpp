@@ -336,14 +336,16 @@ void Game::checkSetting() {
 
 
 void Game::messWin(int check) {
-    if (check == -1)  MessageBoxA(NULL, "White is Winner", "Winner", MB_OKCANCEL | MB_ICONEXCLAMATION);
-    if (check == 1)  MessageBoxA(NULL, "Black is Winner", "Winner", MB_OKCANCEL | MB_ICONEXCLAMATION);
+    if (check == -1)  MessageBoxA(NULL, "White is Winner", "Winner", MB_OK | MB_ICONEXCLAMATION);
+    if (check == 1)  MessageBoxA(NULL, "Black is Winner", "Winner", MB_OK| MB_ICONEXCLAMATION);
 
 }
 
-int Game::checkMate(int check)
+int Game::checkMate(int check,int board[8][8])
 {
+    int result;
     int matrix_mate[9][9];
+    int check_ = check;
 
     int board_i[8][8];
     for (int i = 0; i < 8; i++) {
@@ -352,16 +354,24 @@ int Game::checkMate(int check)
         }
     }
 
+    cout << "Board check: \n";
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (board[i][j] * check < 0) {
-                if (board[i][j] * check == -6)    PositivePawn(i, j, matrix_mate);
-                if (board[i][j] * check == -5)    PositiveCastle(i, j, matrix_mate);
-                if (board[i][j] * check == -4)     PositiveKnight(i, j, matrix_mate);
-                if (board[i][j] * check == -3)    PositiveBishop(i, j, matrix_mate);
-                if (board[i][j] * check == -2)       PositiveQueen(i, j, matrix_mate);
-                if (board[i][j] * check == -1)    PositiveKing(i, j, matrix_mate);
+            cout << board_i[i][j] << " ";
+        }
+        cout << endl;
+    }
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (board[i][j] * check_ < 0) {
+                if (board[i][j] * check_ == -6)    PositivePawn(i, j, matrix_mate);
+                if (board[i][j] * check_ == -5)    PositiveCastle(i, j, matrix_mate);
+                if (board[i][j] * check_ == -4)     PositiveKnight(i, j, matrix_mate);
+                if (board[i][j] * check_ == -3)    PositiveBishop(i, j, matrix_mate);
+                if (board[i][j] * check_ == -2)       PositiveQueen(i, j, matrix_mate);
+                if (board[i][j] * check_ == -1)    PositiveKing(i, j, matrix_mate);
             }
+
             for (int in = 0; in < 8; in++) {
                 for (int jn = 0; jn < 8; jn++) {
                     int index_2 = board_i[in][jn];
@@ -369,21 +379,19 @@ int Game::checkMate(int check)
                     if (matrix_mate[in][jn] > 0) {
                         board_i[in][jn] = board_i[i][j];
                         board_i[i][j] = 0;
-                        checkKing(check,matrix_mate);
-                        if (!bool_king(check,matrix_mate)) {
-                            board_i[in][jn] = index_2;
-                            board_i[i][j] = index;
-                        }
-                        else {
+                        checkKing(check_,matrix_mate);
+                        if (bool_king(check_, matrix_mate)) {
                             return 0;
                         }
+
                     }
                 }
             }
             reloadMatrix(matrix_mate);
         }
     }
-    return check;
+
+    return check_;
 }
 
 
@@ -489,16 +497,16 @@ void Game::Play() {
                         }
                         sound.play();
                         checkKing(-checkTurn,check_king);
+                        check_ = -checkMate(checkTurn, board);
+                        cout << "check : " << check_ << endl;
                         if (!bool_king(-checkTurn,check_king)) {
                             board[dx_n][dy_n] = index_2;
                             board[dx][dy] = index;
-                            if (checkMate(checkTurn) == 1)  check_ = -1;
-                            if (checkMate(checkTurn) == -1)  check_ = 1;
+
                         }
                         else{
                             checkKing(checkTurn,check_king);
                             checkTurn = -checkTurn;
-
                         }
                         //To Capture 
                         
@@ -533,14 +541,7 @@ void Game::Play() {
         }
 
 
-        if (check_ == 1 || check_ == -1) {
-            returnGame();
-            board_.loadPosition(board);
-            checkTurn = -check_;
-            messWin(check_);
-            check_ = 0;
-            checkTurn = -1;
-        }
+
 
 
         board_.drawBoard(checkPos, board, check_king,dx,dy);
@@ -552,6 +553,15 @@ void Game::Play() {
         board_.Quit();
 
         window.display();
+
+        if (check_ == 1 || check_ == -1) {
+            returnGame();
+            board_.loadPosition(board);
+            checkTurn = -check_;
+            messWin(check_);
+            check_ = 0;
+            checkTurn = -1;
+        }
     }
 }
 
