@@ -15,7 +15,7 @@ public:
     void PositiveKing(int x, int y, int checkPos[9][9]);
     void PositiveQueen(int x, int y, int checkPos[9][9]);
     void PositivePawn(int x, int y, int checkPos[9][9]);
-    void checkKing(int check);
+    void checkKing(int check, int check_king[9][9]);
     void reloadPos(int checkPos[9][9]);
     void toCapture(int x, int y,int board[8][8]);
     void toCastling(int x, int y, int dx, int dy);
@@ -24,9 +24,11 @@ public:
     void disableTurn();
     int check_win();
     void checkSetting();
-    bool bool_king(int check);
+    bool bool_king(int check, int check_king[9][9]);
     void messWin(int check);
+    int checkMate(int check);
     void Play();
+    void reloadMatrix(int matrix[9][9]);
 private:
     sf::RenderWindow& window;
     int dx = 0;

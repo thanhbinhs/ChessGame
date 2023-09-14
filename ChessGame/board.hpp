@@ -21,6 +21,7 @@ public:
     void Quit();
     void PrintSetting();
     sf::RectangleShape createButton();
+    sf::ConvexShape createRoundedRectangle(float width, float height, float radius, unsigned int cornerPoints);
 private:
     sf::RenderWindow& window;
     sf::Texture texture;

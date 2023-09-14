@@ -40,6 +40,38 @@ void Board::drawBoxLegalMove(int x, int y) {
     drawBox(sp, draw_box, x, y);
 }
 
+sf::ConvexShape Board::createRoundedRectangle(float width, float height, float radius, unsigned int cornerPoints) {
+    sf::ConvexShape shape;
+    shape.setPointCount(4 * cornerPoints);
+
+    float angleIncrement = 90.0f / (cornerPoints - 1);
+    float currentAngle = 0.0f;
+
+    for (unsigned int i = 0; i < 4 * cornerPoints; i += 4) {
+        // Calculate the coordinates for each corner
+        float x1 = width - radius + cos(currentAngle * 3.14159265f / 180) * radius;
+        float y1 = height - radius + sin(currentAngle * 3.14159265f / 180) * radius;
+
+        float x2 = radius - cos(currentAngle * 3.14159265f / 180) * radius;
+        float y2 = height - radius + sin(currentAngle * 3.14159265f / 180) * radius;
+
+        float x3 = radius - cos(currentAngle * 3.14159265f / 180) * radius;
+        float y3 = radius - sin(currentAngle * 3.14159265f / 180) * radius;
+
+        float x4 = width - radius + cos(currentAngle * 3.14159265f / 180) * radius;
+        float y4 = radius - sin(currentAngle * 3.14159265f / 180) * radius;
+
+        shape.setPoint(i, sf::Vector2f(x1, y1));
+        shape.setPoint(i + 1, sf::Vector2f(x2, y2));
+        shape.setPoint(i + 2, sf::Vector2f(x3, y3));
+        shape.setPoint(i + 3, sf::Vector2f(x4, y4));
+
+        currentAngle += angleIncrement;
+    }
+
+    return shape;
+}
+
 void Board::drawCapture(const std::string& filename,int x,int y,int board[8][8])
 {
     sf::Sprite ct[4];
@@ -48,23 +80,23 @@ void Board::drawCapture(const std::string& filename,int x,int y,int board[8][8])
     for (int i = 0; i < 4; i++) {
         ct[i].setTexture(texture);
     }
-    sf::RectangleShape shape;
-    shape.setFillColor(sf::Color::White);
-    shape.setSize(sf::Vector2f(cellSize, cellSize * 4));
+    sf::ConvexShape shape = createRoundedRectangle(cellSize, cellSize * 4, 15, 40);
+    shape.setFillColor(sf::Color(230, 230, 230));
+    
 
     if (board[x][y] == 6) {
         for (int i = 0; i < 4; i++) {
             ct[i].setTextureRect({ 80 * (i + 1),0,80,80 });
-            ct[i].setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_MARGIN + cellSize * (i ));
+            ct[i].setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_MARGIN + cellSize * (i +1));
         }
-        shape.setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_MARGIN );
+        shape.setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_MARGIN + cellSize );
     }
     else if(board[x][y] == -6){
         for (int i = 3; i >= 0; i--) {
             ct[i].setTextureRect({ 80 * (i + 1),80,80,80 });
-            ct[i].setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_HEIGHT - ( cellSize * (i + 1)));
+            ct[i].setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_HEIGHT - ( cellSize * (i + 2)));
         }
-        shape.setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_HEIGHT - ( cellSize * 4));
+        shape.setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_HEIGHT - ( cellSize * 5));
     }
 
     window.draw(shape);

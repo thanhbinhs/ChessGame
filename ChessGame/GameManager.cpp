@@ -185,17 +185,17 @@ void Game::toCapture(int x, int y,int board[8][8]) {
                 int dx = (int)(posCap.y - SCREEN_MARGIN) / 80;
                 cout << "dy: " << dx << endl;
                 if (board[x][y] == 6) {
-                    if (dx == 0) board[x][y] = (board[x][y] / 6) * 2;
-                    if (dx == 1) board[x][y] = (board[x][y] / 6) * 3;
-                    if (dx == 2) board[x][y] = (board[x][y] / 6) * 4;
-                    if (dx == 3) board[x][y] = (board[x][y] / 6) * 5;
+                    if (dx == 1) board[x][y] = (board[x][y] / 6) * 2;
+                    if (dx == 2) board[x][y] = (board[x][y] / 6) * 3;
+                    if (dx == 3) board[x][y] = (board[x][y] / 6) * 4;
+                    if (dx == 4) board[x][y] = (board[x][y] / 6) * 5;
                     check = false;
                 }
                 else if(board[x][y] == -6 ){
-                    if (dx == 7) board[x][y] = (board[x][y] / 6) * 2;
-                    if (dx == 6) board[x][y] = (board[x][y] / 6) * 3;
-                    if (dx == 5) board[x][y] = (board[x][y] / 6) * 4;
-                    if (dx == 4) board[x][y] = (board[x][y] / 6) * 5;
+                    if (dx == 6) board[x][y] = (board[x][y] / 6) * 2;
+                    if (dx == 5) board[x][y] = (board[x][y] / 6) * 3;
+                    if (dx == 4) board[x][y] = (board[x][y] / 6) * 4;
+                    if (dx == 3) board[x][y] = (board[x][y] / 6) * 5;
                     check = false;
                 }
             }
@@ -218,7 +218,7 @@ bool Game::falseChoose(int i, int j) {
     return true;
 }
 
-void Game::checkKing(int check) {
+void Game::checkKing(int check,int check_king[9][9]) {
     reloadPos(check_king);
     if (check == -1) {
         for (int i = 0; i < 8; i++) {
@@ -252,7 +252,7 @@ void Game::checkKing(int check) {
 
 }
 
-bool Game::bool_king(int check) {
+bool Game::bool_king(int check,int check_king[9][9]) {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             if (board[i][j] == check && check_king[i][j] == 2) {
@@ -290,10 +290,17 @@ void Game::disableTurn()
 
 }
 
+void Game::reloadMatrix(int matrix[9][9]) {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++)  matrix[i][j] = 0;
+    }
+}
+
 void Game::checkSetting() {
     bool checkareaPvP = false;
     bool checkareaPvAI = false;
     bool checkareaQuit = false;
+    bool checkSelection = false;
     checkareaSetting = true;
     checkareaPvP = true;
     cout << "1";
@@ -334,6 +341,51 @@ void Game::messWin(int check) {
 
 }
 
+int Game::checkMate(int check)
+{
+    int matrix_mate[9][9];
+
+    int board_i[8][8];
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            board_i[i][j] = board[i][j];
+        }
+    }
+
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (board[i][j] * check < 0) {
+                if (board[i][j] * check == -6)    PositivePawn(i, j, matrix_mate);
+                if (board[i][j] * check == -5)    PositiveCastle(i, j, matrix_mate);
+                if (board[i][j] * check == -4)     PositiveKnight(i, j, matrix_mate);
+                if (board[i][j] * check == -3)    PositiveBishop(i, j, matrix_mate);
+                if (board[i][j] * check == -2)       PositiveQueen(i, j, matrix_mate);
+                if (board[i][j] * check == -1)    PositiveKing(i, j, matrix_mate);
+            }
+            for (int in = 0; in < 8; in++) {
+                for (int jn = 0; jn < 8; jn++) {
+                    int index_2 = board_i[in][jn];
+                    int index = board_i[i][j];
+                    if (matrix_mate[in][jn] > 0) {
+                        board_i[in][jn] = board_i[i][j];
+                        board_i[i][j] = 0;
+                        checkKing(check,matrix_mate);
+                        if (!bool_king(check,matrix_mate)) {
+                            board_i[in][jn] = index_2;
+                            board_i[i][j] = index;
+                        }
+                        else {
+                            return 0;
+                        }
+                    }
+                }
+            }
+            reloadMatrix(matrix_mate);
+        }
+    }
+    return check;
+}
+
 
 
 void Game::Play() {
@@ -364,6 +416,8 @@ void Game::Play() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
+
+
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.key.code == sf::Mouse::Left) {
                     pos = sf::Mouse::getPosition(window);
@@ -371,7 +425,6 @@ void Game::Play() {
                 }
             }
 
-            bool checkSelection = false;
 
             if (click == 1 && isMouse == true) {
                 dy = (int)(pos.x - SCREEN_MARGIN) / 80;
@@ -433,14 +486,17 @@ void Game::Play() {
                             board[dx][dy] = 0;
                         }
                         sound.play();
-                        checkKing(-checkTurn);
-                        if (!bool_king(-checkTurn)) {
+                        checkKing(-checkTurn,check_king);
+                        if (!bool_king(-checkTurn,check_king)) {
                             board[dx_n][dy_n] = index_2;
                             board[dx][dy] = index;
+                            if (checkMate(checkTurn) == 1)  check_ = -1;
+                            if (checkMate(checkTurn) == -1)  check_ = 1;
                         }
-                        else {
-                            checkKing(checkTurn);
+                        else{
+                            checkKing(checkTurn,check_king);
                             checkTurn = -checkTurn;
+
                         }
                         //To Capture 
                         
@@ -474,23 +530,22 @@ void Game::Play() {
             window.display();
         }
 
-        check_ = check_win();
+
         if (check_ == 1 || check_ == -1) {
             returnGame();
             board_.loadPosition(board);
             checkTurn = -check_;
             messWin(check_);
+            check_ = 0;
+            checkTurn = -1;
         }
 
 
         board_.drawBoard(checkPos, board, check_king,dx,dy);
 
-
-
         if (checkareaSetting) {
             board_.PrintSetting();
         }
-
 
         board_.Quit();
 
