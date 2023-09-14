@@ -392,15 +392,17 @@ void Game::Play() {
 
 
     Board board_(window);
-
-    board_.loadTexture("../Data/Image/chesses.png");
+    string file = "../Data/Image/chesses.png";
+    board_.loadTexture(file);
         // Handle texture loading failure
 
 
 
     //Sound
     sf::SoundBuffer buffer;
-    if (!buffer.loadFromFile("../Data/Audio/moveSound.ogg"))     cout << "No Found Sound moveSound" << endl;
+    if (!buffer.loadFromFile("../Data/Audio/moveSound.ogg")) {
+        buffer.loadFromFile("Data/Audio/moveSound.ogg");
+    }
     sf::Sound sound;
     sound.setBuffer(buffer);
     sf::Event event;
@@ -524,7 +526,7 @@ void Game::Play() {
         }
 
         while ((board[dx_n][dy_n] == 6 && dx_n == 0) || (board[dx_n][dy_n] == -6 && dx_n == 7)) {
-            board_.drawCapture("../Data/Image/chesses.png", dx_n, dy_n, board);
+            board_.drawCapture(file, dx_n, dy_n, board);
             toCapture(dx_n, dy_n, board);
             board_.loadPosition(board);
             window.display();

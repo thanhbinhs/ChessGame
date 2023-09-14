@@ -6,9 +6,10 @@ sf::RectangleShape Board::createButton() {
     return button;
 }
 
-bool Board::loadTexture(const std::string& filename) {
+bool Board::loadTexture(std::string& filename) {
     if (!texture.loadFromFile(filename)) {
-        return false; // Failed to load the texture
+        filename.erase(filename.begin(), filename.begin() + 1);
+        texture.loadFromFile(filename);
     }
 
     f->setTexture(texture);
@@ -28,14 +29,17 @@ void Board::drawBox(sf::Sprite sprite, sf::Texture draw_box, int x, int y) {
 
 void Board::drawBoxDeath(int x, int y) {
     sf::Texture draw_box;
-    draw_box.loadFromFile("../Data/Image/death.png");
+    if (!draw_box.loadFromFile("../Data/Image/death.png"))
+        draw_box.loadFromFile("Data/Image/death.png");
     sf::Sprite sp;
     drawBox(sp, draw_box, x, y);
 }
 
 void Board::drawBoxLegalMove(int x, int y) {
     sf::Texture draw_box;
-    draw_box.loadFromFile("../Data/Image/legalMove.png");
+    if(!draw_box.loadFromFile("../Data/Image/legalMove.png"))
+    draw_box.loadFromFile("Data/Image/legalMove.png");
+
     sf::Sprite sp;
     drawBox(sp, draw_box, x, y);
 }
@@ -72,10 +76,13 @@ sf::ConvexShape Board::createRoundedRectangle(float width, float height, float r
     return shape;
 }
 
-void Board::drawCapture(const std::string& filename,int x,int y,int board[8][8])
+void Board::drawCapture( std::string& filename,int x,int y,int board[8][8])
 {
     sf::Sprite ct[4];
-    texture.loadFromFile(filename);
+    if (!texture.loadFromFile(filename)) {
+        filename.erase(filename.begin(), filename.begin() + 1);
+        texture.loadFromFile(filename);
+    }
     ct->setTexture(texture);
     for (int i = 0; i < 4; i++) {
         ct[i].setTexture(texture);
@@ -105,7 +112,9 @@ void Board::drawCapture(const std::string& filename,int x,int y,int board[8][8])
 
 void Board::drawBoxDeathKing(int x, int y) {
     sf::Texture draw_box;
-    draw_box.loadFromFile("../Data/Image/kingDeath.png");
+    if (!draw_box.loadFromFile("../Data/Image/kingDeath.png"))
+        draw_box.loadFromFile("Data/Image/kingDeath.png");
+
     sf::Sprite sp;
     drawBox(sp, draw_box, x, y);
 }
@@ -150,7 +159,7 @@ void Board::chessBoard() {
     sf::Vector2f boardPosition(SCREEN_MARGIN, SCREEN_MARGIN);
     // Load font chữ 
     if (!font.loadFromFile("../Data/Font/font_1.ttf")) {
-        cout << "false to load font";
+        font.loadFromFile("Data/Font/font_1.ttf");
     }
 
     window.clear(sf::Color(179, 179, 179)); // Xóa nội dung cửa sổ
@@ -218,12 +227,14 @@ void Board::showTurn(int check) {
     sf::Sprite chess_png;
 
     if (check == -1) {
-        text_png.loadFromFile("../Data/Image/white_chess_rmbg.png");
+        if (!text_png.loadFromFile("../Data/Image/white_chess_rmbg.png"))
+            text_png.loadFromFile("Data/Image/white_chess_rmbg.png");
         chess_png.setTexture(text_png);
         chess_png.setPosition(SCREEN_WIDTH - (chess_png.getGlobalBounds().width) * 1.2f, 200.f);
     }
     if (check == 1) {
-        text_png.loadFromFile("../Data/Image/black_chess_rmbg.png");
+        if (!text_png.loadFromFile("../Data/Image/black_chess_rmbg.png"))
+            text_png.loadFromFile("Data/Image/black_chess_rmbg.png");
         chess_png.setTexture(text_png);
         chess_png.setPosition(SCREEN_WIDTH - (chess_png.getGlobalBounds().width) * 1.5f, 200.f);
     }
@@ -264,7 +275,7 @@ void Board::PrintSetting() {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
     sf::Font customFont1;
     if (!customFont1.loadFromFile("../Data/Font/font_1.ttf")) {
-        cout << "false to load font";
+        customFont1.loadFromFile("Data/Font/font_1.ttf");
     }
     sf::Text textMenu;
     textMenu.setFont(customFont1); // Thiết lập font tùy chỉnh

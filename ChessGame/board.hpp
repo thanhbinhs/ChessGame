@@ -7,7 +7,7 @@
 class Board {
 public:
     Board(sf::RenderWindow& window) : window(window){}
-    bool loadTexture(const std::string& filename);
+    bool loadTexture(std::string& filename);
     void loadPosition(int board[8][8]);
     void chessBoard();
     void drawBoxPos(int x, int y,int dx, int dy);
@@ -15,7 +15,7 @@ public:
     void drawBoxDeath(int x, int y);
     void drawBoxDeathKing(int x, int y);
     void drawBoxLegalMove(int x, int y);
-    void drawCapture(const std::string& filename, int x, int y,int board[8][8]);
+    void drawCapture(std::string& filename, int x, int y,int board[8][8]);
     void drawBoard(int checkPos[9][9], int board[8][8], int check_king[9][9],  int dx, int dy);
     void showTurn(int check);
     void Quit();
