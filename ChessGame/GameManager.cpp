@@ -173,24 +173,31 @@ void Game::PositiveQueen(int x, int y, int checkPos[9][9]) {
     PositiveBishop(x, y, checkPos);
 }
 
-void Game::toCapture(int x, int y, Board& board_, sf::Event event) {
-    board_.drawCapture("../Data/Image/chesses.png", x, y);
-    if (event.type == sf::Event::MouseButtonPressed) {
-        if (event.key.code == sf::Mouse::Left) {
-            sf::Vector2i posCap = sf::Mouse::getPosition(window);
-            int dy = (int)(posCap.y - SCREEN_MARGIN) / 80;
-            //       int dx = (int)(posCap.y - SCREEN_MARGIN) / 80;
-            if (board[x][y] > 0) {
-                if (dy == 0) board[x][y] = (board[x][y] / 6) * 2;
-                if (dy == 1) board[x][y] = (board[x][y] / 6) * 3;
-                if (dy == 2) board[x][y] = (board[x][y] / 6) * 4;
-                if (dy == 3) board[x][y] = (board[x][y] / 6) * 5;
-            }
-            else {
-                if (dy == 7) board[x][y] = (board[x][y] / 6) * 2;
-                if (dy == 6) board[x][y] = (board[x][y] / 6) * 3;
-                if (dy == 5) board[x][y] = (board[x][y] / 6) * 4;
-                if (dy == 4) board[x][y] = (board[x][y] / 6) * 5;
+void Game::toCapture(int x, int y,int board[8][8]) {
+    sf::Event anotherEvent;
+    bool check = true;
+    if (window.pollEvent(anotherEvent)) {
+        if (anotherEvent.type == sf::Event::MouseButtonPressed) {
+            if (anotherEvent.key.code == sf::Mouse::Left) {
+                sf::Vector2i posCap = sf::Mouse::getPosition(window);
+                cout << "PosCap: " << posCap.x << endl;
+                int dy = (int)(posCap.x - SCREEN_MARGIN) / 80;
+                int dx = (int)(posCap.y - SCREEN_MARGIN) / 80;
+                cout << "dy: " << dx << endl;
+                if (board[x][y] == 6) {
+                    if (dx == 0) board[x][y] = (board[x][y] / 6) * 2;
+                    if (dx == 1) board[x][y] = (board[x][y] / 6) * 3;
+                    if (dx == 2) board[x][y] = (board[x][y] / 6) * 4;
+                    if (dx == 3) board[x][y] = (board[x][y] / 6) * 5;
+                    check = false;
+                }
+                else if(board[x][y] == -6 ){
+                    if (dx == 7) board[x][y] = (board[x][y] / 6) * 2;
+                    if (dx == 6) board[x][y] = (board[x][y] / 6) * 3;
+                    if (dx == 5) board[x][y] = (board[x][y] / 6) * 4;
+                    if (dx == 4) board[x][y] = (board[x][y] / 6) * 5;
+                    check = false;
+                }
             }
         }
     }
@@ -402,8 +409,8 @@ void Game::Play() {
             }
             if (click == 2) {
                 sf::Vector2i pos_n = sf::Mouse::getPosition(window);
-                int dy_n = (int)(pos_n.x - SCREEN_MARGIN) / 80;
-                int dx_n = (int)(pos_n.y - SCREEN_MARGIN) / 80;
+                dy_n = (int)(pos_n.x - SCREEN_MARGIN) / 80;
+                dx_n = (int)(pos_n.y - SCREEN_MARGIN) / 80;
                 int index = board[dx][dy];
                 int index_2 = board[dx_n][dy_n];
                 if (!(dx_n == dx && dy_n == dy))
@@ -422,7 +429,6 @@ void Game::Play() {
                             board[dx][dy] = 0;
                         }
                         sound.play();
-                        cout << "Check: " << checkTurn << endl;
                         checkKing(-checkTurn);
                         if (!bool_king(-checkTurn)) {
                             board[dx_n][dy_n] = index_2;
@@ -433,9 +439,7 @@ void Game::Play() {
                             checkTurn = -checkTurn;
                         }
                         //To Capture 
-                        if ((board[dx_n][dy_n] == 6 && dx_n == 0) || (board[dx_n][dy_n] == -6 && dx_n == 7)) {
-                            toCapture(dx_n, dy_n,board_,event);
-                        }
+                        
                     }
                 cout << "New Board: " << endl;
                 for (int i = 0; i < 8; i++) {
@@ -455,6 +459,13 @@ void Game::Play() {
 
         }
 
+        while ((board[dx_n][dy_n] == 6 && dx_n == 0) || (board[dx_n][dy_n] == -6 && dx_n == 7)) {
+            board_.drawCapture("../Data/Image/chesses.png", dx_n, dy_n, board);
+            toCapture(dx_n, dy_n, board);
+            board_.loadPosition(board);
+            window.display();
+        }
+
         check_ = check_win();
         if (check_ == 1 || check_ == -1) {
             returnGame();
@@ -470,6 +481,8 @@ void Game::Play() {
         if (checkareaSetting) {
             board_.PrintSetting();
         }
+
+
         board_.Quit();
 
         window.display();

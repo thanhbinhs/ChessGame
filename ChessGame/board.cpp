@@ -40,7 +40,7 @@ void Board::drawBoxLegalMove(int x, int y) {
     drawBox(sp, draw_box, x, y);
 }
 
-void Board::drawCapture(const std::string& filename,int x,int y)
+void Board::drawCapture(const std::string& filename,int x,int y,int board[8][8])
 {
     sf::Sprite ct[4];
     texture.loadFromFile(filename);
@@ -49,24 +49,24 @@ void Board::drawCapture(const std::string& filename,int x,int y)
         ct[i].setTexture(texture);
     }
     sf::RectangleShape shape;
+    shape.setFillColor(sf::Color::White);
+    shape.setSize(sf::Vector2f(cellSize, cellSize * 4));
 
-
-    if (board[x][y] > 0) {
+    if (board[x][y] == 6) {
         for (int i = 0; i < 4; i++) {
             ct[i].setTextureRect({ 80 * (i + 1),0,80,80 });
-            ct[i].setPosition(cellSize * x + SCREEN_MARGIN, SCREEN_MARGIN + cellSize * i);
+            ct[i].setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_MARGIN + cellSize * (i ));
         }
-        shape.setSize(sf::Vector2f(cellSize, cellSize * 4));
-        shape.setPosition(cellSize * x + SCREEN_MARGIN, SCREEN_MARGIN + cellSize);
+        shape.setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_MARGIN );
     }
-    else {
-        for (int i = 0; i < 4; i++) {
+    else if(board[x][y] == -6){
+        for (int i = 3; i >= 0; i--) {
             ct[i].setTextureRect({ 80 * (i + 1),80,80,80 });
-            ct[i].setPosition(cellSize * x + SCREEN_MARGIN,SCREEN_HEIGHT - SCREEN_MARGIN + cellSize * i);
+            ct[i].setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_HEIGHT - ( cellSize * (i + 1)));
         }
-        shape.setSize(sf::Vector2f(cellSize, cellSize * 4));
-        shape.setPosition(cellSize * x + SCREEN_MARGIN, SCREEN_HEIGHT - SCREEN_MARGIN + cellSize);
+        shape.setPosition(cellSize * y + SCREEN_MARGIN, SCREEN_HEIGHT - ( cellSize * 4));
     }
+
     window.draw(shape);
     for (auto i : ct)  window.draw(i);
 }

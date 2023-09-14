@@ -17,7 +17,7 @@ public:
     void PositivePawn(int x, int y, int checkPos[9][9]);
     void checkKing(int check);
     void reloadPos(int checkPos[9][9]);
-    void toCapture(int x, int y, Board &board_, sf::Event event);
+    void toCapture(int x, int y,int board[8][8]);
     void toCastling(int x, int y, int dx, int dy);
     bool falseChoose(int i, int j);
     void returnGame();
@@ -30,6 +30,8 @@ private:
     sf::RenderWindow& window;
     int dx = 0;
     int dy = 0;
+    int dy_n = 0;
+    int dx_n = 0;
     bool checkCastlingWhite = true;
     bool checkCastlingBlack = true;
     sf::Sprite f[33];
