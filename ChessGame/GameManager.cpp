@@ -336,8 +336,12 @@ void Game::checkSetting() {
 
 
 void Game::messWin(int check) {
-    if (check == -1)  MessageBoxA(NULL, "White is Winner", "Winner", MB_OK | MB_ICONEXCLAMATION);
-    if (check == 1)  MessageBoxA(NULL, "Black is Winner", "Winner", MB_OK| MB_ICONEXCLAMATION);
+    int result;
+    if (check == -1) result = MessageBoxA(NULL, "White is Winner","WINNER", MB_OK | MB_ICONASTERISK);
+    if (check == 1)  result = MessageBoxA(NULL, "Black is Winner", "WINNER", MB_OK| MB_ICONASTERISK);
+    while (result != IDOK) {
+        result = MessageBoxA(NULL, "Please click OK","Message", MB_OK);
+    }
 
 }
 
@@ -561,6 +565,14 @@ void Game::Play() {
             messWin(check_);
             check_ = 0;
             checkTurn = -1;
+            board_.drawBoard(checkPos, board, check_king, dx, dy);
+            if (checkareaSetting) {
+                board_.PrintSetting();
+            }
+
+            board_.Quit();
+
+            window.display();
         }
     }
 }
