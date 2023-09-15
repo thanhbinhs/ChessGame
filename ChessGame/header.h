@@ -64,7 +64,7 @@ static int checkPos[9][9];
 static int check_king[9][9];
 
 
-
+static bool bot;
 
 
 enum WhiteChesses {

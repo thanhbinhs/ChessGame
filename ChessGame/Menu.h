@@ -10,7 +10,7 @@ class Menu
 public:
     Menu();
     int returnMenu();
-
+    int returnBot();
     ~Menu();
 private:
 

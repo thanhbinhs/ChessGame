@@ -29,6 +29,7 @@ public:
     int checkMate(int check,  int board[8][8]);
     void Play();
     void reloadMatrix(int matrix[9][9]);
+    void Bot();
 private:
     sf::RenderWindow& window;
     int dx = 0;

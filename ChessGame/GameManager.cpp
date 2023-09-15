@@ -296,6 +296,10 @@ void Game::reloadMatrix(int matrix[9][9]) {
     }
 }
 
+void Game::Bot()
+{
+}
+
 void Game::checkSetting() {
     bool checkareaPvP = false;
     bool checkareaPvAI = false;
@@ -397,6 +401,7 @@ int Game::checkMate(int check,int board[8][8])
 
     return check_;
 }
+
 
 
 
@@ -544,7 +549,9 @@ void Game::Play() {
             window.display();
         }
 
+        if (bot == true && checkTurn > 0) {
 
+        }
 
 
 
