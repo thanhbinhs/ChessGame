@@ -70,6 +70,7 @@ void Board::chessBoard() {
     window.draw(textMenu);
 
 
+
 }
 
 void Board::drawBoxPos(int x, int y) {

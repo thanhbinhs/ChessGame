@@ -5,7 +5,7 @@
 #include<SFML/Audio.hpp>
 #include<iostream>
 #include<math.h>
-#include <time.h>
+#include<time.h>
 #include<stack>
 #include<algorithm>// min, max
 #include<cstdbool>
@@ -24,14 +24,16 @@ const int SCREEN_HEIGHT = 690;
 const float SCREEN_MARGIN = 50.0f;
 
 static int board[8][8] =
-{ -5,-4,-3,-2,-1,-3,-4,-5,
--6,-6,-6,-6,-6,-6,-6,-6,
+{ -5, -4, -3, -2, -1, -3, -4, -5,
+    - 6, -6, -6, -6, -6, -6, -6, -6,
+
 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0,
-6, 6, 6, 6, 6, 6, 6, 6,
-5, 4, 3, 2, 1, 3, 4, 5 };
+6,6,6,6,6,6,6,6,
+5,4,3,2,1,3,4,5
+};
 
 static int checkPos[9][9];
 

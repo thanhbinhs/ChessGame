@@ -56,12 +56,12 @@ void GameManager::IncreasePositive(int i, int j) {
     positiveCount++;
 }
 
-void GameManager::toCapture(int n,int y) {
+void GameManager::toCapture(int n, int y) {
     //phong hau cho tot
     if (y == 0) {
         nS.push(100);//de ty undo xoa phong hau di
     }
-    if (y == 7 ) {
+    if (y == 7) {
         nS.push(-100);
     }
     sf::Event anotherEvent;
@@ -101,8 +101,8 @@ void GameManager::toCapture(int n,int y) {
     else if (g == 1)  v = 900;
     else if (g == 6)  v = 10;
     f[n].cost = f[n].index / g * v;
-    if(index > 0)   f[n].s.setTextureRect({ size_ * (index - 1),size_,size_,size_ });
-    else if(index < 0)  f[n].s.setTextureRect({ size_ * (index - 1),0,size_,size_ });
+    if (index > 0)   f[n].s.setTextureRect({ size_ * (index - 1),size_,size_,size_ });
+    else if (index < 0)  f[n].s.setTextureRect({ size_ * (index - 1),0,size_,size_ });
 }
 
 void GameManager::move(int n, Vector2f oldPos, Vector2f newPos)
@@ -222,7 +222,7 @@ Vector2f GameManager::getNextMove(bool luot)
     return newPos;
 }
 
-void GameManager::computer(sf::Vector2f newPos,sf::Vector2f oldPos,bool LuotChoi)
+void GameManager::computer(sf::Vector2f newPos, sf::Vector2f oldPos, bool LuotChoi)
 {
     newPos = getNextMove(LuotChoi);
     int c = nS.top();   nS.pop();//lay dk thong tin roi xoa di
@@ -472,7 +472,7 @@ void GameManager::PositiveMoving(int n)
     else   PositivePawn(n, x, y, grid); //tot
 }
 
-void GameManager::Personal(int click, int n, sf::Vector2i pos, sf::Vector2f oldPos,sf::Vector2f newPos, int count,sf::Sound sound, bool LuotChoi)
+void GameManager::Personal(int click, int n, sf::Vector2i pos, sf::Vector2f oldPos, sf::Vector2f newPos, int count, sf::Sound sound, bool LuotChoi)
 {
     if (click == 1) {
         bool isMove = false;
@@ -513,7 +513,7 @@ void GameManager::Personal(int click, int n, sf::Vector2i pos, sf::Vector2f oldP
 }
 
 int GameManager::checkWin()
-{   
+{
     int checkP = false;
     int checkB = false;
 
@@ -664,10 +664,21 @@ void GameManager::Play()
 
         ////// draw  ///////
         bgame.chessBoard();
+        for (int i = 0; i < 32; i++) {
+            sf::Vector2f pos = f[i].s.getPosition() - offset;
+            int y = pos.x/size_;
+            int x = pos.y/size_;
+            if (f[i].global == 1) {
+                bgame.drawBoxPos(x,y);
+            }
+        }
         for (int i = 0; i < count; i++) {
             sPositive.setPosition(positiveMove[i]);
             window.draw(sPositive);
         }
+
+
+
         if (click == 1) {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
