@@ -627,7 +627,7 @@ void GameManager::Play()
                     checkareaAI = false;
                 }
                 if ((mousePosition.x >= 745 + 160 && mousePosition.x <= SCREEN_WIDTH - 50) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 7 && mousePosition.y <= SCREEN_MARGIN + cellSize * 8)) {
-                    Menu = 0;
+                    Menu = -1;
                 }
             }
         }
@@ -648,6 +648,9 @@ void GameManager::Play()
             Menu = 0;
             com = 0;
             LuotChoi = true;
+        }
+        else if (Menu == -1) {
+            window.close();
         }
 
       //  cout << com <<" "<<LuotChoi<<  endl;
