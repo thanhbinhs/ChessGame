@@ -1,5 +1,3 @@
-
-﻿#include"header.h"
 #include"GameManager.hpp"
 
 int main()

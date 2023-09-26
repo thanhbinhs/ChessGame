@@ -1,6 +1,8 @@
 ﻿#include "GameManager.hpp"
 
 
+
+
 int GameManager::Alpha_Beta(int depth, bool luot, int alpha, int beta)
 {
     if (depth == 0) {
@@ -475,42 +477,8 @@ void GameManager::PositiveMoving(int n)
 
 void GameManager::Personal(int click, int n, sf::Vector2i pos, sf::Vector2f oldPos,sf::Vector2f newPos, int count,sf::Sound sound, bool LuotChoi)
 {
-    if (click == 1) {
-        bool isMove = false;
-        for (int i = 0; i < 16; i++)
-        {
-            if (f[i].s.getGlobalBounds().contains(pos.x + offset.x, pos.y + offset.y))
-            {
-                isMove = true;
-                n = i;
-                f[n].global = 1;
-                oldPos = f[n].s.getPosition();
-            }
-        }
-        if (!isMove)  click = 0;
-        else {
-            PositiveMoving(n); count = positiveCount; positiveCount = 0;
-        }
-    }
-    if (click == 2)
-    {
-        f[n].s.setColor(Color::White);
-        int x = pos.x / size_;   int y = pos.y / size_;
-        newPos = Vector2f(x * size_, y * size_) + offset;
-        //chi di chuyen trong vung positiveMove
-        for (int i = 0; i < count; i++)
-        {
-            if (positiveMove[i] == newPos) {
-                move(n, oldPos, newPos);
-                sound.play();
-                LuotChoi = !LuotChoi;
-            }
-        }
-        //reset
-        count = 0;
-        click = 0;
 
-    }
+
 }
 
 int GameManager::checkWin()
@@ -561,9 +529,11 @@ void GameManager::Play()
     int cellSize = size_;
 
     int Menu = 0;
-
+    int menu = 0;
+    int com = 0;
 
     Board bgame(window);
+
     Texture t1, t2, t3;
     t1.loadFromFile("../Data/Image/chesses.png");
     t3.loadFromFile("../Data/Image/legalMove.png");
@@ -582,7 +552,7 @@ void GameManager::Play()
 
     Create();//khoi tao
 
-    bool LuotChoi = true;//luot choi : = true=> nguoi ... =false => may
+    bool LuotChoi = false;//luot choi : = true=> nguoi ... =false => may
     Vector2f oldPos, newPos;// luu vi tri click lan1 va lan2
     int n = 0, click = 0, count = 0;
     Vector2i pos; //vitri chuot khi click
@@ -662,7 +632,26 @@ void GameManager::Play()
             }
         }
 
-        if (LuotChoi == true)
+        if (Menu == 4) {
+            bgame.SetTime();
+        }
+        if (Menu == 3) {
+            Create();
+            menu = 3;
+            Menu = 0;
+            com = 0;
+            LuotChoi = true;
+        }
+        else if (Menu == 2) {
+            Create();
+            menu = 2;
+            Menu = 0;
+            com = 0;
+            LuotChoi = true;
+        }
+
+      //  cout << com <<" "<<LuotChoi<<  endl;
+        if (LuotChoi == true && com == 0)
         {
             if (click == 1) {
                 bool isMove = false;
@@ -702,6 +691,8 @@ void GameManager::Play()
                         }
 
                         LuotChoi = !LuotChoi;
+                        com = 1;
+                        
                     }
                 }
                 //reset
@@ -712,68 +703,120 @@ void GameManager::Play()
         }
         else  //computer moving
         {
-            computer(newPos, oldPos, LuotChoi);
-            sound.play();
-            check_com = true;
-            LuotChoi = !LuotChoi;
-            //reset
-            click = 0;
-            //Personal(click,n,pos,oldPos,newPos,count,sound,LuotChoi);
-        }
-
-        if (click == 0) {
-            resetGlobal();
-            resetMatrix(checkPos);
-        }
-
-        if (checkWin() == 1) {
-            cout << "You Win" << endl;
-            Create();
-        }
-        else if (checkWin() == -1) {
-            cout << "You Lose" << endl;
-            Create();
-        }
-
-
-
-        ////// draw  ///////
-        bgame.chessBoard();
-
-        if (Menu == 4) {
-            bgame.SetTime();
-        }
-
-        if (checkareaSetting) {
-            bgame.PrintSetting();
-        }
-        for (int i = 0; i < count; i++) {
-            sPositive.setPosition(positiveMove[i]);
-            window.draw(sPositive);
-        }
-        for (int i = 0; i < 32; i++) {
-            sf::Vector2f pos = f[i].s.getPosition() - offset;
-            int y = pos.x / size_;
-            int x = pos.y / size_;
-            if (f[i].global == 1) {
-                bgame.drawBoxPos(x, y);
+            if (menu == 3 && com == 1) {
+                computer(newPos, oldPos, LuotChoi);
+                sound.play();
+                check_com = true;
+                LuotChoi = !LuotChoi;
+                com = 0;
+                //reset
+                click = 0;
+                //Personal(click,n,pos,oldPos,newPos,count,sound,LuotChoi);
             }
-        }
-        if (check_com == true && click != 2) {
-            bgame.drawBoxCom(x_com, y_com);
-        }
-        if (click == 1) {
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    if (checkPos[i][j] == 1)   bgame.drawBoxDeath(i, j);
+
+            if (menu == 2 && com == 1) {
+                if (click == 1) {
+                    bool isMove = false;
+
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (f[i].s.getGlobalBounds().contains(pos.x + offset.x, pos.y + offset.y))
+                        {
+                            isMove = true;
+                            n = i;
+                            f[n].global = 1;
+                            oldPos = f[n].s.getPosition();
+                        }
+                    }
+                    if (!isMove)  click = 0;
+                    else {
+                        PositiveMoving(n); count = positiveCount; positiveCount = 0;
+                    }
                 }
+                if (click == 2)
+                {
+                    f[n].s.setColor(Color::White);
+                    int x = pos.x / size_;   int y = pos.y / size_;
+                    newPos = Vector2f(x * size_, y * size_) + offset;
+                    //chi di chuyen trong vung positiveMove
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (positiveMove[i] == newPos) {
+                            move(n, oldPos, newPos);
+                            sound.play();
+                            int y = int((newPos - offset).y / size_);
+                            //cout << "y new: " << y <<" "<<f[n].index<< endl;
+                            while ((y == 0 && f[n].index == 6) || (y == 7 && f[n].index == -6)) {
+                                bgame.drawCapture(n);
+                                toCapture(n, y);
+                                window.display();
+                            }
+                            LuotChoi = !LuotChoi;
+                            cout << "Luot: " << LuotChoi << endl;
+                            com = 0;
+
+                        }
+                    }
+                    //reset
+                    count = 0;
+                    click = 0;
+                }
+
             }
-        }
-        for (int i = 0; i < 32; i++) {
-            window.draw(f[i].s);
+                
         }
 
-        window.display();
+    if (click == 0) {
+        resetGlobal();
+        resetMatrix(checkPos);
+    }
+
+    if (checkWin() == 1) {
+        cout << "You Win" << endl;
+        Create();
+    }
+    else if (checkWin() == -1) {
+        cout << "You Lose" << endl;
+        Create();
+    }
+
+
+
+    ////// draw  ///////
+    bgame.chessBoard();
+
+
+
+    if (checkareaSetting) {
+        bgame.PrintSetting();
+    }
+    for (int i = 0; i < count; i++) {
+        sPositive.setPosition(positiveMove[i]);
+        window.draw(sPositive);
+    }
+    for (int i = 0; i < 32; i++) {
+        sf::Vector2f pos = f[i].s.getPosition() - offset;
+        int y = pos.x / size_;
+        int x = pos.y / size_;
+        if (f[i].global == 1) {
+            bgame.drawBoxPos(x, y);
+        }
+    }
+    if (check_com == true && click != 2) {
+        bgame.drawBoxCom(x_com, y_com);
+    }
+    if (click == 1) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (checkPos[i][j] == 1)   bgame.drawBoxDeath(i, j);
+            }
+        }
+    }
+    for (int i = 0; i < 32; i++) {
+        window.draw(f[i].s);
+    }
+
+    window.display();
     }
 }
 
