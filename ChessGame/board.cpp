@@ -91,11 +91,11 @@ void Board::chessBoard() {
     // setting
     sf::Texture setting;
     if (!setting.loadFromFile("../Data/Image/Setting1.png")) {
-        cout << "false load Setting1.png";
+        //cout << "false load Setting1.png";
     }
     sf::Texture setting1;
     if (!setting1.loadFromFile("../Data/Image/Setting2.png")) {
-        cout << "false load Setting2.png";
+        //cout << "false load Setting2.png";
     }
 
     // text

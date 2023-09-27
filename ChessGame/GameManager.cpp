@@ -73,10 +73,10 @@ void GameManager::toCapture(int n,int y) {
         if (anotherEvent.type == sf::Event::MouseButtonPressed) {
             if (anotherEvent.key.code == sf::Mouse::Left) {
                 sf::Vector2i posCap = sf::Mouse::getPosition(window);
-                cout << "PosCap: " << posCap.x << endl;
+               // cout << "PosCap: " << posCap.x << endl;
                 int dy = (int)(posCap.x - SCREEN_MARGIN) / 80;
                 int dx = (int)(posCap.y - SCREEN_MARGIN) / 80;
-                cout << "dy: " << dx << endl;
+               // cout << "dy: " << dx << endl;
                 if (f[n].index == 6) {
                     if (dx == 1) index = (index / 6) * 2;
                     if (dx == 2) index = (index / 6) * 3;
@@ -611,12 +611,12 @@ void GameManager::Play()
                     checkareaPvP = true;
                     checkareaAI = true;
                     checkareaSetTime = true;
-                    cout << "Check Setting ";
+                   // cout << "Check Setting ";
                 }
                 else if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize && mousePosition.y <= SCREEN_MARGIN + cellSize * 2) && checkareaPvP) {
                     checkareaSetting = true;
                     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-                        cout << "Check areaPvP = true ";
+                       // cout << "Check areaPvP = true ";
                         Menu = 2;
                         checkareaSetting = false;
                     }
@@ -624,7 +624,7 @@ void GameManager::Play()
                 else if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 2 && mousePosition.y <= SCREEN_MARGIN + cellSize * 3) && checkareaAI) {
                     checkareaSetting = true;
                     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-                        cout << "Check areaAI = true\n";
+                        //cout << "Check areaAI = true\n";
                         Menu = 3;
                         checkareaSetting = false;
                     }
@@ -632,7 +632,7 @@ void GameManager::Play()
                 else if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 3 && mousePosition.y <= SCREEN_MARGIN + cellSize * 4) && checkareaSetTime) {
                     checkareaSetting = true;
                     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-                        cout << "Check SetTime = true \n";
+                       // cout << "Check SetTime = true \n";
                         Menu = 4;
                         checkareaSetting = false;
                     }
@@ -778,7 +778,7 @@ void GameManager::Play()
                                 window.display();
                             }
                             LuotChoi = !LuotChoi;
-                            cout << "Luot: " << LuotChoi << endl;
+                            //cout << "Luot: " << LuotChoi << endl;
                             com = 0;
 
                         }
@@ -798,7 +798,7 @@ void GameManager::Play()
     }
 
     MessageBoxCom(checkWin());
-    if (mess = true) {
+    if (mess == true) {
         resetGlobal();
         resetMatrix(checkPos);
         check_com = false;
