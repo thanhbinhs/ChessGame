@@ -9,6 +9,7 @@ public:
     void PrintSetting();
     void drawBox(sf::Sprite sprite, sf::Texture draw_box, int x, int y);
     void drawBoxPos(int x, int y);
+    void drawBoxCom(int x, int y);
     void drawBoxDeath(int x,int y);
     void drawBoxKingDeath(int x, int y);
     void drawCapture(int n);

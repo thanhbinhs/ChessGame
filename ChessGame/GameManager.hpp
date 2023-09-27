@@ -38,6 +38,10 @@ public:
     void computer(sf::Vector2f newPos, sf::Vector2f oldPos, bool LuotChoi);
 private:
     sf::RenderWindow& window;
+    sf::Time delay = sf::milliseconds(500);
+    int x_com = 0;
+    int y_com = 0;
+    bool check_com = false;
 };
 
 

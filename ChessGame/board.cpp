@@ -263,6 +263,15 @@ void Board::drawBoxPos(int x, int y) {
     window.draw(boxPos);
 }
 
+void Board::drawBoxCom(int x, int y)
+{
+    sf::RectangleShape boxPos;
+    boxPos.setFillColor(sf::Color(253, 2, 45, 100));
+    boxPos.setSize(sizeBtn);
+    boxPos.setPosition(y * size_ + SCREEN_MARGIN, x * size_ + SCREEN_MARGIN);
+    window.draw(boxPos);
+}
+
 void Board::drawBox(sf::Sprite sprite, sf::Texture draw_box, int x, int y) {
     sprite.setTexture(draw_box);
     sprite.setPosition(y * size_ + SCREEN_MARGIN, x * size_ + SCREEN_MARGIN);

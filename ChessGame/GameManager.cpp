@@ -161,7 +161,7 @@ void GameManager::Create()//gan gia tri can thiet vao danh sach Quan co
             int n = board[i][j];
             if (!n) continue;
             int x = abs(n) - 1;
-            int y = n > 0 ? 1 : 0;
+            int y = n > 0 ? 0 : 1;
             f[k].index = n;
             f[k].s.setTextureRect(IntRect(size_ * x, size_ * y, size_, size_));
             f[k].s.setPosition(size_ * j + offset.x, size_ * i + offset.y);
@@ -202,7 +202,7 @@ Vector2f GameManager::getNextMove(bool luot)
         {
             move(i, oldPostemp, positiveMovetemp[j]);
             int alpha = -9999, beta = 9999;
-            int temp = Alpha_Beta(3, !luot, alpha, beta);
+            int temp = Alpha_Beta(2, !luot, alpha, beta);
             if (minimaxtemp > temp) {
                 newPostemp = positiveMovetemp[j];
                 minimaxtemp = temp;
@@ -222,14 +222,15 @@ Vector2f GameManager::getNextMove(bool luot)
     return newPos;
 }
 
-void GameManager::computer(sf::Vector2f newPos,sf::Vector2f oldPos,bool LuotChoi)
+void GameManager::computer(sf::Vector2f newPos, sf::Vector2f oldPos, bool LuotChoi)
 {
+    sf::sleep(delay);
     newPos = getNextMove(LuotChoi);
     int c = nS.top();   nS.pop();//lay dk thong tin roi xoa di
     oldPos = posS.top();  posS.pop();//vi ham move tu nhet trong stack roi
+    y_com = (oldPos.x - SCREEN_MARGIN) / size_;
+    x_com = (oldPos.y - SCREEN_MARGIN) / size_;
     move(c, oldPos, newPos);
-
-
 }
 
 int GameManager::CostMove()// don gian con nao bi chet thi khong tinh diem cua con day
@@ -577,6 +578,8 @@ void GameManager::Play()
     sf::Sound sound;
     sound.setBuffer(buffer);
 
+
+
     Create();//khoi tao
 
     bool LuotChoi = true;//luot choi : = true=> nguoi ... =false => may
@@ -652,22 +655,11 @@ void GameManager::Play()
                     checkareaSetting = false;
                     checkareaPvP = false;
                     checkareaAI = false;
- 
                 }
-
                 if ((mousePosition.x >= 745 + 160 && mousePosition.x <= SCREEN_WIDTH - 50) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 7 && mousePosition.y <= SCREEN_MARGIN + cellSize * 8)) {
                     Menu = 0;
                 }
-
-
-
-
             }
-
-            
-
-
-
         }
 
         if (LuotChoi == true)
@@ -715,13 +707,14 @@ void GameManager::Play()
                 //reset
                 count = 0;
                 click = 0;
-
+                check_com = false;
             }
         }
         else  //computer moving
         {
             computer(newPos, oldPos, LuotChoi);
             sound.play();
+            check_com = true;
             LuotChoi = !LuotChoi;
             //reset
             click = 0;
@@ -757,6 +750,17 @@ void GameManager::Play()
         for (int i = 0; i < count; i++) {
             sPositive.setPosition(positiveMove[i]);
             window.draw(sPositive);
+        }
+        for (int i = 0; i < 32; i++) {
+            sf::Vector2f pos = f[i].s.getPosition() - offset;
+            int y = pos.x / size_;
+            int x = pos.y / size_;
+            if (f[i].global == 1) {
+                bgame.drawBoxPos(x, y);
+            }
+        }
+        if (check_com == true && click != 2) {
+            bgame.drawBoxCom(x_com, y_com);
         }
         if (click == 1) {
             for (int i = 0; i < 8; i++) {
