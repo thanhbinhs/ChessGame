@@ -75,7 +75,16 @@ void Board::chessBoard() {
 
 void Board::drawBoxPos(int x, int y) {
     sf::RectangleShape boxPos;
-    boxPos.setFillColor(sf::Color(245, 236, 66, 100));
+    boxPos.setFillColor(sf::Color(245, 236, 66, 70));
+    boxPos.setSize(sizeBtn);
+    boxPos.setPosition(y * size_ + SCREEN_MARGIN, x * size_ + SCREEN_MARGIN);
+    window.draw(boxPos);
+}
+
+void Board::drawBoxCom(int x, int y)
+{
+    sf::RectangleShape boxPos;
+    boxPos.setFillColor(sf::Color(253, 2, 45, 100));
     boxPos.setSize(sizeBtn);
     boxPos.setPosition(y * size_ + SCREEN_MARGIN, x * size_ + SCREEN_MARGIN);
     window.draw(boxPos);

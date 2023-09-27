@@ -1,6 +1,8 @@
 ﻿#include "GameManager.hpp"
 
 
+
+
 int GameManager::Alpha_Beta(int depth, bool luot, int alpha, int beta)
 {
     if (depth == 0) {
@@ -101,8 +103,20 @@ void GameManager::toCapture(int n, int y) {
     else if (g == 1)  v = 900;
     else if (g == 6)  v = 10;
     f[n].cost = f[n].index / g * v;
-    if (index > 0)   f[n].s.setTextureRect({ size_ * (index - 1),size_,size_,size_ });
-    else if (index < 0)  f[n].s.setTextureRect({ size_ * (index - 1),0,size_,size_ });
+    if (index > 0)   f[n].s.setTextureRect({ size_ * (index - 1),0,size_,size_ });
+    else if (index < 0)  f[n].s.setTextureRect({ size_ * (index - 1),size_,size_,size_ });
+}
+
+void GameManager::toCastling(int grid[9][9])
+{
+    for (int i = 0; i < 32; i++) {
+        sf::Vector2f pos = f[i].s.getPosition() - offset;
+        int y = pos.x / size_;
+        int x = pos.y / size_;
+        if (f[i].global == 1 && f[i].index == 1) {
+    
+        }
+    }
 }
 
 void GameManager::move(int n, Vector2f oldPos, Vector2f newPos)
@@ -161,7 +175,7 @@ void GameManager::Create()//gan gia tri can thiet vao danh sach Quan co
             int n = board[i][j];
             if (!n) continue;
             int x = abs(n) - 1;
-            int y = n > 0 ? 1 : 0;
+            int y = n > 0 ? 0 : 1;
             f[k].index = n;
             f[k].s.setTextureRect(IntRect(size_ * x, size_ * y, size_, size_));
             f[k].s.setPosition(size_ * j + offset.x, size_ * i + offset.y);
@@ -227,6 +241,8 @@ void GameManager::computer(sf::Vector2f newPos, sf::Vector2f oldPos, bool LuotCh
     newPos = getNextMove(LuotChoi);
     int c = nS.top();   nS.pop();//lay dk thong tin roi xoa di
     oldPos = posS.top();  posS.pop();//vi ham move tu nhet trong stack roi
+    y_com = (oldPos.x - SCREEN_MARGIN)/size_;
+    x_com = (oldPos.y - SCREEN_MARGIN)/size_;
     move(c, oldPos, newPos);
 
 
@@ -470,6 +486,7 @@ void GameManager::PositiveMoving(int n)
     }
     else if (abs(f[n].index) == 1)  PositiveKing(n, x, y, grid);//vua
     else   PositivePawn(n, x, y, grid); //tot
+    
 }
 
 void GameManager::Personal(int click, int n, sf::Vector2i pos, sf::Vector2f oldPos, sf::Vector2f newPos, int count, sf::Sound sound, bool LuotChoi)
@@ -562,6 +579,8 @@ void GameManager::Play()
     sf::Sound sound;
     sound.setBuffer(buffer);
 
+    sf::Time delay = sf::seconds(0.5);
+
     Create();//khoi tao
 
     bool LuotChoi = true;//luot choi : = true=> nguoi ... =false => may
@@ -635,14 +654,16 @@ void GameManager::Play()
                 //reset
                 count = 0;
                 click = 0;
-
+                check_com = false;
             }
         }
         else  //computer moving
-        {
+        {   
+            sf::sleep(delay);
             computer(newPos, oldPos, LuotChoi);
             sound.play();
             LuotChoi = !LuotChoi;
+            check_com = true;
             //reset
             click = 0;
             //Personal(click,n,pos,oldPos,newPos,count,sound,LuotChoi);
@@ -677,6 +698,9 @@ void GameManager::Play()
             window.draw(sPositive);
         }
 
+        if (check_com == true && click != 2) {
+            bgame.drawBoxCom(x_com, y_com);
+        }
 
 
         if (click == 1) {

@@ -26,6 +26,7 @@ public:
     void PositiveKing(int n, int x, int y, int grid[9][9]);
     void PositivePawn(int n, int x, int y, int grid[9][9]);
     void toCapture(int n, int y);
+    void toCastling(int grid[9][9]);
     void IncreasePositive(int i, int j);//tang so nuoc co the di
     void PositiveMoving(int n);//tim cac nuoc co the di ung voi index n
     void Personal(int click, int n, sf::Vector2i pos, sf::Vector2f oldPos, sf::Vector2f newPos, int count, sf::Sound sound, bool LuotChoi);
@@ -38,6 +39,9 @@ public:
     void computer(sf::Vector2f newPos, sf::Vector2f oldPos, bool LuotChoi);
 private:
     sf::RenderWindow& window;
+    int x_com = 0;
+    int y_com = 0;
+    bool check_com = false;
 };
 
 
