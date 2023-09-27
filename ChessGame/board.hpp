@@ -12,7 +12,7 @@ public:
     void drawBoxCom(int x, int y);
     void drawBoxDeath(int x,int y);
     void drawBoxKingDeath(int x, int y);
-    void drawCapture(int n);
+    void drawCapture(int x,int n);
     void SetTime();
     sf::ConvexShape createRoundedRectangle(float width, float height, float radius, unsigned int cornerPoints);
 private:

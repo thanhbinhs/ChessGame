@@ -330,7 +330,7 @@ sf::ConvexShape Board::createRoundedRectangle(float width, float height, float r
     return shape;
 }
 
-void Board::drawCapture( int n )
+void Board::drawCapture( int x,int index )
 {
     sf::Sprite ct[4];
     sf::Texture texture;
@@ -342,20 +342,20 @@ void Board::drawCapture( int n )
     sf::ConvexShape shape = createRoundedRectangle(size_, size_ * 4, 15, 40);
     shape.setFillColor(sf::Color(230, 230, 230));
 
-    sf::Vector2f pos = f[n].s.getPosition() - offset;
-    int y =(int) pos.x / size_;
+    int y = (x - SCREEN_MARGIN) / size_;
     
+    //cout << y<<" " <<index << endl;
 
-    if (f[n].index == 6) {
+    if (index == 6) {
         for (int i = 0; i < 4; i++) {
-            ct[i].setTextureRect({ 80 * (i + 1),80,80,80 });
+            ct[i].setTextureRect({ 80 * (i + 1),0,80,80 });
             ct[i].setPosition(size_ * y + SCREEN_MARGIN, SCREEN_MARGIN + size_ * (i + 1));
         }
         shape.setPosition(size_ * y + SCREEN_MARGIN, SCREEN_MARGIN + size_);
     }
-    else if (f[n].index == -6) {
+    else if (index == -6) {
         for (int i = 3; i >= 0; i--) {
-            ct[i].setTextureRect({ 80 * (i + 1),0,80,80 });
+            ct[i].setTextureRect({ 80 * (i + 1),80,80,80 });
             ct[i].setPosition(size_ * y + SCREEN_MARGIN, SCREEN_HEIGHT - (size_ * (i + 2)));
         }
         shape.setPosition(size_ * y + SCREEN_MARGIN, SCREEN_HEIGHT - (size_ * 5));

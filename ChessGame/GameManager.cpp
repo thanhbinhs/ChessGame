@@ -103,8 +103,8 @@ void GameManager::toCapture(int n,int y) {
     else if (g == 1)  v = 900;
     else if (g == 6)  v = 10;
     f[n].cost = f[n].index / g * v;
-    if(index > 0)   f[n].s.setTextureRect({ size_ * (index - 1),size_,size_,size_ });
-    else if(index < 0)  f[n].s.setTextureRect({ size_ * (index - 1),0,size_,size_ });
+    if(index > 0)   f[n].s.setTextureRect({ size_ * (index - 1),0,size_,size_ });
+    else if(index < 0)  f[n].s.setTextureRect({ size_ * (index - 1),size_,size_,size_ });
 }
 
 void GameManager::move(int n, Vector2f oldPos, Vector2f newPos)
@@ -520,6 +520,23 @@ int CountTime( float countdown) {
     
 }
 
+void GameManager::MessageBoxCom(int check) {
+    if (check == 1) {
+        MessageBox(NULL, L"You Win", L"Thông báo", MB_OK);
+        Create();
+        mess = true;
+    }
+    else if (check == -1) {
+        MessageBox(NULL, L"You Loss", L"Thông báo", MB_OK);
+        Create();
+        mess = true;
+    }
+    else {
+        mess = false;
+    }
+
+}
+
 void GameManager::Play()
 {
     bool checkareaSetting = false;
@@ -627,7 +644,7 @@ void GameManager::Play()
                     checkareaAI = false;
                 }
                 if ((mousePosition.x >= 745 + 160 && mousePosition.x <= SCREEN_WIDTH - 50) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 7 && mousePosition.y <= SCREEN_MARGIN + cellSize * 8)) {
-                    Menu = -1;
+                    Menu = 0;
                 }
             }
         }
@@ -640,6 +657,7 @@ void GameManager::Play()
             menu = 3;
             Menu = 0;
             com = 0;
+            click = 0;
             LuotChoi = true;
         }
         else if (Menu == 2) {
@@ -647,9 +665,10 @@ void GameManager::Play()
             menu = 2;
             Menu = 0;
             com = 0;
+            click = 0;
             LuotChoi = true;
         }
-        else if (Menu == -1) {
+        if (Menu == -1) {
             window.close();
         }
 
@@ -687,8 +706,10 @@ void GameManager::Play()
                         sound.play();
                         int y = int((newPos - offset).y / size_);
                         //cout << "y new: " << y <<" "<<f[n].index<< endl;
+                        int index = f[n].index;
                         while ((y == 0 && f[n].index == 6) || (y == 7 && f[n].index == -6)) {
-                            bgame.drawCapture(n);
+                            int x = f[n].s.getPosition().x;
+                            bgame.drawCapture(x,index);
                             toCapture(n, y);
                             window.display();
                         }
@@ -749,8 +770,10 @@ void GameManager::Play()
                             sound.play();
                             int y = int((newPos - offset).y / size_);
                             //cout << "y new: " << y <<" "<<f[n].index<< endl;
+                            int index = f[n].index;
                             while ((y == 0 && f[n].index == 6) || (y == 7 && f[n].index == -6)) {
-                                bgame.drawCapture(n);
+                                int x = f[n].s.getPosition().x;
+                                bgame.drawCapture(x, index);
                                 toCapture(n, y);
                                 window.display();
                             }
@@ -774,13 +797,11 @@ void GameManager::Play()
         resetMatrix(checkPos);
     }
 
-    if (checkWin() == 1) {
-        cout << "You Win" << endl;
-        Create();
-    }
-    else if (checkWin() == -1) {
-        cout << "You Lose" << endl;
-        Create();
+    MessageBoxCom(checkWin());
+    if (mess = true) {
+        resetGlobal();
+        resetMatrix(checkPos);
+        check_com = false;
     }
 
 
