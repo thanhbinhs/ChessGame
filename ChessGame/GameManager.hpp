@@ -46,6 +46,8 @@ private:
     int y_com = 0;
     bool check_com = false;
     bool mess = false;
+    bool checkWhite = true;
+    bool checkBlack = true;
 };
 
 

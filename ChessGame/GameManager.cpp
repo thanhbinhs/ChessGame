@@ -303,6 +303,13 @@ void GameManager::PositiveKing(int n, int x, int y, int grid[9][9])//xet 8 vi tr
         IncreasePositive(x, y - 1);
         checkPos[y - 1][x] = 1;
     }
+
+        if (checkBlack == true && grid[5][0] == 0 && grid[6][0] == 0 && n == 4) {
+            IncreasePositive(6,0);
+        }
+        else if (checkWhite == true && grid[5][7] == 0 && grid[6][7] == 0 && n == 28) {
+            IncreasePositive(6,7 );
+        }
 }
 
 void GameManager::PositiveKnight(int n, int x, int y, int grid[9][9])//xet 8 vi tri co the di cua ma
@@ -707,13 +714,23 @@ void GameManager::Play()
                         int y = int((newPos - offset).y / size_);
                         //cout << "y new: " << y <<" "<<f[n].index<< endl;
                         int index = f[n].index;
+                        int x_pos = f[n].s.getPosition().x;
+                        int y_pos = f[n].s.getPosition().y;
                         while ((y == 0 && f[n].index == 6) || (y == 7 && f[n].index == -6)) {
-                            int x = f[n].s.getPosition().x;
-                            bgame.drawCapture(x,index);
+
+                            bgame.drawCapture(x_pos,index);
                             toCapture(n, y);
                             window.display();
                         }
-
+                        if (f[n].index == 1 || (f[n].index == 5 && n == 31)) {
+                            cout << "White" << endl;
+                            checkWhite = false;
+                        }
+                        x_pos = (x_pos - SCREEN_MARGIN) / size_;
+                        y_pos = (y_pos - SCREEN_MARGIN) / size_;
+                        if (f[n].index == 1 && x_pos == 6 && y_pos == 7) {
+                           f[31].s.setPosition(5*size_ + SCREEN_MARGIN, 7*size_ + SCREEN_MARGIN);
+                        }
                         LuotChoi = !LuotChoi;
                         com = 1;
                         
@@ -731,6 +748,17 @@ void GameManager::Play()
                 computer(newPos, oldPos, LuotChoi);
                 sound.play();
                 check_com = true;
+
+                int x_pos = f[n].s.getPosition().x;
+                int y_pos = f[n].s.getPosition().y;
+
+                if (f[n].index == -1 || (f[n].index == -5 && n == 7)) checkBlack = false;
+                x_pos = (x_pos - SCREEN_MARGIN) / size_;
+                y_pos = (y_pos - SCREEN_MARGIN) / size_;
+                if (f[n].index == -1 && x_pos == 6 && y_pos == 0) {
+                    f[7].s.setPosition(5 * size_ + SCREEN_MARGIN, SCREEN_MARGIN);
+                }
+
                 LuotChoi = !LuotChoi;
                 com = 0;
                 //reset
@@ -771,12 +799,20 @@ void GameManager::Play()
                             int y = int((newPos - offset).y / size_);
                             //cout << "y new: " << y <<" "<<f[n].index<< endl;
                             int index = f[n].index;
+                            int x_pos = f[n].s.getPosition().x;
+                            int y_pos = f[n].s.getPosition().y;
                             while ((y == 0 && f[n].index == 6) || (y == 7 && f[n].index == -6)) {
-                                int x = f[n].s.getPosition().x;
-                                bgame.drawCapture(x, index);
+                                bgame.drawCapture(x_pos, index);
                                 toCapture(n, y);
                                 window.display();
                             }
+                            if (f[n].index == -1 || (f[n].index == -5 && n == 7)) checkBlack = false;
+                            x_pos = (x_pos - SCREEN_MARGIN) / size_;
+                            y_pos = (y_pos - SCREEN_MARGIN) / size_;
+                            if (f[n].index == -1 && x_pos == 6 && y_pos == 0) {
+                                f[7].s.setPosition(5*size_ + SCREEN_MARGIN,  SCREEN_MARGIN);
+                            }
+
                             LuotChoi = !LuotChoi;
                             //cout << "Luot: " << LuotChoi << endl;
                             com = 0;
@@ -795,6 +831,7 @@ void GameManager::Play()
     if (click == 0) {
         resetGlobal();
         resetMatrix(checkPos);
+
     }
 
     MessageBoxCom(checkWin());
@@ -802,6 +839,8 @@ void GameManager::Play()
         resetGlobal();
         resetMatrix(checkPos);
         check_com = false;
+        com = 0;
+
     }
 
 
