@@ -651,33 +651,13 @@ void GameManager::Play()
                     checkareaAI = false;
                 }
                 if ((mousePosition.x >= 745 + 160 && mousePosition.x <= SCREEN_WIDTH - 50) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 7 && mousePosition.y <= SCREEN_MARGIN + cellSize * 8)) {
-                    Menu = 0;
+                    Menu = -1;
+                    //break;
                 }
             }
         }
 
-        if (Menu == 4) {
-            bgame.SetTime();
-        }
-        if (Menu == 3) {
-            Create();
-            menu = 3;
-            Menu = 0;
-            com = 0;
-            click = 0;
-            LuotChoi = true;
-        }
-        else if (Menu == 2) {
-            Create();
-            menu = 2;
-            Menu = 0;
-            com = 0;
-            click = 0;
-            LuotChoi = true;
-        }
-        if (Menu == -1) {
-            window.close();
-        }
+
 
       //  cout << com <<" "<<LuotChoi<<  endl;
         if (LuotChoi == true && com == 0)
@@ -848,7 +828,30 @@ void GameManager::Play()
     ////// draw  ///////
     bgame.chessBoard();
 
-
+    if (Menu == 4) {
+        bgame.SetTime();
+    }
+    if (Menu == 3) {
+        Create();
+        menu = 3;
+        Menu = 0;
+        com = 0;
+        click = 0;
+        check_com = 0;
+        LuotChoi = true;
+    }
+    else if (Menu == 2) {
+        Create();
+        menu = 2;
+        Menu = 0;
+        com = 0;
+        click = 0;
+        check_com = 0;
+        LuotChoi = true;
+    }
+    if (Menu == -1) {
+        window.close();
+    }
 
     if (checkareaSetting) {
         bgame.PrintSetting();
