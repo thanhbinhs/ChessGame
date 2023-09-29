@@ -725,12 +725,11 @@ void GameManager::Play()
                                 window.display();
                             }
                             if (f[n].index == 1 || (f[n].index == 5 && n == 31)) {
-                                cout << "White" << endl;
                                 checkWhite = false;
                             }
                             x_pos = (x_pos - SCREEN_MARGIN) / size_;
                             y_pos = (y_pos - SCREEN_MARGIN) / size_;
-                            if (f[n].index == 1 && x_pos == 6 && y_pos == 7) {
+                            if (f[n].index == 1 && x_pos == 6 && y_pos == 7 && checkWhite == true) {
                                 f[31].s.setPosition(5 * size_ + SCREEN_MARGIN, 7 * size_ + SCREEN_MARGIN);
                             }
                             LuotChoi = !LuotChoi;
@@ -756,7 +755,7 @@ void GameManager::Play()
                     if (f[n].index == -1 || (f[n].index == -5 && n == 7)) checkBlack = false;
                     x_pos = (x_pos - SCREEN_MARGIN) / size_;
                     y_pos = (y_pos - SCREEN_MARGIN) / size_;
-                    if (f[n].index == -1 && x_pos == 6 && y_pos == 0) {
+                    if (f[n].index == -1 && x_pos == 6 && y_pos == 0 && checkBlack == true) {
                         f[7].s.setPosition(5 * size_ + SCREEN_MARGIN, SCREEN_MARGIN);
                     }
 
@@ -810,7 +809,7 @@ void GameManager::Play()
                                 if (f[n].index == -1 || (f[n].index == -5 && n == 7)) checkBlack = false;
                                 x_pos = (x_pos - SCREEN_MARGIN) / size_;
                                 y_pos = (y_pos - SCREEN_MARGIN) / size_;
-                                if (f[n].index == -1 && x_pos == 6 && y_pos == 0) {
+                                if (f[n].index == -1 && x_pos == 6 && y_pos == 0 && checkBlack == true) {
                                     f[7].s.setPosition(5 * size_ + SCREEN_MARGIN, SCREEN_MARGIN);
                                 }
 
