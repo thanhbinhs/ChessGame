@@ -21,8 +21,8 @@ using namespace std;
 static int size_ = 80;
 static Vector2f sizeBtn(80, 80);
 
-const int SCREEN_WIDTH = 1040;
-const int SCREEN_HEIGHT = 740;
+const float SCREEN_WIDTH = 1040;
+const float SCREEN_HEIGHT = 740;
 const float SCREEN_MARGIN = 50.0f;
 static Vector2f offset(SCREEN_MARGIN,SCREEN_MARGIN);
 

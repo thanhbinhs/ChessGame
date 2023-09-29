@@ -12,7 +12,6 @@ public:
     int positiveCount;// so nuoc co the di chuyen
     stack<Vector2f> posS;//luu tru vi tri cac nuoc di
     stack<int> nS;//luu tru index cua quan di
-    int CountTime(float coutndown);
     void move(int n, Vector2f oldPos, Vector2f newPos);//ham danh co
     void Undo();//ham quay lai
     void Create();
@@ -46,6 +45,7 @@ private:
     int y_com = 0;
     bool check_com = false;
     bool mess = false;
+    bool check_setTime = false;
 };
 
 

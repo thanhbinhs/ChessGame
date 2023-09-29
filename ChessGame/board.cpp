@@ -69,6 +69,34 @@ void Board::chessBoard() {
         textij.setPosition(SCREEN_MARGIN / 2, boardPosition.y + ij * cellSize + SCREEN_MARGIN / 2); // Vị trí chữ trên cửa sổ
         window.draw(textij);
     }
+
+
+    // thong tin tren ban co.
+    sf::RectangleShape BoxInInformation(sf::Vector2f(295, cellSize));
+    BoxInInformation.setFillColor(sf::Color(0, 0, 0));
+    BoxInInformation.setPosition(745, SCREEN_MARGIN + cellSize);
+    window.draw(BoxInInformation);
+    
+    sf::Text textGameMode;
+    textGameMode.setFont(font);
+    textGameMode.setString("Game Mode: ");
+    textGameMode.setCharacterSize(25);
+    textGameMode.setFillColor(sf::Color::White);
+    textGameMode.setPosition(SCREEN_WIDTH - (textGameMode.getGlobalBounds().width) * 1.2f - 100.f, SCREEN_MARGIN + cellSize + 10.f);
+    window.draw(textGameMode);
+
+    sf::Text textTurnof;
+    textTurnof.setFont(font);
+    textTurnof.setString("Turn: ");
+    textTurnof.setCharacterSize(25);
+    textTurnof.setFillColor(sf::Color::White);
+    textTurnof.setPosition(SCREEN_WIDTH - (textTurnof.getGlobalBounds().width) * 1.2f - 200.f, SCREEN_MARGIN + cellSize + 10.f + 30.f);
+    window.draw(textTurnof);
+    
+
+
+
+
     // Các dòng kẻ đen và trắng 
     sf::RectangleShape line(sf::Vector2f(1060.f, 5.f));
     line.rotate(90.f);
@@ -81,12 +109,22 @@ void Board::chessBoard() {
     lineSetting.setFillColor(sf::Color::White);
     lineSetting.setPosition(1040,SCREEN_MARGIN + cellSize);
     window.draw(lineSetting);
+    
+    sf::RectangleShape lineSetting0(sf::Vector2f(3.f, 295.f));
+    lineSetting0.rotate(90.f);
+    lineSetting0.setFillColor(sf::Color::White);
+    lineSetting0.setPosition(1040, SCREEN_MARGIN + cellSize * 2.f);
+    window.draw(lineSetting0);
+
 
     sf::RectangleShape lineSetting1(sf::Vector2f(3.f, 295.f));
     lineSetting1.rotate(90.f);
     lineSetting1.setFillColor(sf::Color::White);
     lineSetting1.setPosition(1040, SCREEN_MARGIN - 3.f );
     window.draw(lineSetting1);
+
+
+
 
     // setting
     sf::Texture setting;
@@ -120,10 +158,6 @@ void Board::chessBoard() {
     BoxInSetting2.setFillColor(sf::Color(0, 0, 0));
     BoxInSetting2.setPosition(745, SCREEN_MARGIN);
 
-    sf::RectangleShape BoxInQuit(sf::Vector2f(295, cellSize));
-    BoxInQuit.setFillColor(sf::Color(0, 0, 0));
-    BoxInQuit.setPosition(745, SCREEN_MARGIN + cellSize * 7);
-
     // image 
     sf::IntRect croppingRect(595, 560, 80, 80);
     sf::Texture Stop;
@@ -143,6 +177,10 @@ void Board::chessBoard() {
 
     // Lấy vị trí chuột
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+
+    // In Game mode;
+
 
     // In ra vị trí chuột lên cửa sổ
     //   std::cout << "Mouse Position: (" << mousePosition.x << ", " << mousePosition.y << ")" << std::endl;
@@ -342,7 +380,7 @@ void Board::drawCapture( int x,int index )
     sf::ConvexShape shape = createRoundedRectangle(size_, size_ * 4, 15, 40);
     shape.setFillColor(sf::Color(230, 230, 230));
 
-    int y = (x - SCREEN_MARGIN) / size_;
+    float y = (x - SCREEN_MARGIN) / size_;
     
     //cout << y<<" " <<index << endl;
 
@@ -356,9 +394,9 @@ void Board::drawCapture( int x,int index )
     else if (index == -6) {
         for (int i = 3; i >= 0; i--) {
             ct[i].setTextureRect({ 80 * (i + 1),80,80,80 });
-            ct[i].setPosition(size_ * y + SCREEN_MARGIN, SCREEN_HEIGHT - (size_ * (i + 2)));
+            ct[i].setPosition(size_ * y + SCREEN_MARGIN, SCREEN_HEIGHT - (size_ * (i + 2.f)));
         }
-        shape.setPosition(size_ * y + SCREEN_MARGIN, SCREEN_HEIGHT - (size_ * 5));
+        shape.setPosition(size_ * y + SCREEN_MARGIN, SCREEN_HEIGHT - (size_ * 5.f));
     }
 
     window.draw(shape);
@@ -366,38 +404,45 @@ void Board::drawCapture( int x,int index )
 }
 
 
-void Board::SetTime()
+void Board::SetTime(bool checkTurn)
 {
     sf::Font font;
     if (!font.loadFromFile("../Data/Font/font_1.ttf")) {
         font.loadFromFile("Data/Font/font_1.ttf");
     }
     int cellSize = size_;
-    sf::RectangleShape lineSetting123(sf::Vector2f(3.f, 295.f));
+
+    sf::RectangleShape Background(sf::Vector2f(295, cellSize*2.f));
+    Background.setFillColor(sf::Color(100, 100, 100));
+    Background.setPosition(745, SCREEN_MARGIN + cellSize);
+    window.draw(Background);
+
+
+    sf::RectangleShape lineSetting123(sf::Vector2f(5.f, 295.f));
     lineSetting123.rotate(90.f);
     lineSetting123.setFillColor(sf::Color::Black);
     lineSetting123.setPosition(1040, SCREEN_MARGIN + cellSize);
     window.draw(lineSetting123);
 
-    sf::RectangleShape lineSetting12(sf::Vector2f(3.f, 295.f));
+    sf::RectangleShape lineSetting12(sf::Vector2f(5.f, 295.f));
     lineSetting12.rotate(90.f);
     lineSetting12.setFillColor(sf::Color::Black);
     lineSetting12.setPosition(1040, SCREEN_MARGIN - 3.f);
     window.draw(lineSetting12);
 
-    sf::RectangleShape lineSetTime(sf::Vector2f(cellSize * 2, 3.f));
+    sf::RectangleShape lineSetTime(sf::Vector2f(cellSize * 2.f, 5.f));
     lineSetTime.rotate(90.f);
     lineSetTime.setFillColor(sf::Color::Black);
     lineSetTime.setPosition(640.0f + SCREEN_MARGIN * 2 + 150.f + 1.5, SCREEN_MARGIN + cellSize * 2);
     window.draw(lineSetTime);
 
-    sf::RectangleShape lineSetting11(sf::Vector2f(3.f, 295.f));
+    sf::RectangleShape lineSetting11(sf::Vector2f(5.f, 295.f));
     lineSetting11.rotate(90.f);
     lineSetting11.setFillColor(sf::Color::Black);
     lineSetting11.setPosition(1040, SCREEN_MARGIN - 3.f + cellSize * 2);
     window.draw(lineSetting11);
 
-    sf::RectangleShape lineSetting22(sf::Vector2f(3.f, 295.f));
+    sf::RectangleShape lineSetting22(sf::Vector2f(5.f, 295.f));
     lineSetting22.rotate(90.f);
     lineSetting22.setFillColor(sf::Color::Black);
     lineSetting22.setPosition(1040, SCREEN_MARGIN - 3.f + cellSize * 4);
@@ -427,8 +472,142 @@ void Board::SetTime()
     textB.setPosition(SCREEN_WIDTH - (textW.getGlobalBounds().width) * 1.2f - 33.f, SCREEN_MARGIN + cellSize * 2.f);
     window.draw(textB);
 
+    // ìnormation
+    sf::RectangleShape BoxInInformation(sf::Vector2f(295, cellSize));
+    BoxInInformation.setFillColor(sf::Color(0, 0, 0));
+    BoxInInformation.setPosition(745, SCREEN_MARGIN + cellSize * 4.f);
+    window.draw(BoxInInformation);
+
+    sf::Text textGameMode;
+    textGameMode.setFont(font);
+    textGameMode.setString("Game Mode:");
+    textGameMode.setCharacterSize(25);
+    textGameMode.setFillColor(sf::Color::White);
+    textGameMode.setPosition(SCREEN_WIDTH - (textGameMode.getGlobalBounds().width) * 1.2f - 110.f, SCREEN_MARGIN + cellSize*4.f + 10.f );
+    window.draw(textGameMode);
+
+    sf::Text textTurnof;
+    textTurnof.setFont(font);
+    textTurnof.setString("Turn: ");
+    textTurnof.setCharacterSize(25);
+    textTurnof.setFillColor(sf::Color::White);
+    textTurnof.setPosition(SCREEN_WIDTH - (textTurnof.getGlobalBounds().width) * 1.2f - 200.f, SCREEN_MARGIN + cellSize*4.f + 10.f + 30.f);
+    window.draw(textTurnof);
+
+    sf::Text textGameMode1;
+    textGameMode1.setFont(font);
+    textGameMode1.setString("Set Time");
+    textGameMode1.setCharacterSize(25);
+    textGameMode1.setFillColor(sf::Color::White);
+    textGameMode1.setPosition(SCREEN_WIDTH - (textGameMode1.getGlobalBounds().width) * 1.2f , SCREEN_MARGIN + cellSize*4.f + 10.f);
+    window.draw(textGameMode1);
+
+    if (checkTurn == false) {
+        // In turn Black
+        sf::Text textTurnBlack;
+        textTurnBlack.setFont(font);
+        textTurnBlack.setString("Black");
+        textTurnBlack.setCharacterSize(25);
+        textTurnBlack.setFillColor(sf::Color::White);
+        textTurnBlack.setPosition(SCREEN_WIDTH - (textTurnBlack.getGlobalBounds().width) * 1.2f - 130.f, SCREEN_MARGIN + cellSize*4.f + 40.f);
+        window.draw(textTurnBlack);
+
+
+    }
+
+    if (checkTurn == true) {
+        // In turn White
+        sf::Text textTurnWhite;
+        textTurnWhite.setFont(font);
+        textTurnWhite.setString("White");
+        textTurnWhite.setCharacterSize(25);
+        textTurnWhite.setFillColor(sf::Color::White);
+        textTurnWhite.setPosition(SCREEN_WIDTH - (textTurnWhite.getGlobalBounds().width) * 1.2f - 130.f, SCREEN_MARGIN + cellSize*4.f + 40.f);
+        window.draw(textTurnWhite);
+    }
+
+}
+void Board::PrintPvP(bool  checkTurn)
+{
+    sf::Font font;
+    if (!font.loadFromFile("../Data/Font/font_1.ttf")) {
+        font.loadFromFile("Data/Font/font_1.ttf");
+    }
+    int cellSize = size_;
+
+    if (checkTurn == false) {
+        // In turn Black
+        sf::Text textTurnBlack;
+        textTurnBlack.setFont(font);
+        textTurnBlack.setString("Black");
+        textTurnBlack.setCharacterSize(25);
+        textTurnBlack.setFillColor(sf::Color::White);
+        textTurnBlack.setPosition(SCREEN_WIDTH - (textTurnBlack.getGlobalBounds().width) * 1.2f - 130.f, SCREEN_MARGIN + cellSize + 40.f);
+        window.draw(textTurnBlack);
+    }
+
+    if (checkTurn == true) {
+        // In turn White
+        sf::Text textTurnWhite;
+        textTurnWhite.setFont(font);
+        textTurnWhite.setString("White");
+        textTurnWhite.setCharacterSize(25);
+        textTurnWhite.setFillColor(sf::Color::White);
+        textTurnWhite.setPosition(SCREEN_WIDTH - (textTurnWhite.getGlobalBounds().width) * 1.2f - 130.f, SCREEN_MARGIN + cellSize + 40.f);
+        window.draw(textTurnWhite);
+    }
+
+    sf::RectangleShape Background(sf::Vector2f(100,50));
+    Background.setFillColor(sf::Color(0, 0, 0));
+    Background.setPosition(745 + 200, SCREEN_MARGIN + cellSize + 5.f);
+    window.draw(Background);
+
+    sf::Text textGameMode2;
+    textGameMode2.setFont(font);
+    textGameMode2.setString("PvP");
+    textGameMode2.setCharacterSize(25);
+    textGameMode2.setFillColor(sf::Color::White);
+    textGameMode2.setPosition(SCREEN_WIDTH - (textGameMode2.getGlobalBounds().width) * 1.2f - 50.f, SCREEN_MARGIN + cellSize + 10.f);
+    window.draw(textGameMode2);
+}
 
 
 
+void Board::PvAi(bool checkTurn) {
+    int cellSize = size_;
+    sf::Font font;
+    if (!font.loadFromFile("../Data/Font/font_1.ttf")) {
+        font.loadFromFile("Data/Font/font_1.ttf");
+    }
+
+    if (checkTurn == true) {
+        // in turn People
+        sf::Text textTurnPeople;
+        textTurnPeople.setFont(font);
+        textTurnPeople.setString("People");
+        textTurnPeople.setCharacterSize(25);
+        textTurnPeople.setFillColor(sf::Color::White);
+        textTurnPeople.setPosition(SCREEN_WIDTH - (textTurnPeople.getGlobalBounds().width) * 1.2f - 110.f, SCREEN_MARGIN + cellSize + 40.f);
+        window.draw(textTurnPeople);
+    }
+
+    if (checkTurn == false) {
+        // in turn Bot(AI)
+        sf::Text textTurnBot;
+        textTurnBot.setFont(font);
+        textTurnBot.setString("Bot");
+        textTurnBot.setCharacterSize(25);
+        textTurnBot.setFillColor(sf::Color::White);
+        textTurnBot.setPosition(SCREEN_WIDTH - (textTurnBot.getGlobalBounds().width) * 1.2f - 155.f, SCREEN_MARGIN + cellSize + 40.f);
+        window.draw(textTurnBot);
+    }
+
+    sf::Text textGameMode1;
+    textGameMode1.setFont(font);
+    textGameMode1.setString("PvAI");
+    textGameMode1.setCharacterSize(25);
+    textGameMode1.setFillColor(sf::Color::White);
+    textGameMode1.setPosition(SCREEN_WIDTH - (textGameMode1.getGlobalBounds().width) * 1.2f - 50.f, SCREEN_MARGIN + cellSize + 10.f);
+    window.draw(textGameMode1);
 
 }

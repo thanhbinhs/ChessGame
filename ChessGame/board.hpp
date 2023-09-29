@@ -13,7 +13,9 @@ public:
     void drawBoxDeath(int x,int y);
     void drawBoxKingDeath(int x, int y);
     void drawCapture(int x,int n);
-    void SetTime();
+    void SetTime(bool checkTurn);
+    void PrintPvP(bool checkTurn);
+    void PvAi(bool checkTurn);
     sf::ConvexShape createRoundedRectangle(float width, float height, float radius, unsigned int cornerPoints);
 private:
     sf::RenderWindow& window;

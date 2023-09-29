@@ -512,13 +512,6 @@ void GameManager::resetMatrix(int a[9][9])
     }
 }
 
-int CountTime( float countdown) {
-    sf::Clock clock;
-    float elapsed = clock.getElapsedTime().asSeconds();
-    float remaining = countdown - elapsed;
-    return remaining;
-    
-}
 
 void GameManager::MessageBoxCom(int check) {
     if (check == 1) {
@@ -536,6 +529,7 @@ void GameManager::MessageBoxCom(int check) {
     }
 
 }
+
 
 void GameManager::Play()
 {
@@ -611,30 +605,42 @@ void GameManager::Play()
                     checkareaPvP = true;
                     checkareaAI = true;
                     checkareaSetTime = true;
-                   // cout << "Check Setting ";
+                    // cout << "Check Setting ";
                 }
+                // set pvp
                 else if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize && mousePosition.y <= SCREEN_MARGIN + cellSize * 2) && checkareaPvP) {
                     checkareaSetting = true;
                     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-                       // cout << "Check areaPvP = true ";
+                        // cout << "Check areaPvP = true ";
                         Menu = 2;
                         checkareaSetting = false;
+                        checkareaPvP = false;
+                        checkareaAI = false;
+                        checkareaSetTime = false;
                     }
                 }
+                //set p v ai
                 else if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 2 && mousePosition.y <= SCREEN_MARGIN + cellSize * 3) && checkareaAI) {
                     checkareaSetting = true;
                     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
                         //cout << "Check areaAI = true\n";
                         Menu = 3;
                         checkareaSetting = false;
+                        checkareaPvP = false;
+                        checkareaAI = false;
+                        checkareaSetTime = false;
                     }
                 }
+                // settime
                 else if ((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 3 && mousePosition.y <= SCREEN_MARGIN + cellSize * 4) && checkareaSetTime) {
                     checkareaSetting = true;
                     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-                       // cout << "Check SetTime = true \n";
+                        // cout << "Check SetTime = true \n";
                         Menu = 4;
                         checkareaSetting = false;
+                        checkareaPvP = false;
+                        checkareaAI = false;
+                        checkareaSetTime = false;
                     }
                 }
                 else
@@ -642,37 +648,18 @@ void GameManager::Play()
                     checkareaSetting = false;
                     checkareaPvP = false;
                     checkareaAI = false;
+                    checkareaSetTime = false;
                 }
+                // quit close window
                 if ((mousePosition.x >= 745 + 160 && mousePosition.x <= SCREEN_WIDTH - 50) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 7 && mousePosition.y <= SCREEN_MARGIN + cellSize * 8)) {
-                    Menu = 0;
+                    Menu = -1;
                 }
             }
         }
 
-        if (Menu == 4) {
-            bgame.SetTime();
-        }
-        if (Menu == 3) {
-            Create();
-            menu = 3;
-            Menu = 0;
-            com = 0;
-            click = 0;
-            LuotChoi = true;
-        }
-        else if (Menu == 2) {
-            Create();
-            menu = 2;
-            Menu = 0;
-            com = 0;
-            click = 0;
-            LuotChoi = true;
-        }
-        if (Menu == -1) {
-            window.close();
-        }
 
-      //  cout << com <<" "<<LuotChoi<<  endl;
+
+        //  cout << com <<" "<<LuotChoi<<  endl;
         if (LuotChoi == true && com == 0)
         {
             if (click == 1) {
@@ -709,14 +696,13 @@ void GameManager::Play()
                         int index = f[n].index;
                         while ((y == 0 && f[n].index == 6) || (y == 7 && f[n].index == -6)) {
                             int x = f[n].s.getPosition().x;
-                            bgame.drawCapture(x,index);
+                            bgame.drawCapture(x, index);
                             toCapture(n, y);
                             window.display();
                         }
 
                         LuotChoi = !LuotChoi;
                         com = 1;
-                        
                     }
                 }
                 //reset
@@ -789,25 +775,78 @@ void GameManager::Play()
                 }
 
             }
-                
+
         }
 
-    if (click == 0) {
-        resetGlobal();
-        resetMatrix(checkPos);
-    }
+        if (click == 0) {
+            resetGlobal();
+            resetMatrix(checkPos);
+        }
 
-    MessageBoxCom(checkWin());
-    if (mess == true) {
-        resetGlobal();
-        resetMatrix(checkPos);
-        check_com = false;
-    }
+        MessageBoxCom(checkWin());
+        if (mess == true) {
+            resetGlobal();
+            resetMatrix(checkPos);
+            check_com = false;
+        }
+
+        // menu = 3 choi voi may 
+        // menu = 2 choi pvp, 
+        // menu = 4 settime 
 
 
+        ////// draw  ///////
+        bgame.chessBoard();
+        
+        int checkTurn = 0;
 
-    ////// draw  ///////
-    bgame.chessBoard();
+
+        //SetTime
+        if (Menu == 4) {
+            Create();
+            menu = 2;
+            Menu = 0;
+            com = 0;
+            click = 0;
+            LuotChoi = true;
+            check_setTime = true;
+        }
+        // PvBot
+        if (Menu == 3) {
+            Create();
+            menu = 3;
+            Menu = 0;
+            com = 0;
+            click = 0;
+            LuotChoi = true;
+            check_setTime = false;
+        }
+        // PvP
+        if (Menu == 2) {
+            Create();
+            menu = 2;
+            com = 0;
+            click = 0;
+            LuotChoi = true;
+            Menu = 0;
+            check_setTime = false;
+        }
+        if (Menu == -1) {
+            window.close();
+        }
+        // in setting bot 
+        if (menu == 3 ) {
+            bgame.PvAi(LuotChoi);
+
+        }
+        else if (menu == 2 && check_setTime == false) {
+            bgame.PrintPvP(LuotChoi);
+        }
+        else if (menu == 2 && check_setTime == true) {
+            bgame.SetTime(LuotChoi);
+        }
+
+
 
 
 
