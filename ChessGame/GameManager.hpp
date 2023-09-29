@@ -45,7 +45,12 @@ private:
     int y_com = 0;
     bool check_com = false;
     bool mess = false;
+<<<<<<< HEAD
     bool check_setTime = false;
+=======
+    bool checkWhite = true;
+    bool checkBlack = true;
+>>>>>>> c8f3211cd6a7ebdf79e377bd26db922f9d159a4c
 };
 
 
