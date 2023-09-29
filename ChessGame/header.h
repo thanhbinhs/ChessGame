@@ -24,7 +24,7 @@ static Vector2f sizeBtn(80, 80);
 const float SCREEN_WIDTH = 1040;
 const float SCREEN_HEIGHT = 740;
 const float SCREEN_MARGIN = 50.0f;
-static Vector2f offset(SCREEN_MARGIN,SCREEN_MARGIN);
+static Vector2f offset(SCREEN_MARGIN, SCREEN_MARGIN);
 
 static int board[8][8] =
 { -5,-4,-3,-2,-1,-3,-4,-5,
