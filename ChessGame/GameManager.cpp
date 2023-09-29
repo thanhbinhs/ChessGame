@@ -124,6 +124,10 @@ void GameManager::move(int n, Vector2f oldPos, Vector2f newPos)
         }
     }
     f[n].s.setPosition(newPos);
+    new_ = newPos;
+    capture_int = n;
+
+
 }
 
 void GameManager::Undo()
@@ -204,7 +208,7 @@ Vector2f GameManager::getNextMove(bool luot)
         {
             move(i, oldPostemp, positiveMovetemp[j]);
             int alpha = -9999, beta = 9999;
-            int temp = Alpha_Beta(2, !luot, alpha, beta);
+            int temp = Alpha_Beta(3, !luot, alpha, beta);
             if (minimaxtemp > temp) {
                 newPostemp = positiveMovetemp[j];
                 minimaxtemp = temp;
@@ -233,6 +237,15 @@ void GameManager::computer(sf::Vector2f newPos, sf::Vector2f oldPos, bool LuotCh
     y_com = (oldPos.x - SCREEN_MARGIN) / size_;
     x_com = (oldPos.y - SCREEN_MARGIN) / size_;
     move(c, oldPos, newPos);
+}
+
+void GameManager::comCapture(sf::Vector2f newPos, int c, int n)
+{
+    int x_capture = (newPos.y - SCREEN_MARGIN) / size_;
+    if (c == -6 && x_capture == 7) {
+        cout << "Bot: " << c << " " << x_capture << endl;
+        f[n].s.setTextureRect({ size_,size_,size_,size_ });
+    }
 }
 
 int GameManager::CostMove()// don gian con nao bi chet thi khong tinh diem cua con day
@@ -949,9 +962,12 @@ void GameManager::Play()
                 }
             }
         }
+        comCapture(newPos, f[n].index, n);
+
         for (int i = 0; i < 32; i++) {
             window.draw(f[i].s);
         }
+
 
         window.display();
     }

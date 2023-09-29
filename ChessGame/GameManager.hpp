@@ -35,12 +35,12 @@ public:
     int Alpha_Beta(int depth, bool luot, int alpha, int beta);//cat tia alpha beta
     Vector2f getNextMove(bool luot);// tra ve nuoc di tot nhat theo chien luoc phia tren
     void computer(sf::Vector2f newPos, sf::Vector2f oldPos, bool LuotChoi);
-
+    void comCapture(sf::Vector2f newPos, int c, int n);
     void MessageBoxCom(int check);
 
 private:
     sf::RenderWindow& window;
-    sf::Time delay = sf::milliseconds(500);
+    sf::Time delay = sf::milliseconds(0);
     int x_com = 0;
     int y_com = 0;
     bool check_com = false;
@@ -49,6 +49,11 @@ private:
         bool check_setTime = false;
         bool checkWhite = true;
     bool checkBlack = true;
+
+    sf::Vector2f new_;
+    int capture_int;
+
+
 };
 
 
