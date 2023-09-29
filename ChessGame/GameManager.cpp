@@ -237,6 +237,16 @@ void GameManager::computer(sf::Vector2f newPos, sf::Vector2f oldPos, bool LuotCh
     y_com = (oldPos.x - SCREEN_MARGIN) / size_;
     x_com = (oldPos.y - SCREEN_MARGIN) / size_;
     move(c, oldPos, newPos);
+    int x_pos = f[c].s.getPosition().x;
+    int y_pos = f[c].s.getPosition().y;
+
+    x_pos = (x_pos - SCREEN_MARGIN) / size_;
+    y_pos = (y_pos - SCREEN_MARGIN) / size_;
+    if (f[c].index == -1 && x_pos == 6 && y_pos == 0 && checkBlack == true) {
+        f[7].s.setPosition(5 * size_ + SCREEN_MARGIN, SCREEN_MARGIN);
+    }
+    if (f[c].index == -1 || (f[c].index == -5 && c == 7)) checkBlack = false;
+    comCapture(newPos, f[c].index, c);
 }
 
 void GameManager::comCapture(sf::Vector2f newPos, int c, int n)
@@ -245,6 +255,8 @@ void GameManager::comCapture(sf::Vector2f newPos, int c, int n)
     if (c == -6 && x_capture == 7) {
         cout << "Bot: " << c << " " << x_capture << endl;
         f[n].s.setTextureRect({ size_,size_,size_,size_ });
+        f[n].index = -2;
+        f[n].cost = 90;
     }
 }
 
@@ -724,13 +736,14 @@ void GameManager::Play()
                                     toCapture(n, y);
                                 window.display();
                             }
-                            if (f[n].index == 1 || (f[n].index == 5 && n == 31)) {
-                                checkWhite = false;
-                            }
                             x_pos = (x_pos - SCREEN_MARGIN) / size_;
                             y_pos = (y_pos - SCREEN_MARGIN) / size_;
                             if (f[n].index == 1 && x_pos == 6 && y_pos == 7 && checkWhite == true) {
                                 f[31].s.setPosition(5 * size_ + SCREEN_MARGIN, 7 * size_ + SCREEN_MARGIN);
+                            }
+                            if (f[n].index == 1 || (f[n].index == 5 && n == 31)) {
+                                cout << "White" << endl;
+                                checkWhite = false;
                             }
                             LuotChoi = !LuotChoi;
                             com = 1;
@@ -749,15 +762,7 @@ void GameManager::Play()
                     sound.play();
                     check_com = true;
 
-                    int x_pos = f[n].s.getPosition().x;
-                    int y_pos = f[n].s.getPosition().y;
 
-                    if (f[n].index == -1 || (f[n].index == -5 && n == 7)) checkBlack = false;
-                    x_pos = (x_pos - SCREEN_MARGIN) / size_;
-                    y_pos = (y_pos - SCREEN_MARGIN) / size_;
-                    if (f[n].index == -1 && x_pos == 6 && y_pos == 0 && checkBlack == true) {
-                        f[7].s.setPosition(5 * size_ + SCREEN_MARGIN, SCREEN_MARGIN);
-                    }
 
                     LuotChoi = !LuotChoi;
                     com = 0;
@@ -806,12 +811,12 @@ void GameManager::Play()
                                     toCapture(n, y);
                                     window.display();
                                 }
-                                if (f[n].index == -1 || (f[n].index == -5 && n == 7)) checkBlack = false;
                                 x_pos = (x_pos - SCREEN_MARGIN) / size_;
                                 y_pos = (y_pos - SCREEN_MARGIN) / size_;
                                 if (f[n].index == -1 && x_pos == 6 && y_pos == 0 && checkBlack == true) {
                                     f[7].s.setPosition(5 * size_ + SCREEN_MARGIN, SCREEN_MARGIN);
                                 }
+                                if (f[n].index == -1 || (f[n].index == -5 && n == 7)) checkBlack = false;
 
                                 LuotChoi = !LuotChoi;
                                 //cout << "Luot: " << LuotChoi << endl;
@@ -961,7 +966,6 @@ void GameManager::Play()
                 }
             }
         }
-        comCapture(newPos, f[n].index, n);
 
         for (int i = 0; i < 32; i++) {
             window.draw(f[i].s);
