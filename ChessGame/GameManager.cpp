@@ -208,7 +208,7 @@ Vector2f GameManager::getNextMove(bool luot)
         {
             move(i, oldPostemp, positiveMovetemp[j]);
             int alpha = -9999, beta = 9999;
-            int temp = Alpha_Beta(3, !luot, alpha, beta);
+            int temp = Alpha_Beta(4, !luot, alpha, beta);
             if (minimaxtemp > temp) {
                 newPostemp = positiveMovetemp[j];
                 minimaxtemp = temp;
