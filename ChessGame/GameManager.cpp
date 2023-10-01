@@ -574,6 +574,29 @@ void GameManager::Play()
     int Menu = 0;
     int menu = 0;
     int com = 0;
+    
+    //Setime 
+    // Clock 1 Run First
+
+    bool StartTime = false;
+
+    sf::Clock clock1;
+    sf::Time countdownTime1 = sf::seconds(10);
+    bool Stop1 = false;
+    bool ContinueremainingTime1 = true;
+    bool Continue1 = false;
+    sf::Time remainingTime1;
+    sf::Time remainingStop1;
+
+    // Clock2
+    sf::Clock clock2;
+    sf::Time countdownTime2 = sf::seconds(10);
+    bool Stop2 = false;
+    bool ContinueremainingTime2 = false;
+    bool Continue2 = false;
+    bool BurnTheClock2 = false;
+    sf::Time remainingTime2;
+    sf::Time remainingStop2;
 
     Board bgame(window);
 
@@ -612,6 +635,44 @@ void GameManager::Play()
                 {
                     Undo();
                 }
+            /*
+            if (e.type == sf::Event::KeyPressed) {
+                if (e.key.code == sf::Keyboard::S) {
+                    Stop1 = true;
+                    Continue1 = false;
+                    ContinueremainingTime1 = false;
+                    if (!BurnTheClock2) {
+                        clock2.restart();
+                        ContinueremainingTime2 = true;
+                    }
+                    if (BurnTheClock2) {
+                        Continue2 = true;
+                        Stop2 = false;
+                        clock2.restart();
+                    }
+                }
+                if (e.key.code == sf::Keyboard::C) {
+                    Continue1 = true;
+                    Stop1 = false;
+                    clock1.restart();
+                    BurnTheClock2 = true;
+                    ContinueremainingTime2 = false;
+                    clock2.restart();
+                    Stop2 = true;
+                    Continue2 = false;
+                }
+            }
+            */
+            if (e.type == sf::Event::KeyPressed) {
+                if (e.key.code == sf::Keyboard::S) {
+                    StartTime = false;
+                }
+                if (e.key.code == sf::Keyboard::C) {
+                    clock1.restart();
+                    clock2.restart();
+                    StartTime = true;
+                }
+            }
             /////click///////
             if (e.type == Event::MouseButtonPressed)
                 if (e.key.code == Mouse::Left)
@@ -621,12 +682,6 @@ void GameManager::Play()
                 }
             // setting
             sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-            if (e.type == sf::Event::MouseMoved) {
-                int mouseX = e.mouseMove.x;
-                int mouseY = e.mouseMove.y;
-                //cout << mouseX << " "; cout << mouseY << "\n";
-            }
-
             if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left)
             {
                 sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
@@ -673,6 +728,10 @@ void GameManager::Play()
                         checkareaPvP = false;
                         checkareaAI = false;
                         checkareaSetTime = false;
+                       
+                        StartTime = true;
+                        clock1.restart();
+                        clock2.restart();
                     }
                 }
                 else
@@ -685,6 +744,14 @@ void GameManager::Play()
                 // quit close window
                 if ((mousePosition.x >= 745 + 160 && mousePosition.x <= SCREEN_WIDTH - 50) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 7 && mousePosition.y <= SCREEN_MARGIN + cellSize * 8)) {
                     Menu = -1;
+                }
+            }
+            if (e.type == sf::Event::MouseMoved) {
+                //int mouseX = e.mouseMove.x;
+                //int mouseY = e.mouseMove.y;
+                //cout << mouseX << " "; cout << mouseY << "\n";
+                if (!((mousePosition.x >= 745 && mousePosition.x <= SCREEN_WIDTH) && (mousePosition.y >= SCREEN_MARGIN && mousePosition.y <= SCREEN_MARGIN + cellSize * 4))) {
+                    checkareaSetting = false;
                 }
             }
         }
@@ -710,6 +777,7 @@ void GameManager::Play()
                     else {
                         PositiveMoving(n); count = positiveCount; positiveCount = 0;
                     }
+
                 }
                 if (click == 2)
                 {
@@ -748,6 +816,20 @@ void GameManager::Play()
                             LuotChoi = !LuotChoi;
                             com = 1;
                         }
+                    }
+                    //Start Clock1
+                    Stop1 = true;
+                    Continue1 = false;
+                    ContinueremainingTime1 = false;
+
+                    if (!BurnTheClock2) {
+                        clock2.restart();
+                        ContinueremainingTime2 = true;
+                    }
+                    if (BurnTheClock2) {
+                        Continue2 = true;
+                        Stop2 = false;
+                        clock2.restart();
                     }
                     //reset
                     count = 0;
@@ -821,9 +903,18 @@ void GameManager::Play()
                                 LuotChoi = !LuotChoi;
                                 //cout << "Luot: " << LuotChoi << endl;
                                 com = 0;
-
+                             
                             }
                         }
+                        // Start clock 2
+                        Continue1 = true;
+                        Stop1 = false;
+                        clock1.restart();
+                        BurnTheClock2 = true;
+                        ContinueremainingTime2 = false;
+                        clock2.restart();
+                        Stop2 = true;
+                        Continue2 = false;
                         //reset
                         count = 0;
                         click = 0;
@@ -863,8 +954,9 @@ void GameManager::Play()
         }
 
 
-            ////// draw  ///////
-            bgame.chessBoard();
+
+        ////// draw  ///////
+        bgame.chessBoard();
 
         int checkTurn = 0;
 
@@ -911,13 +1003,51 @@ void GameManager::Play()
             bgame.PrintPvP(LuotChoi);
         }
         else if (menu == 2 && check_setTime == true) {
-            bgame.SetTime(LuotChoi);
+            if (StartTime) {
+                // Lấy thời gian còn lại
+                sf::Time elapsed1 = clock1.getElapsedTime();
+                sf::Time elapsed2 = clock2.getElapsedTime();
+                // dong ho 1 truoc
+                if (ContinueremainingTime1) {
+                    remainingTime1 = countdownTime1 - elapsed1;
+                }
+                if (Stop1) {
+                    remainingStop1 = remainingTime1;
+                    Stop1 = false;
+                }
+                if (Continue1) {
+                    remainingTime1 = remainingStop1 - elapsed1;
+                }
+
+                // dong ho 2
+                if (ContinueremainingTime2) {
+                    remainingTime2 = countdownTime2 - elapsed2;
+                }
+                if (Stop2) {
+                    remainingStop2 = remainingTime2;
+                    //cout << remainingStop2.asSeconds();
+                    Stop2 = false;
+                }
+                if (Continue2) {
+                    remainingTime2 = remainingStop2 - elapsed2;
+                }
+
+                if (remainingTime1 <= sf::Time::Zero) {
+                    cout << "W lose \n";
+                }
+                if ((remainingTime2 <= sf::Time::Zero) && BurnTheClock2 == true) {
+                    cout << "B lose \n";
+                }
+            }
+            
+            // chu yyyyyyyyyyyyyyyyy in nguoc luoi ko muon sua :))))
+            bgame.SetTime(LuotChoi,remainingTime2,remainingTime1);
         }
 
 
 
         if (Menu == 4) {
-            bgame.SetTime(LuotChoi);
+            bgame.SetTime(LuotChoi,remainingTime2,remainingTime1);
         }
         if (Menu == 3) {
             Create();

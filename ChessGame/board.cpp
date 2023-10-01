@@ -404,7 +404,7 @@ void Board::drawCapture(int x, int index)
 }
 
 
-void Board::SetTime(bool checkTurn)
+void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTime2)
 {
     sf::Font font;
     if (!font.loadFromFile("../Data/Font/font_1.ttf")) {
@@ -417,6 +417,21 @@ void Board::SetTime(bool checkTurn)
     Background.setPosition(745, SCREEN_MARGIN + cellSize);
     window.draw(Background);
 
+    sf::Text textClockB;
+    textClockB.setFont(font);
+    //textClockB.setString("2334");
+    textClockB.setCharacterSize(40);
+    textClockB.setFillColor(sf::Color::White);
+    textClockB.setPosition(745 + 25, SCREEN_MARGIN + 80 * 3 + 10);
+    window.draw(textClockB);
+
+    sf::Text textClockW;
+    textClockW.setFont(font);
+    //textClockW.setString("2334");
+    textClockW.setCharacterSize(40);
+    textClockW.setFillColor(sf::Color::White);
+    textClockW.setPosition(745 + 25 + 150, SCREEN_MARGIN + 80 * 3 + 10);
+    window.draw(textClockW);
 
     sf::RectangleShape lineSetting123(sf::Vector2f(5.f, 295.f));
     lineSetting123.rotate(90.f);
@@ -511,9 +526,8 @@ void Board::SetTime(bool checkTurn)
         textTurnBlack.setFillColor(sf::Color::White);
         textTurnBlack.setPosition(SCREEN_WIDTH - (textTurnBlack.getGlobalBounds().width) * 1.2f - 130.f, SCREEN_MARGIN + cellSize * 4.f + 40.f);
         window.draw(textTurnBlack);
-
-
     }
+
 
     if (checkTurn == true) {
         // In turn White
@@ -525,6 +539,18 @@ void Board::SetTime(bool checkTurn)
         textTurnWhite.setPosition(SCREEN_WIDTH - (textTurnWhite.getGlobalBounds().width) * 1.2f - 130.f, SCREEN_MARGIN + cellSize * 4.f + 40.f);
         window.draw(textTurnWhite);
     }
+
+    // Chuyển thời gian còn lại thành chuỗi để hiển thị
+    std::string countdownString1 = std::to_string(static_cast<int>(remainingTime1.asSeconds()));
+    std::string countdownString2 = std::to_string(static_cast<int>(remainingTime2.asSeconds()));
+    // Cập nhật văn bản đồng hồ đếm ngược
+    textClockW.setString(countdownString1);
+    textClockB.setString(countdownString2);
+
+    window.draw(textClockW);
+    window.draw(textClockB);
+
+
 
 }
 void Board::PrintPvP(bool  checkTurn)
