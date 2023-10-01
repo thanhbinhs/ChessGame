@@ -565,38 +565,7 @@ void GameManager::MessageBoxCom(int check) {
 
 void GameManager::Play()
 {
-    bool checkareaSetting = false;
-    bool checkareaPvP = false;
-    bool checkareaAI = false;
-    bool checkareaSetTime = false;
-    int cellSize = size_;
-
-    int Menu = 0;
-    int menu = 0;
-    int com = 0;
-    
-    //Setime 
-    // Clock 1 Run First
-
-    bool StartTime = false;
-
-    sf::Clock clock1;
-    sf::Time countdownTime1 = sf::seconds(10);
-    bool Stop1 = false;
-    bool ContinueremainingTime1 = true;
-    bool Continue1 = false;
-    sf::Time remainingTime1;
-    sf::Time remainingStop1;
-
-    // Clock2
-    sf::Clock clock2;
-    sf::Time countdownTime2 = sf::seconds(10);
-    bool Stop2 = false;
-    bool ContinueremainingTime2 = false;
-    bool Continue2 = false;
-    bool BurnTheClock2 = false;
-    sf::Time remainingTime2;
-    sf::Time remainingStop2;
+    bool FreezeTheClock2 = true;
 
     Board bgame(window);
 
@@ -663,6 +632,7 @@ void GameManager::Play()
                 }
             }
             */
+            /*
             if (e.type == sf::Event::KeyPressed) {
                 if (e.key.code == sf::Keyboard::S) {
                     StartTime = false;
@@ -673,6 +643,7 @@ void GameManager::Play()
                     StartTime = true;
                 }
             }
+            */
             /////click///////
             if (e.type == Event::MouseButtonPressed)
                 if (e.key.code == Mouse::Left)
@@ -680,6 +651,7 @@ void GameManager::Play()
                     pos = Mouse::getPosition(window) - Vector2i(offset);
                     click++;
                 }
+
             // setting
             sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
             if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left)
@@ -728,7 +700,6 @@ void GameManager::Play()
                         checkareaPvP = false;
                         checkareaAI = false;
                         checkareaSetTime = false;
-                       
                         StartTime = true;
                         clock1.restart();
                         clock2.restart();
@@ -754,6 +725,7 @@ void GameManager::Play()
                     checkareaSetting = false;
                 }
             }
+
         }
 
 
@@ -821,6 +793,7 @@ void GameManager::Play()
                     Stop1 = true;
                     Continue1 = false;
                     ContinueremainingTime1 = false;
+                    FreezeTheClock2 = false;
 
                     if (!BurnTheClock2) {
                         clock2.restart();
@@ -954,6 +927,9 @@ void GameManager::Play()
         }
 
 
+        
+
+
 
         ////// draw  ///////
         bgame.chessBoard();
@@ -1041,13 +1017,13 @@ void GameManager::Play()
             }
             
             // chu yyyyyyyyyyyyyyyyy in nguoc luoi ko muon sua :))))
-            bgame.SetTime(LuotChoi,remainingTime2,remainingTime1);
+            bgame.SetTime(LuotChoi,remainingTime2,remainingTime1,FreezeTheClock2);
         }
 
 
 
         if (Menu == 4) {
-            bgame.SetTime(LuotChoi,remainingTime2,remainingTime1);
+            bgame.SetTime(LuotChoi,remainingTime2,remainingTime1,FreezeTheClock2);
         }
         if (Menu == 3) {
             Create();

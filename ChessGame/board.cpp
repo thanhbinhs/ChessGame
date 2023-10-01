@@ -404,7 +404,7 @@ void Board::drawCapture(int x, int index)
 }
 
 
-void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTime2)
+void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTime2,bool FreezeTheClock2)
 {
     sf::Font font;
     if (!font.loadFromFile("../Data/Font/font_1.ttf")) {
@@ -422,7 +422,7 @@ void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTim
     //textClockB.setString("2334");
     textClockB.setCharacterSize(40);
     textClockB.setFillColor(sf::Color::White);
-    textClockB.setPosition(745 + 25, SCREEN_MARGIN + 80 * 3 + 10);
+    textClockB.setPosition(745 + 25 + 95, SCREEN_MARGIN + cellSize * 3.f + 15);
     window.draw(textClockB);
 
     sf::Text textClockW;
@@ -430,7 +430,7 @@ void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTim
     //textClockW.setString("2334");
     textClockW.setCharacterSize(40);
     textClockW.setFillColor(sf::Color::White);
-    textClockW.setPosition(745 + 25 + 150, SCREEN_MARGIN + 80 * 3 + 10);
+    textClockW.setPosition(745 + 25 + 95, SCREEN_MARGIN + cellSize *2.f + 15);
     window.draw(textClockW);
 
     sf::RectangleShape lineSetting123(sf::Vector2f(5.f, 295.f));
@@ -439,16 +439,23 @@ void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTim
     lineSetting123.setPosition(1040, SCREEN_MARGIN + cellSize);
     window.draw(lineSetting123);
 
+    sf::RectangleShape lineSetting1234(sf::Vector2f(5.f, 295.f));
+    lineSetting1234.rotate(90.f);
+    lineSetting1234.setFillColor(sf::Color::Black);
+    lineSetting1234.setPosition(1040, SCREEN_MARGIN + cellSize * 3);
+    window.draw(lineSetting1234);
+
     sf::RectangleShape lineSetting12(sf::Vector2f(5.f, 295.f));
     lineSetting12.rotate(90.f);
     lineSetting12.setFillColor(sf::Color::Black);
     lineSetting12.setPosition(1040, SCREEN_MARGIN - 3.f);
     window.draw(lineSetting12);
 
+    // line doc
     sf::RectangleShape lineSetTime(sf::Vector2f(cellSize * 2.f, 5.f));
     lineSetTime.rotate(90.f);
     lineSetTime.setFillColor(sf::Color::Black);
-    lineSetTime.setPosition(640.0f + SCREEN_MARGIN * 2 + 150.f + 1.5, SCREEN_MARGIN + cellSize * 2);
+    lineSetTime.setPosition(640.0f + SCREEN_MARGIN * 2 + 100, SCREEN_MARGIN + cellSize * 2);
     window.draw(lineSetTime);
 
     sf::RectangleShape lineSetting11(sf::Vector2f(5.f, 295.f));
@@ -476,7 +483,7 @@ void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTim
     textW.setString("W");
     textW.setCharacterSize(60);
     textW.setFillColor(sf::Color::White);
-    textW.setPosition(SCREEN_WIDTH - (textW.getGlobalBounds().width) * 1.2f - 185.f, SCREEN_MARGIN + cellSize * 2.f);
+    textW.setPosition(SCREEN_WIDTH - (textW.getGlobalBounds().width) * 1.2f - 215.f, SCREEN_MARGIN + cellSize * 3.f);
     window.draw(textW);
 
     sf::Text textB;
@@ -484,10 +491,10 @@ void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTim
     textB.setString("B");
     textB.setCharacterSize(60);
     textB.setFillColor(sf::Color::Black);
-    textB.setPosition(SCREEN_WIDTH - (textW.getGlobalBounds().width) * 1.2f - 33.f, SCREEN_MARGIN + cellSize * 2.f);
+    textB.setPosition(SCREEN_WIDTH - (textW.getGlobalBounds().width) * 1.2f - 205.f, SCREEN_MARGIN + cellSize * 2.f);
     window.draw(textB);
 
-    // ìnormation
+    // information
     sf::RectangleShape BoxInInformation(sf::Vector2f(295, cellSize));
     BoxInInformation.setFillColor(sf::Color(0, 0, 0));
     BoxInInformation.setPosition(745, SCREEN_MARGIN + cellSize * 4.f);
@@ -540,15 +547,51 @@ void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTim
         window.draw(textTurnWhite);
     }
 
+    
+
     // Chuyển thời gian còn lại thành chuỗi để hiển thị
-    std::string countdownString1 = std::to_string(static_cast<int>(remainingTime1.asSeconds()));
-    std::string countdownString2 = std::to_string(static_cast<int>(remainingTime2.asSeconds()));
+    // Clock 1
+    int minutes1 = static_cast<int>(remainingTime1.asSeconds()) / 60;
+    int seconds1 = static_cast<int>(remainingTime1.asSeconds()) % 60;
+    int milliseconds1 = static_cast<int>(remainingTime1.asMilliseconds()) % 1000;
+    std::string countdownString1 = std::to_string(minutes1) + ":" + (seconds1 < 10 ? "0" : "") + std::to_string(seconds1) + "." + std::to_string(milliseconds1);
+    // Clock 2
+    int minutes2= static_cast<int>(remainingTime2.asSeconds()) / 60;
+    int seconds2 = static_cast<int>(remainingTime2.asSeconds()) % 60;
+    int milliseconds2 = static_cast<int>(remainingTime2.asMilliseconds()) % 1000;
+    std::string countdownString2 = std::to_string(minutes2) + ":" + (seconds2 < 10 ? "0" : "") + std::to_string(seconds2) + "." + std::to_string(milliseconds2);
+
     // Cập nhật văn bản đồng hồ đếm ngược
+    if (remainingTime1 <= sf::Time::Zero)
+    {
+        textClockW.setString("00:00");
+        textClockW.setFillColor(sf::Color::Red);
+    }
+    if (remainingTime2 <= sf::Time::Zero)
+    {
+        textClockB.setString("00:00");
+        textClockB.setFillColor(sf::Color::Red);
+    }
+
     textClockW.setString(countdownString1);
     textClockB.setString(countdownString2);
-
     window.draw(textClockW);
     window.draw(textClockB);
+    if (FreezeTheClock2 ) {
+        sf::RectangleShape BackgroundInClockBlack(sf::Vector2f(295, cellSize - 5.f));
+        BackgroundInClockBlack.setFillColor(sf::Color(100, 100, 100));
+        BackgroundInClockBlack.setPosition(640.0f + SCREEN_MARGIN * 2 + 100, SCREEN_MARGIN + cellSize * 2.f + 5.f);
+        window.draw(BackgroundInClockBlack);
+
+        sf::Text textClockFreeze;
+        textClockFreeze.setFont(font);
+        textClockFreeze.setString("15:00.000");
+        textClockFreeze.setCharacterSize(40);
+        textClockFreeze.setFillColor(sf::Color::White);
+        textClockFreeze.setPosition(745 + 25 + 95, SCREEN_MARGIN + cellSize * 2.f + 15);
+        window.draw(textClockFreeze);
+    }
+
 
 
 

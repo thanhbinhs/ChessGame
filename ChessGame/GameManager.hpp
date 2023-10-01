@@ -46,12 +46,46 @@ private:
     bool check_com = false;
     bool mess = false;
 
-        bool check_setTime = false;
-        bool checkWhite = true;
+    bool check_setTime = false;
+    bool checkWhite = true;
     bool checkBlack = true;
 
     sf::Vector2f new_;
     int capture_int;
+
+    bool checkareaSetting = false;
+    bool checkareaPvP = false;
+    bool checkareaAI = false;
+    bool checkareaSetTime = false;
+    int cellSize = size_;
+
+    int Menu = 0;
+    int menu = 0;
+    int com = 0;
+
+    //Setime 
+    
+    // Clock 1 Run First
+
+    bool StartTime = false;
+
+    sf::Clock clock1;
+    sf::Time countdownTime1 = sf::seconds(900);
+    bool Stop1 = false;
+    bool ContinueremainingTime1 = true;
+    bool Continue1 = false;
+    sf::Time remainingTime1;
+    sf::Time remainingStop1;
+
+    // Clock2
+    sf::Clock clock2;
+    sf::Time countdownTime2 = sf::seconds(900);
+    bool Stop2 = false;
+    bool ContinueremainingTime2 = false;
+    bool Continue2 = false;
+    bool BurnTheClock2 = false;
+    sf::Time remainingTime2;
+    sf::Time remainingStop2;
 
 
 };
