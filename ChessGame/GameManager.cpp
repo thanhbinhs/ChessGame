@@ -700,9 +700,16 @@ void GameManager::Play()
                         checkareaPvP = false;
                         checkareaAI = false;
                         checkareaSetTime = false;
-                        StartTime = true;
                         clock1.restart();
                         clock2.restart();
+                        StartTime = true;
+                        BurnTheClock2 = false;
+                        FreezeTheClock2 = true;
+                        Continue1 = false;
+                        Continue2 = false;
+                        ContinueremainingTime1 = true;
+                        ContinueremainingTime2 = true;
+                        
                     }
                 }
                 else
@@ -785,15 +792,16 @@ void GameManager::Play()
                                 cout << "White" << endl;
                                 checkWhite = false;
                             }
+                            //Start Clock1
+                            Stop1 = true;
+                            Continue1 = false;
+                            ContinueremainingTime1 = false;
+                            FreezeTheClock2 = false;
                             LuotChoi = !LuotChoi;
                             com = 1;
                         }
                     }
-                    //Start Clock1
-                    Stop1 = true;
-                    Continue1 = false;
-                    ContinueremainingTime1 = false;
-                    FreezeTheClock2 = false;
+
 
                     if (!BurnTheClock2) {
                         clock2.restart();
@@ -872,23 +880,21 @@ void GameManager::Play()
                                     f[7].s.setPosition(5 * size_ + SCREEN_MARGIN, SCREEN_MARGIN);
                                 }
                                 if (f[n].index == -1 || (f[n].index == -5 && n == 7)) checkBlack = false;
-
+                                // Start clock 2
+                                Continue1 = true;
+                                Stop1 = false;
+                                clock1.restart();
+                                BurnTheClock2 = true;
+                                ContinueremainingTime2 = false;
+                                clock2.restart();
+                                Stop2 = true;
+                                Continue2 = false;
                                 LuotChoi = !LuotChoi;
                                 //cout << "Luot: " << LuotChoi << endl;
                                 com = 0;
                              
                             }
                         }
-                        // Start clock 2
-                        Continue1 = true;
-                        Stop1 = false;
-                        clock1.restart();
-                        BurnTheClock2 = true;
-                        ContinueremainingTime2 = false;
-                        clock2.restart();
-                        Stop2 = true;
-                        Continue2 = false;
-                        //reset
                         count = 0;
                         click = 0;
                     }
