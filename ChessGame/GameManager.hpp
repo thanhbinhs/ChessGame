@@ -86,8 +86,17 @@ private:
     bool BurnTheClock2 = false;
     sf::Time remainingTime2;
     sf::Time remainingStop2;
-
-
+    
+    // Box, Print Box
+    sf::Vector2i mousePositionBlackFirst;
+    sf::Vector2i mousePositionBlackSecond;
+    sf::Vector2i mousePositionWhiteFirst;
+    sf::Vector2i mousePositionWhiteSecond;
+    int x1, x2, x3, x4, y1, y2, y3, y4;
+    bool FirstClickWhite = false;
+    bool SecondClickWhite = false;
+    bool FirstClickBlack = false;
+    bool SecondClickBlack = false;
 };
 
 

@@ -582,15 +582,16 @@ void GameManager::Play()
     }
     sf::Sound sound;
     sound.setBuffer(buffer);
-
-
-
     Create();//khoi tao
-
     bool LuotChoi = false;//luot choi : = true=> nguoi ... =false => may
     Vector2f oldPos, newPos;// luu vi tri click lan1 va lan2
     int n = 0, click = 0, count = 0;
     Vector2i pos; //vitri chuot khi click
+    
+    //Box
+
+
+
     while (window.isOpen())
     {
         Event e;
@@ -756,13 +757,26 @@ void GameManager::Play()
                     else {
                         PositiveMoving(n); count = positiveCount; positiveCount = 0;
                     }
-
+                    //PrintBox
+                    FirstClickWhite = true;
+                    SecondClickWhite = false;
+                    if(e.mouseButton.button == sf::Mouse::Left){
+                        mousePositionWhiteFirst = sf::Mouse::getPosition(window);
+                    }
                 }
                 if (click == 2)
                 {
                     f[n].s.setColor(Color::White);
+                    // lay toa do quan co 
                     int x = pos.x / size_;   int y = pos.y / size_;
-                    newPos = Vector2f(x * size_, y * size_) + offset;
+                    newPos = Vector2f(x * size_, y * size_) + offset; 
+                    
+                    x = (newPos.x - SCREEN_MARGIN) / size_ ;
+                    y = (newPos.y - SCREEN_MARGIN) / size_ ;
+                    
+                    cout << x ;
+                    cout << y ;
+                    
                     //chi di chuyen trong vung positiveMove
                     for (int i = 0; i < count; i++)
                     {
@@ -777,8 +791,6 @@ void GameManager::Play()
                             while ((y == 0 && f[n].index == 6) || (y == 7 && f[n].index == -6)) {
                                     int x = f[n].s.getPosition().x;
                                 bgame.drawCapture(x, index);
-
-
                                     bgame.drawCapture(x_pos, index);
                                     toCapture(n, y);
                                 window.display();
@@ -792,6 +804,10 @@ void GameManager::Play()
                                 cout << "White" << endl;
                                 checkWhite = false;
                             }
+                            //Print Box
+                            SecondClickWhite = true;
+                            mousePositionWhiteSecond = sf::Mouse::getPosition(window);
+
                             //Start Clock1
                             Stop1 = true;
                             Continue1 = false;
@@ -801,8 +817,6 @@ void GameManager::Play()
                             com = 1;
                         }
                     }
-
-
                     if (!BurnTheClock2) {
                         clock2.restart();
                         ContinueremainingTime2 = true;
@@ -824,9 +838,6 @@ void GameManager::Play()
                     computer(newPos, oldPos, LuotChoi);
                     sound.play();
                     check_com = true;
-
-
-
                     LuotChoi = !LuotChoi;
                     com = 0;
                     //reset
@@ -852,6 +863,13 @@ void GameManager::Play()
                         else {
                             PositiveMoving(n); count = positiveCount; positiveCount = 0;
                         }
+                        // Print Box
+                        FirstClickBlack = true;
+                        SecondClickBlack = false;
+                        if (e.mouseButton.button == sf::Mouse::Left) {
+                            mousePositionBlackFirst = sf::Mouse::getPosition(window);
+                        }
+
                     }
                     if (click == 2)
                     {
@@ -880,6 +898,10 @@ void GameManager::Play()
                                     f[7].s.setPosition(5 * size_ + SCREEN_MARGIN, SCREEN_MARGIN);
                                 }
                                 if (f[n].index == -1 || (f[n].index == -5 && n == 7)) checkBlack = false;
+                                // Print Box
+                                SecondClickBlack = true;
+                                mousePositionBlackSecond = sf::Mouse::getPosition(window);
+                           
                                 // Start clock 2
                                 Continue1 = true;
                                 Stop1 = false;
@@ -929,20 +951,35 @@ void GameManager::Play()
             resetMatrix(checkPos);
             check_com = false;
             com = 0;
-
         }
-
-
-        
-
 
 
         ////// draw  ///////
         bgame.chessBoard();
+        
+        if (FirstClickBlack) {
+            x3 = (mousePositionBlackFirst.x - SCREEN_MARGIN) / size_;
+            y3 = (mousePositionBlackFirst.y - SCREEN_MARGIN) / size_;
+            bgame.drawFirstBoxBlack(y3, x3);
+        }
+        if (SecondClickBlack) {
+            x4 = (mousePositionBlackSecond.x - SCREEN_MARGIN) / size_;
+            y4 = (mousePositionBlackSecond.y - SCREEN_MARGIN) / size_;
+            bgame.drawSecondBoxBlack(y4, x4);
+        }
+        if (FirstClickWhite) {
+            x1 = (mousePositionWhiteFirst.x - SCREEN_MARGIN) / size_;
+            y1 = (mousePositionWhiteFirst.y - SCREEN_MARGIN) / size_;
+            bgame.drawFirstBoxWhite(y1, x1);
+        }
+        if (SecondClickWhite) {
+            x2 = (mousePositionWhiteSecond.x - SCREEN_MARGIN) / size_;
+            y2 = (mousePositionWhiteSecond.y - SCREEN_MARGIN) / size_;
+            bgame.drawSecondBoxWhite(y2, x2);
+        }
+
 
         int checkTurn = 0;
-
-
         //SetTime
         if (Menu == 4) {
             Create();
@@ -1025,9 +1062,6 @@ void GameManager::Play()
             // chu yyyyyyyyyyyyyyyyy in nguoc luoi ko muon sua :))))
             bgame.SetTime(LuotChoi,remainingTime2,remainingTime1,FreezeTheClock2);
         }
-
-
-
         if (Menu == 4) {
             bgame.SetTime(LuotChoi,remainingTime2,remainingTime1,FreezeTheClock2);
         }

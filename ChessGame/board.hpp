@@ -7,6 +7,10 @@ public:
     Board(sf::RenderWindow& window) :window(window) {}
     void chessBoard();
     void PrintSetting();
+    void drawFirstBoxBlack(int x3, int y3);
+    void drawSecondBoxBlack(int x4, int y4);
+    void drawFirstBoxWhite(int x1, int y1);
+    void drawSecondBoxWhite(int x2, int y2);
     void drawBox(sf::Sprite sprite, sf::Texture draw_box, int x, int y);
     void drawBoxPos(int x, int y);
     void drawBoxCom(int x, int y);

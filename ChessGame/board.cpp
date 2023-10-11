@@ -192,7 +192,12 @@ void Board::chessBoard() {
     if ((mousePosition.x >= 745 + 160 && mousePosition.x <= SCREEN_WIDTH - 50) && (mousePosition.y >= SCREEN_MARGIN + cellSize * 7 && mousePosition.y <= SCREEN_MARGIN + cellSize * 8)) {
         window.draw(Stopp);
     }
-
+    int x = 1; int y = 1;
+    sf::RectangleShape FisrtBoxBlack;
+    FisrtBoxBlack.setFillColor(sf::Color(255, 153, 51));
+    FisrtBoxBlack.setSize(sizeBtn);
+    FisrtBoxBlack.setPosition(y * size_ + SCREEN_MARGIN, x * size_ + SCREEN_MARGIN);
+    //window.draw(FisrtBoxBlack);
 }
 
 
@@ -298,7 +303,7 @@ void Board::drawBoxPos(int x, int y) {
     boxPos.setFillColor(sf::Color(245, 236, 66, 100));
     boxPos.setSize(sizeBtn);
     boxPos.setPosition(y * size_ + SCREEN_MARGIN, x * size_ + SCREEN_MARGIN);
-    window.draw(boxPos);
+    //window.draw(boxPos);
 }
 
 void Board::drawBoxCom(int x, int y)
@@ -314,6 +319,35 @@ void Board::drawBox(sf::Sprite sprite, sf::Texture draw_box, int x, int y) {
     sprite.setTexture(draw_box);
     sprite.setPosition(y * size_ + SCREEN_MARGIN, x * size_ + SCREEN_MARGIN);
     window.draw(sprite);
+}
+
+void Board::drawFirstBoxBlack(int x, int y) {
+    sf::RectangleShape FisrtBoxBlack;
+    FisrtBoxBlack.setFillColor(sf::Color(255, 229, 204));
+    FisrtBoxBlack.setSize(sizeBtn);
+    FisrtBoxBlack.setPosition(y * size_ + SCREEN_MARGIN, x * size_ + SCREEN_MARGIN);
+    window.draw(FisrtBoxBlack);
+}
+void Board::drawSecondBoxBlack(int x, int y) {
+    sf::RectangleShape SecondBoxBlack;
+    SecondBoxBlack.setFillColor(sf::Color(255, 153, 51));
+    SecondBoxBlack.setSize(sizeBtn);
+    SecondBoxBlack.setPosition(y * size_ + SCREEN_MARGIN, x * size_ + SCREEN_MARGIN);
+    window.draw(SecondBoxBlack);
+}
+void Board::drawFirstBoxWhite(int x1, int y1) {
+    sf::RectangleShape FisrtBoxWhite;
+    FisrtBoxWhite.setFillColor(sf::Color(204, 229, 255));
+    FisrtBoxWhite.setSize(sizeBtn);
+    FisrtBoxWhite.setPosition(y1 * size_ + SCREEN_MARGIN, x1 * size_ + SCREEN_MARGIN);
+    window.draw(FisrtBoxWhite);
+}
+void Board::drawSecondBoxWhite(int x, int y) {
+    sf::RectangleShape SecondBoxWhite;
+    SecondBoxWhite.setFillColor(sf::Color(51, 153, 255));
+    SecondBoxWhite.setSize(sizeBtn);
+    SecondBoxWhite.setPosition(y * size_ + SCREEN_MARGIN, x * size_ + SCREEN_MARGIN);
+    window.draw(SecondBoxWhite);
 }
 
 void Board::drawBoxDeath(int x, int y)
@@ -639,7 +673,6 @@ void Board::PrintPvP(bool  checkTurn)
     textGameMode2.setPosition(SCREEN_WIDTH - (textGameMode2.getGlobalBounds().width) * 1.2f - 50.f, SCREEN_MARGIN + cellSize + 10.f);
     window.draw(textGameMode2);
 }
-
 
 
 void Board::PvAi(bool checkTurn) {
