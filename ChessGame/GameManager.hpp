@@ -97,6 +97,7 @@ private:
     bool SecondClickWhite = false;
     bool FirstClickBlack = false;
     bool SecondClickBlack = false;
+    bool PrintBox = false;
 };
 
 
