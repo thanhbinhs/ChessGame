@@ -562,6 +562,10 @@ void GameManager::MessageBoxCom(int check) {
 
 }
 
+void GameManager::ResetBox(int &a, int &b) {
+    a = 100;
+    b = 100;
+}
 
 void GameManager::Play()
 {
@@ -572,7 +576,6 @@ void GameManager::Play()
     Texture t1, t2, t3;
     t1.loadFromFile("../Data/Image/chesses.png");
     t3.loadFromFile("../Data/Image/legalMove.png");
-
     for (int i = 0; i < 32; i++) f[i].s.setTexture(t1);
     Sprite sPositive(t3);
 
@@ -675,6 +678,7 @@ void GameManager::Play()
                         checkareaPvP = false;
                         checkareaAI = false;
                         checkareaSetTime = false;
+
                     }
                 }
                 //set p v ai
@@ -757,7 +761,9 @@ void GameManager::Play()
                     //PrintBox
                     FirstClickWhite = true;
                     SecondClickWhite = false;
-                    if(e.mouseButton.button == sf::Mouse::Left){
+                    resetBox = false;
+
+                    if(e.mouseButton.button == sf::Mouse::Left ){
                         mousePositionWhiteFirst = sf::Mouse::getPosition(window);
                     }
                 }
@@ -804,7 +810,6 @@ void GameManager::Play()
                             //Print Box
                             SecondClickWhite = true;
                             mousePositionWhiteSecond = sf::Mouse::getPosition(window);
-
                             //Start Clock1
                             Stop1 = true;
                             Continue1 = false;
@@ -830,8 +835,9 @@ void GameManager::Play()
                 }
             }
             else  //computer moving
-            {
+            {   
                 if (menu == 3 && com == 1) {
+                    resetBoxCom = false;
                     computer(newPos, oldPos, LuotChoi);
                     sound.play();
                     check_com = true;
@@ -861,6 +867,8 @@ void GameManager::Play()
                             PositiveMoving(n); count = positiveCount; positiveCount = 0;
                         }
                         // Print Box
+                        resetBox3 = false;
+                        resetBox4 = false;
                         FirstClickBlack = true;
                         SecondClickBlack = false;
                         if (e.mouseButton.button == sf::Mouse::Left) {
@@ -924,6 +932,7 @@ void GameManager::Play()
             if (click == 0) {
                 resetGlobal();
                 resetMatrix(checkPos);
+                
             }
 
 
@@ -964,8 +973,11 @@ void GameManager::Play()
             click = 0;
             LuotChoi = true;
             check_setTime = true;
-
-
+            resetBox = true;
+            resetBox3 = true;
+            resetBox4 = true;
+            PrintBox = true;
+            resetBoxCom = true;
         }
         // PvBot
         if (Menu == 3) {
@@ -976,7 +988,11 @@ void GameManager::Play()
             click = 0;
             LuotChoi = true;
             check_setTime = false;
-            PrintBox = false;
+            PrintBox = true;
+            resetBox = true;
+            resetBox3 = true;
+            resetBox4 = true;
+            resetBoxCom = true;
         }
         // PvP
         if (Menu == 2) {
@@ -986,8 +1002,12 @@ void GameManager::Play()
             click = 0;
             LuotChoi = true;
             Menu = 0;
+            resetBox = true;
+            resetBox3 = true;
+            resetBox4 = true;
             check_setTime = false;
             PrintBox = true;
+            resetBoxCom = true;
         }
         if (Menu == -1) {
             window.close();
@@ -999,36 +1019,7 @@ void GameManager::Play()
         }
         else if (menu == 2 && check_setTime == false) {
             bgame.PrintPvP(LuotChoi);
-            if (PrintBox) {
-                if (FirstClickBlack) {
-                    x3 = (mousePositionBlackFirst.x - SCREEN_MARGIN) / size_;
-                    y3 = (mousePositionBlackFirst.y - SCREEN_MARGIN) / size_;
-                    if (x3 <= 7 && y3 <= 7 && mousePositionBlackFirst.x > SCREEN_MARGIN && mousePositionBlackFirst.y > SCREEN_MARGIN) {
-                        bgame.drawFirstBoxBlack(y3, x3);
-                    }
-                }
-                if (SecondClickBlack) {
-                    x4 = (mousePositionBlackSecond.x - SCREEN_MARGIN) / size_;
-                    y4 = (mousePositionBlackSecond.y - SCREEN_MARGIN) / size_;
-                    if (x4 <= 7 && y4 <= 7 && mousePositionBlackSecond.x > SCREEN_MARGIN && mousePositionBlackSecond.y > SCREEN_MARGIN) {
-                        bgame.drawSecondBoxBlack(y4, x4);
-                    }
-                }
-                if (FirstClickWhite) {
-                    x1 = (mousePositionWhiteFirst.x - SCREEN_MARGIN) / size_;
-                    y1 = (mousePositionWhiteFirst.y - SCREEN_MARGIN) / size_;
-                    if (x1 <= 7 && y1 <= 7 && mousePositionWhiteFirst.x > SCREEN_MARGIN && mousePositionWhiteFirst.y > SCREEN_MARGIN) {
-                        bgame.drawFirstBoxWhite(y1, x1);
-                    }
-                }
-                if (SecondClickWhite) {
-                    x2 = (mousePositionWhiteSecond.x - SCREEN_MARGIN) / size_;
-                    y2 = (mousePositionWhiteSecond.y - SCREEN_MARGIN) / size_;
-                    if (x2 <= 7 && y2 <= 7 && mousePositionWhiteSecond.x > SCREEN_MARGIN && mousePositionWhiteSecond.y > SCREEN_MARGIN) {
-                        bgame.drawSecondBoxWhite(y2, x2);
-                    }
-                }
-            }
+            
         }
         else if (menu == 2 && check_setTime == true) {
             if (StartTime) {
@@ -1067,38 +1058,69 @@ void GameManager::Play()
                     cout << "B lose \n";
                 }
             }
-            PrintBox = true;
             // chu yyyyyyyyyyyyyyyyy in nguoc luoi ko muon sua :))))
             bgame.SetTime(LuotChoi,remainingTime2,remainingTime1,FreezeTheClock2);
         }
-        if (Menu == 4) {
-            bgame.SetTime(LuotChoi,remainingTime2,remainingTime1,FreezeTheClock2);
-        }
-        if (Menu == 3) {
-            Create();
-            menu = 3;
-            Menu = 0;
-            com = 0;
-            click = 0;
-            check_com = 0;
-            LuotChoi = true;
-        }
-        else if (Menu == 2) {
-            Create();
-            menu = 2;
-            Menu = 0;
-            com = 0;
-            click = 0;
-            check_com = 0;
-            LuotChoi = true;
-        }
-        if (Menu == -1) {
-            window.close();
-        }
+
 
         if (checkareaSetting) {
             bgame.PrintSetting();
         }
+        if (PrintBox) {
+            if (FirstClickBlack) {
+                if (resetBox3) {
+                    ResetBox(x3, y3);
+                }
+                else {
+                    x3 = (mousePositionBlackFirst.x - SCREEN_MARGIN) / size_;
+                    y3 = (mousePositionBlackFirst.y - SCREEN_MARGIN) / size_;
+                }
+                //cout << x3 << y3;
+                if (x3 <= 7 && y3 <= 7 && mousePositionBlackFirst.x > SCREEN_MARGIN && mousePositionBlackFirst.y > SCREEN_MARGIN) {
+                    bgame.drawFirstBoxBlack(y3, x3);
+                }
+            }
+            if (SecondClickBlack) {
+                if (resetBox4) {
+                    ResetBox(x4, y4);
+                }
+                else {
+                    x4 = (mousePositionBlackSecond.x - SCREEN_MARGIN) / size_;
+                    y4 = (mousePositionBlackSecond.y - SCREEN_MARGIN) / size_;
+                }
+                //cout << x4 << y4;
+                if (x4 <= 7 && y4 <= 7 && mousePositionBlackSecond.x > SCREEN_MARGIN && mousePositionBlackSecond.y > SCREEN_MARGIN) {
+                    bgame.drawSecondBoxBlack(y4, x4);
+                }
+            }
+            if (FirstClickWhite) {
+
+                if (resetBox) {
+                    ResetBox(x1, y1); 
+                }
+                else 
+                {
+                    x1 = (mousePositionWhiteFirst.x - SCREEN_MARGIN) / size_;
+                    y1 = (mousePositionWhiteFirst.y - SCREEN_MARGIN) / size_;
+                }
+                if (x1 <= 7 && y1 <= 7 && mousePositionWhiteFirst.x > SCREEN_MARGIN && mousePositionWhiteFirst.y > SCREEN_MARGIN) {
+                    bgame.drawFirstBoxWhite(y1, x1);
+                }
+            }
+            if (SecondClickWhite) {
+                if (resetBox) {
+                    ResetBox(x2, y2);
+                }
+                else {
+                    x2 = (mousePositionWhiteSecond.x - SCREEN_MARGIN) / size_;
+                    y2 = (mousePositionWhiteSecond.y - SCREEN_MARGIN) / size_;
+                }
+                if (x2 <= 7 && y2 <= 7 && mousePositionWhiteSecond.x > SCREEN_MARGIN && mousePositionWhiteSecond.y > SCREEN_MARGIN) {
+                    bgame.drawSecondBoxWhite(y2, x2);
+                }
+            }
+        }
+
         for (int i = 0; i < count; i++) {
             sPositive.setPosition(positiveMove[i]);
             window.draw(sPositive);
@@ -1111,9 +1133,20 @@ void GameManager::Play()
                 bgame.drawBoxPos(x, y);
             }
         }
+
+
+
         if (check_com == true && click != 2) {
-            bgame.drawBoxCom(x_com, y_com);
+            if (resetBoxCom) {
+                ResetBox(x_com, y_com);
+            }else
+            if (x_com <= 7 && y_com <= 7 ) {
+                bgame.drawBoxCom(x_com, y_com);
+            }
         }
+
+
+
         if (click == 1) {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {

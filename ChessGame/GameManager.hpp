@@ -29,6 +29,7 @@ public:
     void PositiveMoving(int n);//tim cac nuoc co the di ung voi index n
     void Personal(int click, int n, sf::Vector2i pos, sf::Vector2f oldPos, sf::Vector2f newPos, int count, sf::Sound sound, bool LuotChoi);
     int checkWin();
+    void ResetBox(int &a, int &b);
     //AI
     int CostMove();//gia tri diem cua toan bo ban co ung voi gia tri moi quan
     //int Minimax(int depth,bool luot);// Chien luoc Minimax
@@ -98,6 +99,10 @@ private:
     bool FirstClickBlack = false;
     bool SecondClickBlack = false;
     bool PrintBox = false;
+    bool resetBox = false;
+    bool resetBoxCom = false;
+    bool resetBox3 = false;
+    bool resetBox4 = false;
 };
 
 
