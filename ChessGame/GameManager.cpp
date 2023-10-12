@@ -545,21 +545,53 @@ void GameManager::resetMatrix(int a[9][9])
 }
 
 
-void GameManager::MessageBoxCom(int check) {
+void GameManager::Message_Box(int check) {
     if (check == 1) {
-        MessageBox(NULL, L"You Win", L"Thông báo", MB_OK);
+        MessageBox(NULL, L"White Win", L"Thông báo", MB_OK);
         Create();
         mess = true;
+        clock1.restart();
+        clock2.restart();
+        StartTime = true;
+        BurnTheClock2 = false;
+        FreezeTheClock2 = true;
+        Continue1 = false;
+        Continue2 = false;
+        ContinueremainingTime1 = true;
+        ContinueremainingTime2 = true;
+        resetBox = true;
+        resetBox3 = true;
+        resetBox4 = true;
     }
     else if (check == -1) {
-        MessageBox(NULL, L"You Loss", L"Thông báo", MB_OK);
+        MessageBox(NULL, L"Black Win", L"Thông báo", MB_OK);
         Create();
         mess = true;
+        clock1.restart();
+        clock2.restart();
+        StartTime = true;
+        BurnTheClock2 = false;
+        FreezeTheClock2 = true;
+        Continue1 = false;
+        Continue2 = false;
+        ContinueremainingTime1 = true;
+        ContinueremainingTime2 = true;
+        resetBox = true;
+        resetBox4 = true;
+        resetBox3 = true;
     }
     else {
         mess = false;
     }
+}
 
+int GameManager::CheckEndTime(sf::Time RemainingTime1, sf::Time Remainingtime2) {
+    if (remainingTime1 <= sf::Time::Zero) {
+        return -1;
+    }
+    if ((remainingTime2 <= sf::Time::Zero) && BurnTheClock2 == true) {
+        return 1;
+    }
 }
 
 void GameManager::ResetBox(int &a, int &b) {
@@ -569,7 +601,6 @@ void GameManager::ResetBox(int &a, int &b) {
 
 void GameManager::Play()
 {
-    bool FreezeTheClock2 = true;
 
     Board bgame(window);
 
@@ -634,6 +665,7 @@ void GameManager::Play()
                     Continue2 = false;
                 }
             }
+            
             */
             /*
             if (e.type == sf::Event::KeyPressed) {
@@ -777,8 +809,8 @@ void GameManager::Play()
                     x = (newPos.x - SCREEN_MARGIN) / size_ ;
                     y = (newPos.y - SCREEN_MARGIN) / size_ ;
                     
-                    cout << x ;
-                    cout << y ;
+                    //cout << x ;
+                    //cout << y ;
                     
                     //chi di chuyen trong vung positiveMove
                     for (int i = 0; i < count; i++)
@@ -804,7 +836,7 @@ void GameManager::Play()
                                 f[31].s.setPosition(5 * size_ + SCREEN_MARGIN, 7 * size_ + SCREEN_MARGIN);
                             }
                             if (f[n].index == 1 || (f[n].index == 5 && n == 31)) {
-                                cout << "White" << endl;
+                                //cout << "White" << endl;
                                 checkWhite = false;
                             }
                             //Print Box
@@ -936,12 +968,13 @@ void GameManager::Play()
             }
 
 
-        MessageBoxCom(checkWin());
+        Message_Box(checkWin());
         if (mess == true) {
             resetGlobal();
             resetMatrix(checkPos);
             check_com = false;
         }
+
 
         // menu = 3 choi voi may 
         // menu = 2 choi pvp, 
@@ -952,13 +985,7 @@ void GameManager::Play()
 
             }
 
-        MessageBoxCom(checkWin());
-        if (mess == true) {
-            resetGlobal();
-            resetMatrix(checkPos);
-            check_com = false;
-            com = 0;
-        }
+
 
 
         ////// draw  ///////
@@ -1050,13 +1077,7 @@ void GameManager::Play()
                 if (Continue2) {
                     remainingTime2 = remainingStop2 - elapsed2;
                 }
-
-                if (remainingTime1 <= sf::Time::Zero) {
-                    cout << "W lose \n";
-                }
-                if ((remainingTime2 <= sf::Time::Zero) && BurnTheClock2 == true) {
-                    cout << "B lose \n";
-                }
+                Message_Box(CheckEndTime(remainingTime1, remainingTime2));
             }
             // chu yyyyyyyyyyyyyyyyy in nguoc luoi ko muon sua :))))
             bgame.SetTime(LuotChoi,remainingTime2,remainingTime1,FreezeTheClock2);
@@ -1076,7 +1097,7 @@ void GameManager::Play()
                     y3 = (mousePositionBlackFirst.y - SCREEN_MARGIN) / size_;
                 }
                 //cout << x3 << y3;
-                if (x3 <= 7 && y3 <= 7 && mousePositionBlackFirst.x > SCREEN_MARGIN && mousePositionBlackFirst.y > SCREEN_MARGIN) {
+                if (x3 <= 7 && y3 <= 7 && mousePositionBlackFirst.x > SCREEN_MARGIN && mousePositionBlackFirst.y > SCREEN_MARGIN && resetBox3 == false) {
                     bgame.drawFirstBoxBlack(y3, x3);
                 }
             }
@@ -1089,7 +1110,7 @@ void GameManager::Play()
                     y4 = (mousePositionBlackSecond.y - SCREEN_MARGIN) / size_;
                 }
                 //cout << x4 << y4;
-                if (x4 <= 7 && y4 <= 7 && mousePositionBlackSecond.x > SCREEN_MARGIN && mousePositionBlackSecond.y > SCREEN_MARGIN) {
+                if (x4 <= 7 && y4 <= 7 && mousePositionBlackSecond.x > SCREEN_MARGIN && mousePositionBlackSecond.y > SCREEN_MARGIN && resetBox4 == false) {
                     bgame.drawSecondBoxBlack(y4, x4);
                 }
             }
@@ -1115,7 +1136,7 @@ void GameManager::Play()
                     x2 = (mousePositionWhiteSecond.x - SCREEN_MARGIN) / size_;
                     y2 = (mousePositionWhiteSecond.y - SCREEN_MARGIN) / size_;
                 }
-                if (x2 <= 7 && y2 <= 7 && mousePositionWhiteSecond.x > SCREEN_MARGIN && mousePositionWhiteSecond.y > SCREEN_MARGIN) {
+                if (x2 <= 7 && y2 <= 7 && mousePositionWhiteSecond.x > SCREEN_MARGIN && mousePositionWhiteSecond.y > SCREEN_MARGIN ){
                     bgame.drawSecondBoxWhite(y2, x2);
                 }
             }

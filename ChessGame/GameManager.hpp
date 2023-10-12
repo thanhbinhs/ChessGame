@@ -37,7 +37,8 @@ public:
     Vector2f getNextMove(bool luot);// tra ve nuoc di tot nhat theo chien luoc phia tren
     void computer(sf::Vector2f newPos, sf::Vector2f oldPos, bool LuotChoi);
     void comCapture(sf::Vector2f newPos, int c, int n);
-    void MessageBoxCom(int check);
+    void Message_Box(int check);
+    int CheckEndTime(sf::Time Remainingtime1, sf::Time Remainingtime2);
 
 private:
     sf::RenderWindow& window;
@@ -67,7 +68,7 @@ private:
     //Setime 
     
     // Clock 1 Run First
-
+    bool FreezeTheClock2 = true;
     bool StartTime = false;
 
     sf::Clock clock1;
@@ -93,7 +94,14 @@ private:
     sf::Vector2i mousePositionBlackSecond;
     sf::Vector2i mousePositionWhiteFirst;
     sf::Vector2i mousePositionWhiteSecond;
-    int x1, x2, x3, x4, y1, y2, y3, y4;
+    int x1;
+    int x2;
+    int x3;
+    int x4;
+    int y1;
+    int y2;
+    int y3;
+    int y4;
     bool FirstClickWhite = false;
     bool SecondClickWhite = false;
     bool FirstClickBlack = false;

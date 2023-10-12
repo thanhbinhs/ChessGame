@@ -596,16 +596,7 @@ void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTim
     std::string countdownString2 = std::to_string(minutes2) + ":" + (seconds2 < 10 ? "0" : "") + std::to_string(seconds2) + "." + std::to_string(milliseconds2);
 
     // Cập nhật văn bản đồng hồ đếm ngược
-    if (remainingTime1 <= sf::Time::Zero)
-    {
-        textClockW.setString("00:00");
-        textClockW.setFillColor(sf::Color::Red);
-    }
-    if (remainingTime2 <= sf::Time::Zero)
-    {
-        textClockB.setString("00:00");
-        textClockB.setFillColor(sf::Color::Red);
-    }
+  
 
     textClockW.setString(countdownString1);
     textClockB.setString(countdownString2);
@@ -623,6 +614,36 @@ void Board::SetTime(bool checkTurn,sf::Time remainingTime1,sf::Time remainingTim
         textClockFreeze.setCharacterSize(40);
         textClockFreeze.setFillColor(sf::Color::White);
         textClockFreeze.setPosition(745 + 25 + 95, SCREEN_MARGIN + cellSize * 2.f + 15);
+        window.draw(textClockFreeze);
+    }
+    sf::Time t1 = sf::seconds(0.1f);
+    if (remainingTime1 <= t1)
+    {
+        sf::RectangleShape BackgroundInClockBlack(sf::Vector2f(295, cellSize - 5.f));
+        BackgroundInClockBlack.setFillColor(sf::Color(100, 100, 100));
+        BackgroundInClockBlack.setPosition(640.0f + SCREEN_MARGIN * 2 + 100, SCREEN_MARGIN + cellSize * 2.f + 5.f);
+        window.draw(BackgroundInClockBlack);
+        sf::Text textClockFreeze;
+        textClockFreeze.setFont(font);
+        textClockFreeze.setString("00:00.00");
+        textClockFreeze.setCharacterSize(40);
+        textClockFreeze.setFillColor(sf::Color::Red);
+        textClockFreeze.setPosition(745 + 25 + 95, SCREEN_MARGIN + cellSize * 2.f + 15);
+        window.draw(textClockFreeze);
+
+    }
+    else if (remainingTime2 <= t1)
+    {
+        sf::RectangleShape BackgroundInClockBlack(sf::Vector2f(295, cellSize - 5.f));
+        BackgroundInClockBlack.setFillColor(sf::Color(100, 100, 100));
+        BackgroundInClockBlack.setPosition(640.0f + SCREEN_MARGIN * 2 + 100, SCREEN_MARGIN + cellSize * 3.f + 5.f);
+        window.draw(BackgroundInClockBlack);
+        sf::Text textClockFreeze;
+        textClockFreeze.setFont(font);
+        textClockFreeze.setString("00:00.00");
+        textClockFreeze.setCharacterSize(40);
+        textClockFreeze.setFillColor(sf::Color::Red);
+        textClockFreeze.setPosition(745 + 25 + 95, SCREEN_MARGIN + cellSize * 3.f + 15);
         window.draw(textClockFreeze);
     }
 
